@@ -1,0 +1,47 @@
+# Global
+.DS_Store
+Thumbs.db
+node_modules/
+.env
+.env.local
+.env.development
+.env.production
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS + Editor Specific
+.vscode/
+.idea/
+*.swp
+
+# Vite build output
+client/dist/
+
+# React build artifacts
+client/build/
+
+# Next.js (in case you experiment)
+.next/
+
+# Prisma artifacts
+server/prisma/dev.db
+server/prisma/dev.db-journal
+server/prisma/migrations/
+
+# Backend build output (if using TypeScript later)
+server/build/
+server/dist/
+
+# Database
+*.sqlite
+*.sqlite3
+
+# Optional Docker files
+docker-compose.override.yml
+*.pid
+*.sock
