@@ -20,6 +20,9 @@ app.use("/", healthRoutes);
 const authRoutes = require("./routes/auth");
 app.use("/auth", authRoutes);
 
+const applicationRoutes = require("./routes/application");
+app.use("/applications", applicationRoutes);
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

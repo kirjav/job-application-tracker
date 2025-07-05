@@ -55,8 +55,6 @@ async function loginUser(req, res) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
-        // Not sure how to use jsonwebtoken to sign a JWT...
-
         const token = jwt.sign(
             { userId: user.id, email: user.email },
             process.env.JWT_SECRET,
@@ -70,8 +68,6 @@ async function loginUser(req, res) {
     }
 
 }
-
-
 
 module.exports = {
     registerUser,
