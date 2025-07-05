@@ -25,6 +25,7 @@ model Application {
   source      String?
   notes       String?
   dateApplied DateTime
+  dateUpdated DateTime @updatedAt
   resumeUrl   String?
   tags        ApplicationTag[]
   user        User     @relation(fields: [userId], references: [id])
