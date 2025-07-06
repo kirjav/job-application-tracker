@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const { isPasswordComplex } = require("../utils/passwordUtils");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
@@ -15,6 +16,10 @@ async function registerUser(req, res) {
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
             return res.status(409).json({ error: "User already exists" });
+        }
+
+        if (!isPasswordComplex(password)) {
+            return res.status(400).json({ error: "Password does not meet complexity requirements" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

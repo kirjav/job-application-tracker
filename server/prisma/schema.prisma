@@ -28,7 +28,7 @@ model Application {
   dateUpdated DateTime @updatedAt
   resumeUrl   String?
   tags        ApplicationTag[]
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
 }
 
