@@ -1,5 +1,10 @@
 const bcrypt = require("bcrypt");
-const { isPasswordComplex } = require("../utils/passwordUtils");
+
+// Utils
+const { isPasswordComplex, hashPassword, verifyPasswordMatch} = require("../utils/passwordUtils");
+const { getAuthenticatedUser } = require("../utils/authHelpers");
+const { handleError } = require("../utils/handleError");
+
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
@@ -12,18 +17,9 @@ async function deleteUser(req, res) {
     }
 
     try {
-        const user = await prisma.user.findUnique({
-            where: { id: req.user.userId },
-        });
+        const user = await getAuthenticatedUser(req.user.userId);
 
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
+        await verifyPasswordMatch(password, user.password);
 
         await prisma.user.delete({
             where: { id: user.id } // ← ensures only *their* account is deleted
@@ -31,55 +27,52 @@ async function deleteUser(req, res) {
 
         return res.status(204).send(); // No Content
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Failed to delete user" });
+        return handleError(res, err, "Failed to delete User");
     }
 }
 
 async function updateEmail(req, res) {
-    const { password, new_email } = req.body;
+    const { password, newEmail } = req.body;
 
     if (!password) {
         return res.status(400).json({ error: "Password required" });
     }
 
-    if (!new_email) {
+    if (!newEmail) {
         return res.status(400).json({ error: "New email required" });
     }
 
     try {
-        const user = await prisma.user.findUnique({
-            where: { id: req.user.userId },
-        });
+        const user = await getAuthenticatedUser(req.user.userId);
 
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
+        await verifyPasswordMatch(password, user.password);
 
         const existing = await prisma.user.findUnique({
-            where: { email: new_email }
+            where: { email: newEmail }
         });
         if (existing) {
             return res.status(409).json({ error: "Email already in use" });
         }
 
-
-        const updatedUser = await prisma.user.update({
+        await prisma.user.update({
             where: { id: req.user.userId },
-            data: { email: new_email },
+            data: { email: newEmail },
         });
 
-        return res.json(updatedUser);
+        return res.json({ message: "Email updated successfully" });
 
+        /* If I want to return the new email to the front end use this instead:
+
+        const updatedUser = await prisma.user.update({
+        where: { id: req.user.userId },
+        data: { email: newEmail },
+        });
+
+        return res.json({ email: updatedUser.email });
+        */
 
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Failed to update Email" });
+        return handleError(res, err, "Failed to update Email");
     }
 }
 
@@ -88,7 +81,6 @@ async function updatePassword(req, res) {
 
     if (!old_password || !new_password) {
         return res.status(400).json({ error: "Incomplete information" });
-
     }
 
     try {
@@ -96,20 +88,11 @@ async function updatePassword(req, res) {
             return res.status(400).json({ error: "Password does not meet complexity requirements" });
         }
 
-        const user = await prisma.user.findUnique({
-            where: { id: req.user.userId },
-        });
+        const user = await getAuthenticatedUser(req.user.userId);
 
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
+        await verifyPasswordMatch(old_password, user.password);
 
-        const isValidPassword = await bcrypt.compare(old_password, user.password);
-        if (!isValidPassword) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
-
-        const hashedPassword = await bcrypt.hash(new_password, 10);
+        const hashedPassword = await hashPassword(new_password);
 
         const updatedUser = await prisma.user.update({
             where: { id: req.user.userId },
@@ -118,8 +101,7 @@ async function updatePassword(req, res) {
 
         return res.json({ message: "Password updated successfully" });
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Failed to update Password" });
+        return handleError(res, err, "Failed to update Password");
     }
 }
 

@@ -1,5 +1,6 @@
-const bcrypt = require("bcrypt");
-const { isPasswordComplex } = require("../utils/passwordUtils");
+const { isPasswordComplex, hashPassword, verifyPasswordMatch} = require("../utils/passwordUtils");
+const { handleError } = require("../utils/handleError");
+
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
@@ -22,9 +23,9 @@ async function registerUser(req, res) {
             return res.status(400).json({ error: "Password does not meet complexity requirements" });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await hashPassword(password)
 
-        const newUser = await prisma.user.create({
+        await prisma.user.create({
             data: {
                 email,
                 password: hashedPassword,
@@ -33,8 +34,7 @@ async function registerUser(req, res) {
 
         return res.status(201).json({ message: "User created successfully!" });
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Internal server error" });
+        return handleError(res, err, "Internal server error");
     }
 }
 
@@ -55,10 +55,7 @@ async function loginUser(req, res) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
+        await verifyPasswordMatch(password, user.password);
 
         const token = jwt.sign(
             { userId: user.id, email: user.email },
@@ -67,11 +64,10 @@ async function loginUser(req, res) {
         );
 
         return res.status(200).json({ token });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Internal server error" });
-    }
 
+    } catch (err) {
+        return handleError(res, err, "Internal server error");
+    }
 }
 
 module.exports = {
