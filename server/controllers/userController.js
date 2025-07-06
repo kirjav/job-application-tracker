@@ -5,8 +5,8 @@ const { isPasswordComplex, hashPassword, verifyPasswordMatch} = require("../util
 const { getAuthenticatedUser } = require("../utils/authHelpers");
 const { handleError } = require("../utils/handleError");
 
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../utils/prisma");
+
 const jwt = require("jsonwebtoken");
 
 

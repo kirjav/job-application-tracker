@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("./prisma");
 
 async function getAuthenticatedUser(userId) {
   if (!userId) throw new Error("User ID is required");

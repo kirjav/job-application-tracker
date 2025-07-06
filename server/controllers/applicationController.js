@@ -1,5 +1,5 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../utils/prisma");
+const { handleError } = require("../utils/handleError");
 
 async function createApplication(req, res) {
     const { company, position, status, source, notes, dateApplied, resumeUrl } = req.body;
@@ -20,8 +20,8 @@ async function createApplication(req, res) {
 
         res.status(201).json(newApp);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to create application" });
+
+        return handleError(res, err, "Failed to create application");
     }
 }
 
@@ -34,8 +34,7 @@ async function getUserApplications(req, res) {
 
         res.status(200).json(apps);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to fetch applications" });
+        return handleError(res, err, "Failed to fetch application");
     }
 }
 
@@ -71,8 +70,7 @@ async function updateApplication(req, res) {
 
         return res.json(updatedApp);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to update application" });
+        return handleError(res, err, "Failed to update application");
     }
 }
 
@@ -98,8 +96,7 @@ async function deleteApplication(req, res) {
 
         res.status(204).send();
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to delete application" });
+        return handleError(res, err, "Failed to delete application");
     }
 }
 
