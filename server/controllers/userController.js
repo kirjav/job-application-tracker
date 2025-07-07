@@ -12,6 +12,7 @@ const jwt = require("jsonwebtoken");
 
 async function deleteUser(req, res) {
     const { password } = req.body;
+    
     if (!password) {
         return res.status(400).json({ error: "Password required" });
     }
