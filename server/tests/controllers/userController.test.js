@@ -45,6 +45,11 @@ const prisma = require("../../utils/prisma");
 const bcrypt = require("bcrypt");
 
 describe("userController", () => {
+
+        beforeEach(() => {
+        jest.clearAllMocks();
+    });
+    
     describe("deleteUser", () => {
         let req, res;
 
