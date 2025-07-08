@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1751997815258" clover="3.2.0">
-  <project timestamp="1751997815258" name="All files">
-    <metrics statements="245" coveredstatements="239" conditionals="90" coveredconditionals="84" methods="27" coveredmethods="26" elements="362" coveredelements="349" complexity="0" loc="245" ncloc="245" packages="6" files="15" classes="15"/>
+<coverage generated="1752000098345" clover="3.2.0">
+  <project timestamp="1752000098345" name="All files">
+    <metrics statements="284" coveredstatements="276" conditionals="93" coveredconditionals="85" methods="30" coveredmethods="28" elements="407" coveredelements="389" complexity="0" loc="284" ncloc="284" packages="7" files="19" classes="19"/>
     <package name="server">
       <metrics statements="18" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\app.js">
@@ -27,7 +27,7 @@
       </file>
     </package>
     <package name="server.controllers">
-      <metrics statements="143" coveredstatements="140" conditionals="56" coveredconditionals="53" methods="18" coveredmethods="18"/>
+      <metrics statements="143" coveredstatements="140" conditionals="56" coveredconditionals="52" methods="18" coveredmethods="18"/>
       <file name="applicationController.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\controllers\applicationController.js">
         <metrics statements="46" coveredstatements="44" conditionals="20" coveredconditionals="17" methods="10" coveredmethods="10"/>
         <line num="1" count="5" type="stmt"/>
@@ -83,22 +83,22 @@
         <line num="2" count="5" type="stmt"/>
         <line num="4" count="5" type="stmt"/>
         <line num="5" count="5" type="stmt"/>
-        <line num="9" count="9" type="stmt"/>
-        <line num="11" count="9" type="cond" truecount="4" falsecount="0"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="15" count="7" type="stmt"/>
-        <line num="16" count="7" type="stmt"/>
-        <line num="17" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="7" type="stmt"/>
+        <line num="11" count="7" type="cond" truecount="4" falsecount="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="15" count="6" type="stmt"/>
+        <line num="16" count="6" type="stmt"/>
+        <line num="17" count="5" type="cond" truecount="2" falsecount="0"/>
         <line num="18" count="2" type="stmt"/>
-        <line num="21" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="22" count="2" type="stmt"/>
+        <line num="21" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="22" count="1" type="stmt"/>
         <line num="25" count="2" type="stmt"/>
         <line num="27" count="2" type="stmt"/>
         <line num="34" count="2" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
-        <line num="41" count="7" type="stmt"/>
-        <line num="43" count="7" type="cond" truecount="4" falsecount="0"/>
-        <line num="44" count="2" type="stmt"/>
+        <line num="41" count="6" type="stmt"/>
+        <line num="43" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
         <line num="46" count="5" type="stmt"/>
         <line num="47" count="5" type="stmt"/>
         <line num="53" count="4" type="cond" truecount="2" falsecount="0"/>
@@ -110,15 +110,15 @@
         <line num="72" count="5" type="stmt"/>
       </file>
       <file name="tagController.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\controllers\tagController.js">
-        <metrics statements="26" coveredstatements="25" conditionals="8" coveredconditionals="8" methods="3" coveredmethods="3"/>
+        <metrics statements="26" coveredstatements="25" conditionals="8" coveredconditionals="7" methods="3" coveredmethods="3"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
         <line num="5" count="3" type="stmt"/>
         <line num="6" count="3" type="stmt"/>
         <line num="10" count="2" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="19" count="7" type="stmt"/>
-        <line num="20" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="6" type="stmt"/>
+        <line num="20" count="6" type="cond" truecount="1" falsecount="1"/>
         <line num="22" count="6" type="stmt"/>
         <line num="23" count="6" type="stmt"/>
         <line num="32" count="6" type="cond" truecount="2" falsecount="0"/>
@@ -155,37 +155,37 @@
         <line num="25" count="2" type="stmt"/>
         <line num="29" count="2" type="stmt"/>
         <line num="31" count="2" type="stmt"/>
-        <line num="36" count="9" type="stmt"/>
-        <line num="38" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="6" type="stmt"/>
+        <line num="38" count="6" type="cond" truecount="2" falsecount="0"/>
         <line num="39" count="1" type="stmt"/>
-        <line num="42" count="8" type="cond" truecount="2" falsecount="0"/>
-        <line num="43" count="2" type="stmt"/>
-        <line num="46" count="6" type="stmt"/>
-        <line num="47" count="6" type="stmt"/>
-        <line num="49" count="5" type="stmt"/>
-        <line num="51" count="4" type="stmt"/>
-        <line num="54" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="55" count="2" type="stmt"/>
-        <line num="58" count="2" type="stmt"/>
-        <line num="63" count="2" type="stmt"/>
+        <line num="42" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="46" count="4" type="stmt"/>
+        <line num="47" count="4" type="stmt"/>
+        <line num="49" count="3" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="54" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
         <line num="76" count="2" type="stmt"/>
-        <line num="81" count="8" type="stmt"/>
-        <line num="83" count="8" type="cond" truecount="4" falsecount="0"/>
-        <line num="84" count="2" type="stmt"/>
-        <line num="87" count="6" type="stmt"/>
-        <line num="88" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="89" count="2" type="stmt"/>
-        <line num="92" count="4" type="stmt"/>
-        <line num="94" count="3" type="stmt"/>
-        <line num="96" count="2" type="stmt"/>
-        <line num="98" count="2" type="stmt"/>
-        <line num="103" count="2" type="stmt"/>
+        <line num="81" count="5" type="stmt"/>
+        <line num="83" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="87" count="4" type="stmt"/>
+        <line num="88" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="92" count="3" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="103" count="1" type="stmt"/>
         <line num="105" count="2" type="stmt"/>
         <line num="109" count="5" type="stmt"/>
       </file>
     </package>
     <package name="server.middleware">
-      <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
+      <metrics statements="20" coveredstatements="19" conditionals="9" coveredconditionals="8" methods="4" coveredmethods="4"/>
       <file name="authMiddleware.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\middleware\authMiddleware.js">
         <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
         <line num="2" count="2" type="stmt"/>
@@ -198,29 +198,47 @@
         <line num="14" count="1" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
       </file>
+      <file name="schemaValidation.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\middleware\schemaValidation.js">
+        <metrics statements="11" coveredstatements="10" conditionals="3" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="4" count="40" type="stmt"/>
+        <line num="5" count="28" type="stmt"/>
+        <line num="6" count="28" type="stmt"/>
+        <line num="7" count="28" type="stmt"/>
+        <line num="8" count="18" type="stmt"/>
+        <line num="9" count="18" type="stmt"/>
+        <line num="11" count="10" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="10" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
+      </file>
     </package>
     <package name="server.routes">
-      <metrics statements="36" coveredstatements="35" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="44" coveredstatements="43" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="application.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\routes\application.js">
-        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="30" count="4" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+      </file>
+      <file name="auth.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\routes\auth.js">
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
         <line num="4" count="4" type="stmt"/>
         <line num="6" count="4" type="stmt"/>
-        <line num="7" count="4" type="stmt"/>
         <line num="8" count="4" type="stmt"/>
         <line num="9" count="4" type="stmt"/>
         <line num="11" count="4" type="stmt"/>
-      </file>
-      <file name="auth.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\routes\auth.js">
-        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="4" type="stmt"/>
-        <line num="2" count="4" type="stmt"/>
-        <line num="4" count="4" type="stmt"/>
-        <line num="6" count="4" type="stmt"/>
-        <line num="7" count="4" type="stmt"/>
-        <line num="9" count="4" type="stmt"/>
       </file>
       <file name="health.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\routes\health.js">
         <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -231,26 +249,30 @@
         <line num="9" count="4" type="stmt"/>
       </file>
       <file name="tag.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\routes\tag.js">
-        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="2" count="4" type="stmt"/>
-        <line num="3" count="4" type="stmt"/>
-        <line num="4" count="4" type="stmt"/>
-        <line num="5" count="4" type="stmt"/>
-        <line num="7" count="4" type="stmt"/>
-        <line num="8" count="4" type="stmt"/>
-        <line num="9" count="4" type="stmt"/>
-        <line num="11" count="4" type="stmt"/>
-      </file>
-      <file name="user.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\routes\user.js">
-        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
         <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
         <line num="6" count="4" type="stmt"/>
-        <line num="7" count="4" type="stmt"/>
         <line num="8" count="4" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
         <line num="10" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+      </file>
+      <file name="user.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\routes\user.js">
+        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
       </file>
     </package>
     <package name="server.services">
@@ -271,7 +293,7 @@
         <line num="31" count="7" type="stmt"/>
         <line num="45" count="7" type="stmt"/>
         <line num="58" count="7" type="stmt"/>
-        <line num="68" count="4" type="stmt"/>
+        <line num="67" count="4" type="stmt"/>
       </file>
     </package>
     <package name="server.utils">
@@ -299,15 +321,47 @@
       <file name="passwordUtils.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\utils\passwordUtils.js">
         <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="1" count="4" type="stmt"/>
-        <line num="5" count="7" type="stmt"/>
-        <line num="6" count="7" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="14" count="6" type="stmt"/>
-        <line num="15" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="6" count="5" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="15" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="16" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
         <line num="22" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="server.validation">
+      <metrics statements="20" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="applicationSchemas.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\validation\applicationSchemas.js">
+        <metrics statements="9" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="45" count="4" type="stmt"/>
+      </file>
+      <file name="tagSchemas.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\validation\tagSchemas.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+      </file>
+      <file name="userSchemas.js" path="C:\Users\amber\Git Repos\job-application-tracker\server\validation\userSchemas.js">
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
       </file>
     </package>
   </project>
