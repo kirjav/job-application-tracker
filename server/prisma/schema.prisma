@@ -28,7 +28,7 @@ model Application {
   dateApplied DateTime
   dateUpdated DateTime @updatedAt
   resumeUrl   String?
-  tags        ApplicationTag[]
+  tags        Tag[]
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
 }
@@ -38,15 +38,7 @@ model Tag {
   name   String
   user   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
-  apps   ApplicationTag[]
+  apps   Application[]
 
   @@unique([userId, name]) // A user can't create two tags with same name
-}
-
-model ApplicationTag {
-  appId Int
-  tagId Int
-  app   Application @relation(fields: [appId], references: [id])
-  tag   Tag         @relation(fields: [tagId], references: [id])
-  @@id([appId, tagId])
 }

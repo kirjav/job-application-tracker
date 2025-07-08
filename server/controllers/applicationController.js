@@ -1,5 +1,6 @@
 const prisma = require("../utils/prisma");
 const { handleError } = require("../utils/handleError");
+const { getPaginatedApplications } = require("../services/applicationService");
 
 async function createApplication(req, res) {
     const { company, position, status, source, notes, dateApplied, resumeUrl, tagIds } = req.body;
@@ -42,14 +43,24 @@ async function createApplication(req, res) {
 }
 
 async function getUserApplications(req, res) {
+    const userId = req.user.userId;
+    const page = parseInt(req.query.page, 10) || 1;
+    const pageSize = parseInt(req.query.pageSize, 10) || 10;
+    const tagFilter = Array.isArray(req.query.tags)
+        ? req.query.tags
+        : req.query.tags
+            ? [req.query.tags]
+            : [];
+
     try {
-        const apps = await prisma.application.findMany({
-            where: { userId: req.user.userId },
-            orderBy: { dateApplied: "desc" },
-            include: { tags: { include: { tag: true } } },
+        const result = await getPaginatedApplications({
+            userId,
+            page,
+            pageSize,
+            tagFilter,
         });
 
-        res.status(200).json(apps);
+        res.status(200).json(result);
     } catch (err) {
         return handleError(res, err, "Failed to fetch application");
     }

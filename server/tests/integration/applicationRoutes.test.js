@@ -1,7 +1,3 @@
-const request = require("supertest");
-const app = require("../../app");
-const { createMockApplication } = require("../__mocks__/mockApplication");
-
 jest.mock("../../middleware/authMiddleware", () => (req, res, next) => {
     req.user = { userId: 1 };
     next();
@@ -20,7 +16,16 @@ jest.mock("../../utils/prisma", () => ({
     },
 }));
 
+jest.mock("../../services/applicationService", () => ({
+    getPaginatedApplications: jest.fn(),
+}));
+
+const request = require("supertest");
+const app = require("../../app");
+const { createMockApplication } = require("../__mocks__/mockApplication");
 const prisma = require("../../utils/prisma");
+const { getPaginatedApplications } = require("../../services/applicationService");
+
 
 describe("Integration: /applications routes", () => {
     beforeEach(() => {
@@ -72,28 +77,45 @@ describe("Integration: /applications routes", () => {
     });
 
     describe("GET /applications", () => {
-        it("should return all applications for user", async () => {
-            const mockApps = [
-                createMockApplication(),
-                createMockApplication({ id: 102 }),
-            ];
-            prisma.application.findMany.mockResolvedValue(mockApps);
+        it("should return paginated applications for the user", async () => {
+            const mockResponse = {
+                applications: [
+                    createMockApplication(),
+                    createMockApplication({ id: 102, company: "B Corp" }),
+                ],
+                totalCount: 2,
+                currentPage: 1,
+                totalPages: 1,
+                pageSize: 10,
+            };
+
+            getPaginatedApplications.mockResolvedValue(mockResponse);
+
+            const res = await request(app).get("/applications").query({
+                page: 1,
+                pageSize: 10,
+                tags: ["Remote", "Urgent"], // Optional: simulate filters
+            });
+
+            expect(res.status).toBe(200);
+            expect(res.body.applications.length).toBe(2);
+            expect(res.body.totalCount).toBe(2);
+
+            expect(getPaginatedApplications).toHaveBeenCalledWith({
+                userId: 1,
+                page: 1,
+                pageSize: 10,
+                tagFilter: ["Remote", "Urgent"],
+            });
+        });
+
+        it("should handle errors gracefully", async () => {
+            getPaginatedApplications.mockRejectedValue(new Error("Failed to fetch application"));
 
             const res = await request(app).get("/applications");
 
-            expect(res.status).toBe(200);
-            expect(res.body.length).toBe(2);
-            expect(prisma.application.findMany).toHaveBeenCalledWith({
-                where: { userId: 1 },
-                orderBy: { dateApplied: "desc" },
-                include: {
-                    tags: {
-                        include: {
-                            tag: true,
-                        },
-                    },
-                },
-            })
+            expect(res.status).toBe(500);
+            expect(res.body.error).toBe("Failed to fetch application");
         });
     });
 

@@ -1,5 +1,3 @@
-
-
 jest.mock("../../utils/prisma", () => ({
     application: {
         create: jest.fn(),
@@ -14,6 +12,9 @@ jest.mock("../../utils/prisma", () => ({
     },
 }));
 
+jest.mock("../../services/applicationService", () => ({
+    getPaginatedApplications: jest.fn(),
+}));
 
 jest.mock("../../utils/handleError", () => ({
     handleError: jest.fn((res, err, msg) =>
@@ -44,6 +45,7 @@ const {
 
 const prisma = require("../../utils/prisma");
 const { createMockApplication } = require("../__mocks__/mockApplication");
+const { getPaginatedApplications } = require("../../services/applicationService");
 
 describe("Unit: applicationController", () => {
     beforeEach(() => {
@@ -143,16 +145,56 @@ describe("Unit: applicationController", () => {
     });
 
     describe("getUserApplications", () => {
-        it("should fetch all apps for user", async () => {
-            const mockApps = [createMockApplication(), createMockApplication({ id: 102 })];
-            prisma.application.findMany.mockResolvedValue(mockApps);
+        it("should fetch paginated apps for user", async () => {
+            const mockData = {
+                applications: [
+                    createMockApplication(),
+                    createMockApplication({ id: 102 }),
+                ],
+                totalCount: 2,
+                currentPage: 1,
+                totalPages: 1,
+                pageSize: 10,
+            };
 
-            const req = { user: { userId: 1 } };
+            getPaginatedApplications.mockResolvedValue(mockData);
+
+            const req = {
+                user: { userId: 1 },
+                query: {
+                    page: "1",
+                    pageSize: "10",
+                    tags: ["Remote", "Urgent"],
+                },
+            };
             const res = mockRes();
 
             await getUserApplications(req, res);
+
+            expect(getPaginatedApplications).toHaveBeenCalledWith({
+                userId: 1,
+                page: 1,
+                pageSize: 10,
+                tagFilter: ["Remote", "Urgent"],
+            });
+
             expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(mockApps);
+            expect(res.json).toHaveBeenCalledWith(mockData);
+        });
+
+        it("should handle errors and call handleError", async () => {
+            const req = { user: { userId: 1 }, query: {} };
+            const res = mockRes();
+
+            getPaginatedApplications.mockRejectedValue(new Error("DB fail"));
+
+            await getUserApplications(req, res);
+
+            expect(handleError).toHaveBeenCalledWith(
+                res,
+                expect.any(Error),
+                "Failed to fetch application"
+            );
         });
     });
 
