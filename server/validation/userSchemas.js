@@ -21,17 +21,28 @@ const loginSchema = z.object({
 });
 
 const updateEmailSchema = z.object({
-  email: emailSchema,
+  password: z.string().min(1, "Password required"),
+  newEmail: z.string().email("Invalid email"),
 });
 
 const updatePasswordSchema = z.object({
-  currentPassword: z.string().min(1, "Current password is required"),
-  newPassword: passwordSchema,
+  old_password: z.string().min(1, "Old password is required"),
+  new_password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
+      "Password must include uppercase, lowercase, number, and special character"),
 });
+
+const deleteUserSchema = z.object({
+  password: z.string().min(1, "Password is required"),
+});
+
 
 module.exports = {
   registerSchema,
   loginSchema,
   updateEmailSchema,
   updatePasswordSchema,
+  deleteUserSchema,
 };

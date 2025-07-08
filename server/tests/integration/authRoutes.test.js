@@ -63,7 +63,7 @@ describe("Integration: /auth routes", () => {
 
     it("should return 400 if password is weak", async () => {
       prisma.user.findUnique.mockResolvedValue(null);
-      passwordUtils.isPasswordComplex.mockReturnValue(false);
+      passwordUtils.isPasswordComplex.mockReturnValue(false); // Optional, might not even be called now
 
       const res = await request(app).post("/auth/register").send({
         email: "test@example.com",
@@ -71,8 +71,16 @@ describe("Integration: /auth routes", () => {
       });
 
       expect(res.status).toBe(400);
-      expect(res.body.error).toBe("Password does not meet complexity requirements");
+      expect(res.body.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: ["password"],
+            message: expect.stringMatching(/Password must.*complexity requirements|uppercase/i),
+          }),
+        ])
+      );
     });
+
 
     it("should return 400 if email or password is missing", async () => {
       const res = await request(app).post("/auth/register").send({
@@ -81,7 +89,21 @@ describe("Integration: /auth routes", () => {
       });
 
       expect(res.status).toBe(400);
-      expect(res.body.error).toBe("Email and password required");
+      expect(res.body).toHaveProperty("errors");
+      expect(res.body.errors.length).toBeGreaterThan(0);
+    });
+
+    it("should return 400 if email is invalid format", async () => {
+      const res = await request(app).post("/auth/register").send({
+        email: "not-an-email",
+        password: "Strong123!",
+      });
+
+      expect(res.status).toBe(400);
+      expect(res.body.errors[0]).toMatchObject({
+        path: ["email"],
+        message: expect.stringMatching(/invalid/i),
+      });
     });
   });
 
@@ -123,7 +145,21 @@ describe("Integration: /auth routes", () => {
       });
 
       expect(res.status).toBe(400);
-      expect(res.body.error).toBe("Email and password required");
+      expect(res.body).toHaveProperty("errors");
+      expect(res.body.errors.length).toBeGreaterThan(0);
+    });
+
+    it("should return 400 if email format is invalid", async () => {
+      const res = await request(app).post("/auth/login").send({
+        email: "badformat",
+        password: "Strong123!",
+      });
+
+      expect(res.status).toBe(400);
+      expect(res.body.errors[0]).toMatchObject({
+        path: ["email"],
+        message: expect.stringMatching(/invalid/i),
+      });
     });
   });
 });

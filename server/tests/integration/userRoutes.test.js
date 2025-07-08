@@ -1,13 +1,11 @@
 const request = require("supertest");
 const app = require("../../app");
 
-// ⬇️ Mock middleware to inject req.user = { userId: 1 }
 jest.mock("../../middleware/authMiddleware", () => (req, res, next) => {
     req.user = { userId: 1 };
     next();
 });
 
-// ⬇️ Mock authHelpers to simulate DB user lookup
 jest.mock("../../utils/authHelpers", () => ({
     getAuthenticatedUser: jest.fn().mockResolvedValue({
         id: 1,
@@ -16,13 +14,11 @@ jest.mock("../../utils/authHelpers", () => ({
     }),
 }));
 
-// ⬇️ Mock bcrypt
 jest.mock("bcrypt", () => ({
     compare: jest.fn().mockResolvedValue(true),
     hash: jest.fn().mockResolvedValue("$2b$10$newfakehash"),
 }));
 
-// ⬇️ Mock prisma
 jest.mock("../../utils/prisma", () => ({
     user: {
         delete: jest.fn().mockResolvedValue({}),
@@ -34,11 +30,9 @@ jest.mock("../../utils/prisma", () => ({
 const { user: mockUser } = require("../../utils/prisma");
 
 describe("Integration: /user routes", () => {
-
     beforeEach(() => {
         jest.clearAllMocks();
     });
-
 
     describe("DELETE /user/delete-account", () => {
         it("returns 204 if deletion is successful", async () => {
@@ -51,15 +45,22 @@ describe("Integration: /user routes", () => {
         });
 
         it("returns 400 if password is missing", async () => {
-            const res = await request(app).delete("/user/delete-account").send({});
+            const res = await request(app)
+                .delete("/user/delete-account")
+                .send({});
+
             expect(res.status).toBe(400);
-            expect(res.body.error).toBe("Password required");
+            expect(res.body.errors).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ path: ["password"] }),
+                ])
+            );
         });
     });
 
     describe("PUT /user/update-email", () => {
         it("returns 200 if email update is successful", async () => {
-            mockUser.findUnique.mockResolvedValue(null); // no conflict
+            mockUser.findUnique.mockResolvedValue(null);
             mockUser.update.mockResolvedValue({ id: 1 });
 
             const res = await request(app)
@@ -75,7 +76,7 @@ describe("Integration: /user routes", () => {
         });
 
         it("returns 409 if new email is taken", async () => {
-            mockUser.findUnique.mockResolvedValue({ id: 999 }); // conflict
+            mockUser.findUnique.mockResolvedValue({ id: 999 });
 
             const res = await request(app)
                 .put("/user/update-email")
@@ -91,7 +92,23 @@ describe("Integration: /user routes", () => {
                 .send({ password: "CorrectPass123!" });
 
             expect(res.status).toBe(400);
-            expect(res.body.error).toBe("New email required");
+            expect(res.body.errors).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ path: ["newEmail"] }),
+                ])
+            );
+        });
+
+        it("returns 400 if email format is invalid", async () => {
+            const res = await request(app)
+                .put("/user/update-email")
+                .send({ password: "CorrectPass123!", newEmail: "not-an-email" });
+
+            expect(res.status).toBe(400);
+            expect(res.body.errors[0]).toMatchObject({
+                path: ["newEmail"],
+                message: expect.stringMatching(/invalid/i),
+            });
         });
     });
 
@@ -120,8 +137,21 @@ describe("Integration: /user routes", () => {
                     new_password: "123",
                 });
 
+
             expect(res.status).toBe(400);
-            expect(res.body.error).toBe("Password does not meet complexity requirements");
+            expect(res.body.errors).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        path: ["new_password"],
+                        message: "Password must be at least 8 characters",
+                    }),
+                    expect.objectContaining({
+                        path: ["new_password"],
+                        message: "Password must include uppercase, lowercase, number, and special character",
+                    }),
+                ])
+            );
+
         });
 
         it("returns 400 if fields are missing", async () => {
@@ -130,7 +160,11 @@ describe("Integration: /user routes", () => {
                 .send({ new_password: "NewPass123!" });
 
             expect(res.status).toBe(400);
-            expect(res.body.error).toBe("Incomplete information");
+            expect(res.body.errors).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ path: ["old_password"] }),
+                ])
+            );
         });
     });
 });

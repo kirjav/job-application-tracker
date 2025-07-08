@@ -78,7 +78,23 @@ describe("Integration: /tags routes", () => {
       const res = await request(app).post("/tags").send({});
 
       expect(res.status).toBe(400);
-      expect(res.body).toEqual({ error: "Tag name is required" });
+      expect(res.body).toHaveProperty("errors");
+      expect(res.body.errors[0]).toMatchObject({
+        path: ["name"],
+        message: expect.stringMatching(/required/i),
+      });
+    });
+
+    it("should return 400 if name contains special characters", async () => {
+      const res = await request(app).post("/tags").send({ name: "Invalid!" });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty("errors");
+      expect(res.body.errors[0]).toMatchObject({
+        path: ["name"],
+        message: "Tag name must not contain spaces or special characters",
+      });
+
     });
   });
 
