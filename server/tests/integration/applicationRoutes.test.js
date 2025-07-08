@@ -2,7 +2,6 @@ const request = require("supertest");
 const app = require("../../app");
 const { createMockApplication } = require("../__mocks__/mockApplication");
 
-// ⬇️ Inject req.user
 jest.mock("../../middleware/authMiddleware", () => (req, res, next) => {
     req.user = { userId: 1 };
     next();
@@ -16,20 +15,26 @@ jest.mock("../../utils/prisma", () => ({
         update: jest.fn(),
         delete: jest.fn(),
     },
+    tag: {
+        findMany: jest.fn(),
+    },
 }));
 
 const prisma = require("../../utils/prisma");
 
 describe("Integration: /applications routes", () => {
-
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-
     describe("POST /applications", () => {
-        it("should create a new application", async () => {
+        it("should create a new application with tags", async () => {
             const mockApp = createMockApplication();
+            const tagIds = [10, 11];
+            prisma.tag.findMany.mockResolvedValue([
+                { id: 10, name: "Remote", userId: 1 },
+                { id: 11, name: "Urgent", userId: 1 },
+            ]);
             prisma.application.create.mockResolvedValue(mockApp);
 
             const res = await request(app).post("/applications").send({
@@ -40,10 +45,16 @@ describe("Integration: /applications routes", () => {
                 notes: mockApp.notes,
                 dateApplied: mockApp.dateApplied.toISOString(),
                 resumeUrl: mockApp.resumeUrl,
+                tagIds,
             });
 
             expect(res.status).toBe(201);
-            expect(res.body.company).toBe(mockApp.company);
+            expect(prisma.tag.findMany).toHaveBeenCalledWith({
+                where: {
+                    id: { in: tagIds },
+                    userId: 1,
+                },
+            });
             expect(prisma.application.create).toHaveBeenCalledWith({
                 data: {
                     company: mockApp.company,
@@ -54,6 +65,7 @@ describe("Integration: /applications routes", () => {
                     dateApplied: new Date(mockApp.dateApplied),
                     resumeUrl: mockApp.resumeUrl,
                     userId: 1,
+                    tags: { connect: [{ id: 10 }, { id: 11 }] },
                 },
             });
         });
@@ -61,7 +73,10 @@ describe("Integration: /applications routes", () => {
 
     describe("GET /applications", () => {
         it("should return all applications for user", async () => {
-            const mockApps = [createMockApplication(), createMockApplication({ id: 102 })];
+            const mockApps = [
+                createMockApplication(),
+                createMockApplication({ id: 102 }),
+            ];
             prisma.application.findMany.mockResolvedValue(mockApps);
 
             const res = await request(app).get("/applications");
@@ -71,23 +86,52 @@ describe("Integration: /applications routes", () => {
             expect(prisma.application.findMany).toHaveBeenCalledWith({
                 where: { userId: 1 },
                 orderBy: { dateApplied: "desc" },
-            });
+                include: {
+                    tags: {
+                        include: {
+                            tag: true,
+                        },
+                    },
+                },
+            })
         });
     });
 
     describe("PUT /applications/:id", () => {
-        it("should update an application", async () => {
+        it("should update an application with tags", async () => {
             const mockApp = createMockApplication();
+            const tagIds = [10, 11];
             prisma.application.findUnique.mockResolvedValue(mockApp);
-            prisma.application.update.mockResolvedValue({ ...mockApp, status: "Interview" });
+            prisma.tag.findMany.mockResolvedValue([
+                { id: 10, name: "Remote", userId: 1 },
+                { id: 11, name: "Urgent", userId: 1 },
+            ]);
+            prisma.application.update.mockResolvedValue({
+                ...mockApp,
+                status: "Interview",
+            });
 
-            const res = await request(app)
-                .put("/applications/101")
-                .send({ ...mockApp, status: "Interview", dateApplied: mockApp.dateApplied.toISOString() });
+            const res = await request(app).put("/applications/101").send({
+                ...mockApp,
+                status: "Interview",
+                dateApplied: mockApp.dateApplied.toISOString(),
+                tagIds,
+            });
 
             expect(res.status).toBe(200);
-            expect(res.body.status).toBe("Interview");
-            expect(prisma.application.update).toHaveBeenCalled();
+            expect(prisma.tag.findMany).toHaveBeenCalledWith({
+                where: {
+                    id: { in: tagIds },
+                    userId: 1,
+                },
+            });
+            expect(prisma.application.update).toHaveBeenCalledWith({
+                where: { id: 101 },
+                data: expect.objectContaining({
+                    status: "Interview",
+                    tags: { set: [{ id: 10 }, { id: 11 }] },
+                }),
+            });
         });
 
         it("should return 403 if user is not the owner", async () => {
@@ -119,7 +163,9 @@ describe("Integration: /applications routes", () => {
             const res = await request(app).delete("/applications/101");
 
             expect(res.status).toBe(204);
-            expect(prisma.application.delete).toHaveBeenCalledWith({ where: { id: 101 } });
+            expect(prisma.application.delete).toHaveBeenCalledWith({
+                where: { id: 101 },
+            });
         });
 
         it("should return 403 if user is not the owner", async () => {

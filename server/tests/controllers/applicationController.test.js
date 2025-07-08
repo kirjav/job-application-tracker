@@ -1,3 +1,40 @@
+
+
+jest.mock("../../utils/prisma", () => ({
+    application: {
+        create: jest.fn(),
+        findMany: jest.fn(),
+        findUnique: jest.fn(),
+        update: jest.fn(),
+        delete: jest.fn(),
+    },
+    tag: {
+        findMany: jest.fn(), // <- this is the missing part
+        findUnique: jest.fn(),
+    },
+}));
+
+
+jest.mock("../../utils/handleError", () => ({
+    handleError: jest.fn((res, err, msg) =>
+        res.status(err.status || 500).json({ error: msg })
+    ),
+}));
+
+const { handleError } = require("../../utils/handleError");
+
+const mockRes = () => {
+    const res = {};
+    res.status = jest.fn().mockReturnValue(res);
+    res.json = jest.fn().mockReturnValue(res);
+    res.send = jest.fn().mockReturnValue(res);
+    return res;
+};
+
+beforeEach(() => {
+    jest.clearAllMocks();
+});
+
 const {
     createApplication,
     getUserApplications,
@@ -8,106 +45,74 @@ const {
 const prisma = require("../../utils/prisma");
 const { createMockApplication } = require("../__mocks__/mockApplication");
 
-// Mock res object
-const mockRes = () => {
-    const res = {};
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res);
-    return res;
-};
-
-jest.mock("../../utils/prisma", () => ({
-    application: {
-        create: jest.fn(),
-        findMany: jest.fn(),
-        findUnique: jest.fn(),
-        update: jest.fn(),
-        delete: jest.fn(),
-    },
-}));
-
-jest.mock("../../utils/handleError", () => ({
-    handleError: jest.fn((res, err, msg) =>
-        res.status(err.status || 500).json({ error: msg })
-    ),
-}));
-
-const { handleError } = require("../../utils/handleError");
-
 describe("Unit: applicationController", () => {
-    
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     describe("createApplication", () => {
-        it("should create and return a new application", async () => {
+        it("should create a new application and connect valid tags", async () => {
             const mockApp = createMockApplication();
-            prisma.application.create.mockResolvedValue(mockApp);
-
             const req = {
-                body: { ...mockApp, dateApplied: mockApp.dateApplied.toISOString() },
+                body: {
+                    ...mockApp,
+                    tagIds: [1, 2],
+                    dateApplied: mockApp.dateApplied.toISOString(),
+                },
                 user: { userId: 1 },
             };
             const res = mockRes();
 
+            prisma.tag.findMany.mockResolvedValue([{ id: 1 }, { id: 2 }]);
+            prisma.application.create.mockResolvedValue(mockApp);
+
             await createApplication(req, res);
 
+            expect(prisma.tag.findMany).toHaveBeenCalled();
+            expect(prisma.application.create).toHaveBeenCalled();
             expect(res.status).toHaveBeenCalledWith(201);
             expect(res.json).toHaveBeenCalledWith(mockApp);
         });
 
         it("should call handleError on failure", async () => {
-            prisma.application.create.mockRejectedValue(new Error("fail"));
-
             const req = {
                 body: createMockApplication(),
                 user: { userId: 1 },
             };
             const res = mockRes();
 
+            prisma.application.create.mockRejectedValue(new Error("fail"));
+
             await createApplication(req, res);
             expect(handleError).toHaveBeenCalledWith(res, expect.any(Error), "Failed to create application");
         });
     });
 
-    describe("getUserApplications", () => {
-        it("should return all applications for the user", async () => {
-            const mockApps = [createMockApplication(), createMockApplication({ id: 102 })];
-            prisma.application.findMany.mockResolvedValue(mockApps);
-
-            const req = { user: { userId: 1 } };
-            const res = mockRes();
-
-            await getUserApplications(req, res);
-
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(mockApps);
-        });
-    });
-
     describe("updateApplication", () => {
-        it("should update an application and return it", async () => {
+        it("should update application and reset tags", async () => {
             const mockApp = createMockApplication();
             prisma.application.findUnique.mockResolvedValue(mockApp);
-            prisma.application.update.mockResolvedValue({ ...mockApp, status: "Updated" });
+            prisma.tag.findMany.mockResolvedValue([{ id: 1 }]);
+            prisma.application.update.mockResolvedValue({ ...mockApp, status: "Interviewing" });
 
             const req = {
                 params: { id: "101" },
-                body: { ...mockApp, status: "Updated", dateApplied: mockApp.dateApplied.toISOString() },
+                body: {
+                    ...mockApp,
+                    tagIds: [1],
+                    status: "Interviewing",
+                    dateApplied: mockApp.dateApplied.toISOString(),
+                },
                 user: { userId: 1 },
             };
             const res = mockRes();
 
             await updateApplication(req, res);
-
-            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ status: "Updated" }));
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ status: "Interviewing" }));
         });
 
         it("should return 403 if user is not the owner", async () => {
-            const mockApp = createMockApplication({ userId: 2 });
-            prisma.application.findUnique.mockResolvedValue(mockApp);
+            prisma.application.findUnique.mockResolvedValue(createMockApplication({ userId: 2 }));
 
             const req = {
                 params: { id: "101" },
@@ -121,7 +126,7 @@ describe("Unit: applicationController", () => {
             expect(res.json).toHaveBeenCalledWith({ error: "Forbidden" });
         });
 
-        it("should return 404 if app not found", async () => {
+        it("should return 404 if application not found", async () => {
             prisma.application.findUnique.mockResolvedValue(null);
 
             const req = {
@@ -137,8 +142,22 @@ describe("Unit: applicationController", () => {
         });
     });
 
+    describe("getUserApplications", () => {
+        it("should fetch all apps for user", async () => {
+            const mockApps = [createMockApplication(), createMockApplication({ id: 102 })];
+            prisma.application.findMany.mockResolvedValue(mockApps);
+
+            const req = { user: { userId: 1 } };
+            const res = mockRes();
+
+            await getUserApplications(req, res);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(mockApps);
+        });
+    });
+
     describe("deleteApplication", () => {
-        it("should delete the application", async () => {
+        it("should delete user-owned app", async () => {
             const mockApp = createMockApplication();
             prisma.application.findUnique.mockResolvedValue(mockApp);
             prisma.application.delete.mockResolvedValue({});
@@ -154,9 +173,8 @@ describe("Unit: applicationController", () => {
             expect(res.send).toHaveBeenCalled();
         });
 
-        it("should return 403 if user is not the owner", async () => {
-            const mockApp = createMockApplication({ userId: 2 });
-            prisma.application.findUnique.mockResolvedValue(mockApp);
+        it("should return 403 for deleting someone else’s app", async () => {
+            prisma.application.findUnique.mockResolvedValue(createMockApplication({ userId: 2 }));
 
             const req = {
                 params: { id: "101" },
@@ -169,7 +187,7 @@ describe("Unit: applicationController", () => {
             expect(res.json).toHaveBeenCalledWith({ error: "Forbidden" });
         });
 
-        it("should return 404 if app not found", async () => {
+        it("should return 404 if app doesn’t exist", async () => {
             prisma.application.findUnique.mockResolvedValue(null);
 
             const req = {
@@ -184,3 +202,4 @@ describe("Unit: applicationController", () => {
         });
     });
 });
+

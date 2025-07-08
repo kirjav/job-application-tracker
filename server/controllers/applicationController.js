@@ -2,9 +2,21 @@ const prisma = require("../utils/prisma");
 const { handleError } = require("../utils/handleError");
 
 async function createApplication(req, res) {
-    const { company, position, status, source, notes, dateApplied, resumeUrl } = req.body;
+    const { company, position, status, source, notes, dateApplied, resumeUrl, tagIds } = req.body;
 
     try {
+        const safeTagIds = (tagIds ?? []).filter((id) => typeof id === "number");
+
+        const userTags = await prisma.tag.findMany({
+            where: {
+                id: { in: safeTagIds },
+                userId: req.user.userId,
+            },
+        });
+
+        const validatedTagIds = userTags.map(tag => tag.id);
+
+
         const newApp = await prisma.application.create({
             data: {
                 company,
@@ -15,6 +27,10 @@ async function createApplication(req, res) {
                 resumeUrl,
                 dateApplied: new Date(dateApplied),
                 userId: req.user.userId,
+                tags: {
+                    connect: validatedTagIds.map(id => ({ id })),
+                }
+
             },
         });
 
@@ -30,6 +46,7 @@ async function getUserApplications(req, res) {
         const apps = await prisma.application.findMany({
             where: { userId: req.user.userId },
             orderBy: { dateApplied: "desc" },
+            include: { tags: { include: { tag: true } } },
         });
 
         res.status(200).json(apps);
@@ -40,7 +57,8 @@ async function getUserApplications(req, res) {
 
 async function updateApplication(req, res) {
     const { id } = req.params;
-    const { company, position, status, source, notes, dateApplied, resumeUrl } = req.body;
+    const { company, position, status, source, notes, dateApplied, resumeUrl, tagIds } = req.body;
+
 
     try {
         const existingApp = await prisma.application.findUnique({
@@ -55,6 +73,18 @@ async function updateApplication(req, res) {
             return res.status(403).json({ error: "Forbidden" });
         }
 
+        const safeTagIds = (tagIds ?? []).filter((id) => typeof id === "number");
+
+        const userTags = await prisma.tag.findMany({
+            where: {
+                id: { in: safeTagIds },
+                userId: req.user.userId,
+            },
+        });
+
+        const validatedTagIds = userTags.map(tag => tag.id);
+
+
         const updatedApp = await prisma.application.update({
             where: { id: Number(id) },
             data: {
@@ -65,6 +95,10 @@ async function updateApplication(req, res) {
                 notes,
                 resumeUrl,
                 dateApplied: new Date(dateApplied),
+                tags: {
+                    set: validatedTagIds.map(id => ({ id })),
+                }
+
             },
         });
 
