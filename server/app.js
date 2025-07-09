@@ -2,20 +2,31 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const { generalLimiter, authLimiter } = require("./middleware/rateLimiter");
+
+// helmet for additional HTTP header security
+const helmet = require("helmet");
+
 
 dotenv.config();
 
 const app = express();
 
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Positioned health routes above general Limiter to allow monitoring later without having to worry about rate limits.
 const healthRoutes = require("./routes/health");
-app.use("/", healthRoutes);
+app.use("/health", healthRoutes);
+
+// Apply general limiter to all other requests
+app.use(generalLimiter);
+
+// Routes
 
 const authRoutes = require("./routes/auth");
-app.use("/auth", authRoutes);
+app.use("/auth", authLimiter, authRoutes);
 
 const applicationRoutes = require("./routes/application");
 app.use("/applications", applicationRoutes);
