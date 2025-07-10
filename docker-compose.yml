@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: jobtracker
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  server:
+    build: ./server
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:password123@db:5432/jobtracker
+      JWT_SECRET: your-secret-key
+      PORT: 4000
+    ports:
+      - "4000:4000"     # your API
+      - "5556:5556"     # expose Prisma Studio
+    volumes:
+      - ./server:/app
+    command: ["node", "index.js"]
+
+volumes:
+  pgdata:

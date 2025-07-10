@@ -1,4 +1,4 @@
-const { isPasswordComplex, hashPassword, verifyPasswordMatch} = require("../utils/passwordUtils");
+const { isPasswordComplex, hashPassword, verifyPasswordMatch } = require("../utils/passwordUtils");
 const { handleError } = require("../utils/handleError");
 
 const prisma = require("../utils/prisma");
@@ -31,7 +31,13 @@ async function registerUser(req, res) {
             },
         });
 
-        return res.status(201).json({ message: "User created successfully!" });
+        const token = jwt.sign(
+            { userId: newUser.id, email: newUser.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+
+        return res.status(201).json({ token });
     } catch (err) {
         return handleError(res, err, "Internal server error");
     }
