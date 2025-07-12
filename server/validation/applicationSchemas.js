@@ -16,6 +16,8 @@ const applicationSchema = z.object({
   dateApplied: z.coerce.date(),
   resumeUrl: z.string().url().optional().nullable(),
   tagIds: z.array(z.number().int()).optional(),
+  tailoredResume: z.boolean().optional(),
+  tailoredCoverLetter: z.boolean().optional(),   
 });
 
 // ─── Application Update Schema (can allow partial fields) ────

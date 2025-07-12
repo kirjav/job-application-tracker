@@ -26,6 +26,8 @@ model Application {
   status      String
   source      String?
   notes       String?
+  tailoredResume Boolean
+  tailoredCoverLetter Boolean
   dateApplied DateTime
   dateUpdated DateTime @updatedAt
   resumeUrl   String?
