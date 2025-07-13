@@ -23,7 +23,7 @@ services:
       PORT: 4000
     ports:
       - "4000:4000"     # your API
-      - "5556:5556"     # expose Prisma Studio
+      - "5555:5555"     # expose Prisma Studio
     volumes:
       - ./server:/app
     command: ["node", "index.js"]

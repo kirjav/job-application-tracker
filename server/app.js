@@ -11,6 +11,8 @@ const helmet = require("helmet");
 dotenv.config();
 
 const app = express();
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 app.use(helmet());
 app.use(cors());

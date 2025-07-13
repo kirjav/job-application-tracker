@@ -33,10 +33,8 @@ async function getPaginatedApplications({ userId, page = 1, pageSize = 10, tagFi
     ...(Array.isArray(tagFilter) && tagFilter.length > 0 && {
       tags: {
         some: {
-          tag: {
-            name: { in: tagFilter },
-            userId,
-          },
+          name: { in: tagFilter },
+          userId,
         },
       },
     }),
@@ -49,8 +47,9 @@ async function getPaginatedApplications({ userId, page = 1, pageSize = 10, tagFi
       skip: (page - 1) * pageSize,
       take: pageSize,
       include: {
-        tags: { include: { tag: true } },
+        tags: true,
       },
+
     }),
     prisma.application.count({ where: whereClause }),
   ]);

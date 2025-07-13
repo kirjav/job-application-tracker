@@ -1,20 +1,18 @@
 import ApplicationTable from "../components/ApplicationTable/ApplicationTable";
-import EditApplication from "../components/EditApplication";
 import LogoutButton from "../components/LogoutButton";
-import { useState } from "react";
+import useTokenMonitor from "../hooks/useTokenMonitor";
 
 const Dashboard = () => {
-  const [selectedAppId, setSelectedAppId] = useState(null);
-
+  useTokenMonitor();
   return (
-    
+
     <div>
       <div style={{ padding: "2rem" }}>
-      <h1>Welcome to your dashboard!</h1>
-      <LogoutButton />
-    </div>
+        <h1>Welcome to your dashboard!</h1>
+      </div>
       <h1>Dashboard</h1>
       <ApplicationTable />
+
     </div>
   );
 };

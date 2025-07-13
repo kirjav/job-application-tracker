@@ -21,7 +21,7 @@ const RegisterForm = () => {
     setMessage(null);
 
     try {
-      const res = await API.post("/auth/register", formData);
+      const res = await API.post("/auth/register", formData, { withCredentials: true });
 
       const token = res.data.token;
       if (token) {
