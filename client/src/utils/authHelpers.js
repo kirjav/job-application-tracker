@@ -4,6 +4,11 @@
  */
 export function parseJwt(token) {
   try {
+    if (typeof token !== "string") {
+      console.warn("parseJwt: token is not a string:", token);
+      return null;
+    }
+
     const base64Payload = token.split('.')[1];
     const decoded = atob(base64Payload);
     return JSON.parse(decoded);
@@ -12,6 +17,7 @@ export function parseJwt(token) {
     return null;
   }
 }
+
 
 /**
  * Returns the expiration time (in seconds since epoch) of the JWT.

@@ -5,6 +5,10 @@ import TagInput from "../components/TagInput/TagInput";
 const ApplicationForm = ({ existingApp, onSuccess }) => {
   const isEditMode = !!existingApp;
 
+  const [selectedTags, setSelectedTags] = useState(() =>
+    existingApp?.tags || []
+  );
+
   const [formData, setFormData] = useState({
     company: existingApp?.company || "",
     position: existingApp?.position || "",
@@ -15,12 +19,17 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
     tailoredCoverLetter: existingApp?.tailoredCoverLetter || false,
     dateApplied: existingApp?.dateApplied
       ? existingApp.dateApplied.split("T")[0]
-      : "", // format for input type="date"
+      : "",
+    tagIds: existingApp?.tags?.map((tag) => tag.id) || [],
   });
 
-  const [tagIds, setTagIds] = useState(() =>
-    existingApp?.tags?.map((tag) => tag.id) || []
-  );
+  // keep tagIds in sync with selectedTags
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      tagIds: selectedTags.map((tag) => tag.id),
+    }));
+  }, [selectedTags]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,17 +50,12 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = {
-      ...formData,
-      tagIds,
-    };
-
     try {
       if (isEditMode) {
-        await API.put(`/applications/${existingApp.id}`, payload);
+        await API.put(`/applications/${existingApp.id}`, formData);
         alert("Application updated!");
       } else {
-        await API.post("/applications", payload);
+        await API.post("/applications", formData);
         alert("Application created!");
       }
 
@@ -136,7 +140,10 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
         required
       />
 
-      <TagInput selectedTagIds={tagIds} setSelectedTagIds={setTagIds} />
+      <TagInput
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
 
       <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
     </form>

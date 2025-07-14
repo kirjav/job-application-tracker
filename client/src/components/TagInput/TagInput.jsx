@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import API from "../../utils/api";
 import "./TagInput.css";
 
-const TagInput = ({ selectedTags, setSelectedTags }) => {
+const TagInput = ({ selectedTags = [], setSelectedTags = () => { } }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [availableTags, setAvailableTags] = useState([]);
@@ -22,13 +22,24 @@ const TagInput = ({ selectedTags, setSelectedTags }) => {
   }, []);
 
   useEffect(() => {
+    if (!input) {
+      setSuggestions([]);
+      return;
+    }
+
     const filtered = availableTags.filter(
       (tag) =>
         tag.name.toLowerCase().startsWith(input.toLowerCase()) &&
         !selectedTags.some((t) => t.name === tag.name)
     );
-    setSuggestions(filtered);
+
+    setSuggestions((prev) => {
+      const prevNames = prev.map((tag) => tag.name).join(",");
+      const newNames = filtered.map((tag) => tag.name).join(",");
+      return prevNames === newNames ? prev : filtered;
+    });
   }, [input, availableTags, selectedTags]);
+
 
   const handleAddTag = async (name) => {
     const cleanName = name.trim();

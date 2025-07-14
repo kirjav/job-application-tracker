@@ -2,30 +2,41 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 const { generalLimiter, authLimiter } = require("./middleware/rateLimiter");
 
-// helmet for additional HTTP header security
-const helmet = require("helmet");
-
-
+// Load env FIRST
 dotenv.config();
 
+// Parse allowed origins from env
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(s => s.trim()) || [];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked request from origin: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
 const app = express();
-const cookieParser = require("cookie-parser");
+
+// Middleware setup
+app.use(helmet());
+app.use(cors(corsOptions));
+app.use(express.json());
 app.use(cookieParser());
 
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-
-// Positioned health routes above general Limiter to allow monitoring later without having to worry about rate limits.
+// Routes and rate limiting
 const healthRoutes = require("./routes/health");
 app.use("/health", healthRoutes);
 
-// Apply general limiter to all other requests
 app.use(generalLimiter);
-
-// Routes
 
 const authRoutes = require("./routes/auth");
 app.use("/auth", authLimiter, authRoutes);
