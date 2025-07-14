@@ -149,9 +149,31 @@ async function deleteApplication(req, res) {
     }
 }
 
+async function getSingleApplication(req, res) {
+  const { id } = req.params;
+
+  try {
+    const app = await prisma.application.findUnique({
+      where: { id: Number(id) },
+      include: {
+        tags: true,
+      },
+    });
+
+    if (!app || app.userId !== req.user.userId) {
+      return res.status(404).json({ error: "Application not found" });
+    }
+
+    res.json(app);
+  } catch (err) {
+    return handleError(res, err, "Failed to fetch application");
+  }
+}
+
 module.exports = {
     createApplication,
     getUserApplications,
     updateApplication,
     deleteApplication,
+    getSingleApplication,
 };

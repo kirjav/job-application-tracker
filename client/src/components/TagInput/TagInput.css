@@ -1,0 +1,59 @@
+.tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  position: relative;
+  min-height: 40px;
+  background: #fff;
+}
+
+.tag-chip {
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.tag-chip button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  margin-left: 4px;
+  cursor: pointer;
+  color: #666;
+}
+
+.tag-input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  min-width: 100px;
+  font-size: 14px;
+}
+
+.tag-suggestions {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  z-index: 10;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 200px;
+}
+
+.tag-suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.tag-suggestions li:hover {
+  background-color: #f0f0f0;
+}

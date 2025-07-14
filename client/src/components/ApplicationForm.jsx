@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../utils/api";
+import TagInput from "../components/TagInput/TagInput";
 
 const ApplicationForm = ({ existingApp, onSuccess }) => {
   const isEditMode = !!existingApp;
@@ -16,6 +17,10 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
       ? existingApp.dateApplied.split("T")[0]
       : "", // format for input type="date"
   });
+
+  const [tagIds, setTagIds] = useState(() =>
+    existingApp?.tags?.map((tag) => tag.id) || []
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,12 +41,17 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const payload = {
+      ...formData,
+      tagIds,
+    };
+
     try {
       if (isEditMode) {
-        await API.put(`/applications/${existingApp.id}`, formData);
+        await API.put(`/applications/${existingApp.id}`, payload);
         alert("Application updated!");
       } else {
-        await API.post("/applications", formData);
+        await API.post("/applications", payload);
         alert("Application created!");
       }
 
@@ -125,6 +135,8 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
         onChange={handleChange}
         required
       />
+
+      <TagInput selectedTagIds={tagIds} setSelectedTagIds={setTagIds} />
 
       <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
     </form>

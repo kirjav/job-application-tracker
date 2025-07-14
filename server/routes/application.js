@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createApplication, getUserApplications, updateApplication, deleteApplication } = require("../controllers/applicationController");
+const { createApplication, getUserApplications, updateApplication, deleteApplication, getSingleApplication } = require("../controllers/applicationController");
 const validate = require("../middleware/schemaValidation");
 const authenticateToken = require("../middleware/authMiddleware");
 
@@ -16,6 +16,8 @@ router.post("/", authenticateToken, validate(applicationSchema), createApplicati
 
 // GET /applications – query validation
 router.get("/", authenticateToken, validate(querySchema, "query"), getUserApplications);
+
+router.get("/:id", authenticateToken, getSingleApplication);
 
 // PUT /applications/:id – body + param validation
 router.put(
