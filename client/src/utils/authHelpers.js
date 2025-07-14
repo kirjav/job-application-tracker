@@ -42,3 +42,12 @@ export function getTimeUntilExpiration(token) {
   const now = Math.floor(Date.now() / 1000);
   return exp - now;
 }
+
+/**
+ * Checks if token is about to expire within a given threshold (default: 5 minutes).
+ */
+export function isTokenExpiringSoon(token, thresholdInSeconds = 300) {
+  const timeLeft = getTimeUntilExpiration(token);
+  return timeLeft > 0 && timeLeft <= thresholdInSeconds;
+}
+

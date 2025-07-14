@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../utils/api";
+import ResetPasswordForm from "./ResetPasswordForm/ResetPasswordForm";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState(null);
+  const [showReset, setShowReset] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,10 +17,8 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
-
     try {
       const res = await API.post("/auth/login", formData, { withCredentials: true });
-
       const token = res.data.token;
       if (token) {
         localStorage.setItem("token", token);
@@ -30,6 +30,10 @@ const LoginForm = () => {
       setMessage(errorMsg);
     }
   };
+
+  if (showReset) {
+    return <ResetPasswordForm onBack={() => setShowReset(false)} />;
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -51,6 +55,20 @@ const LoginForm = () => {
         required
       />
       <button type="submit">Login</button>
+      <button
+        type="button"
+        onClick={() => setShowReset(true)}
+        style={{
+          marginTop: "0.5rem",
+          background: "none",
+          border: "none",
+          color: "blue",
+          textDecoration: "underline",
+          cursor: "pointer",
+        }}
+      >
+        Forgot your password?
+      </button>
       {message && <p>{message}</p>}
     </form>
   );

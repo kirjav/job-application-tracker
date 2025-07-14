@@ -17,6 +17,8 @@ model User {
   password String
   apps     Application[]
   tags     Tag[]
+  resetToken        String?     
+  resetTokenExpiry  DateTime?
 }
 
 model Application {

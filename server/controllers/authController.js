@@ -128,9 +128,81 @@ async function refreshToken(req, res) {
   }
 }
 
+const crypto = require("crypto");
+
+async function forgotPassword(req, res) {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: "Email is required" });
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const tokenExpiry = new Date(Date.now() + 1000 * 60 * 60); // 1 hour from now
+
+    await prisma.user.update({
+      where: { email },
+      data: {
+        resetToken,
+        resetTokenExpiry: tokenExpiry,
+      },
+    });
+
+    // TODO: Send email with reset link
+    console.log(`[DEBUG] Send user this reset link: https://yourapp.com/reset-password?token=${resetToken}`);
+
+    return res.json({ message: "If the email exists, a reset link has been sent." });
+  } catch (err) {
+    return handleError(res, err, "Error sending password reset link");
+  }
+}
+
+async function resetPassword(req, res) {
+  const { token, newPassword } = req.body;
+
+  if (!token || !newPassword) {
+    return res.status(400).json({ error: "Token and new password are required" });
+  }
+
+  try {
+    if (!isPasswordComplex(newPassword)) {
+      return res.status(400).json({ error: "Password does not meet complexity requirements" });
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpiry: { gte: new Date() }, // not expired
+      },
+    });
+
+    if (!user) return res.status(400).json({ error: "Invalid or expired token" });
+
+    const hashedPassword = await hashPassword(newPassword);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
+    });
+
+    return res.json({ message: "Password reset successfully" });
+  } catch (err) {
+    return handleError(res, err, "Error resetting password");
+  }
+}
+
+
+
 
 module.exports = {
     registerUser,
     loginUser,
     refreshToken,
+    forgotPassword,
+    resetPassword,
 };

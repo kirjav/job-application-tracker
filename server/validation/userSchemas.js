@@ -38,6 +38,15 @@ const deleteUserSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Reset token is required"),
+  new_password: z.string().min(8, "Password must be at least 8 characters"), // Or use your existing complexity validator
+});
+
 
 module.exports = {
   registerSchema,
@@ -45,4 +54,6 @@ module.exports = {
   updateEmailSchema,
   updatePasswordSchema,
   deleteUserSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 };
