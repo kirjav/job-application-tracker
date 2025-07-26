@@ -5,6 +5,16 @@ import TagInput from "../components/TagInput/TagInput";
 const ApplicationForm = ({ existingApp, onSuccess }) => {
   const isEditMode = !!existingApp;
 
+  const STATUS_OPTIONS = [
+    "Wishlist",
+    "Applied",
+    "Interviewing",
+    "Offer",
+    "Rejected",
+    "Ghosted",
+    "Withdrawn",
+  ];
+
   const [selectedTags, setSelectedTags] = useState(() =>
     existingApp?.tags || []
   );
@@ -88,14 +98,22 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
         required
       />
 
-      <input
-        type="text"
+      <select
         name="status"
         value={formData.status}
         onChange={handleChange}
-        placeholder="Status"
         required
-      />
+      >
+        <option value="" disabled>
+          Select status
+        </option>
+        {STATUS_OPTIONS.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+
 
       <input
         type="text"
