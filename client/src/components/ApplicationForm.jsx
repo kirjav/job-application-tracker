@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react";
 import API from "../utils/api";
 import TagInput from "../components/TagInput/TagInput";
+import { STATUS_OPTIONS } from "../../constants/ApplicationStatuses";
+
 
 const ApplicationForm = ({ existingApp, onSuccess }) => {
   const isEditMode = !!existingApp;
-
-  const STATUS_OPTIONS = [
-    "Wishlist",
-    "Applied",
-    "Interviewing",
-    "Offer",
-    "Rejected",
-    "Ghosted",
-    "Withdrawn",
-  ];
 
   const [selectedTags, setSelectedTags] = useState(() =>
     existingApp?.tags || []

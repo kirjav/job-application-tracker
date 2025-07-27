@@ -68,6 +68,26 @@ async function getUserApplications(req, res) {
     }
 }
 
+async function getAllUserApplications(req, res) {
+  const userId = req.user.userId;
+
+  try {
+    const allApps = await prisma.application.findMany({
+      where: { userId },
+      include: {
+        tags: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    res.json(allApps);
+  } catch (err) {
+    return handleError(res, err, "Failed to fetch all applications");
+  }
+}
+
 async function updateApplication(req, res) {
     const { id } = req.params;
     const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.body;
@@ -173,6 +193,7 @@ async function getSingleApplication(req, res) {
 module.exports = {
     createApplication,
     getUserApplications,
+    getAllUserApplications,
     updateApplication,
     deleteApplication,
     getSingleApplication,

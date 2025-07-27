@@ -38,7 +38,7 @@ async function registerUser(req, res) {
     );
 
     const refreshToken = jwt.sign(
-      { userId: newUser.id, email: newUser.email },
+      { userId: newUser.id },
       process.env.REFRESH_SECRET,
       { expiresIn: "7d" }
     );
@@ -47,7 +47,7 @@ async function registerUser(req, res) {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      sameSite: "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -71,7 +71,11 @@ async function loginUser(req, res) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    await verifyPasswordMatch(password, user.password);
+    const isValid = await verifyPasswordMatch(password, user.password);
+    if (!isValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
 
     const accessToken = jwt.sign(
       { userId: user.id, email: user.email },
@@ -80,7 +84,7 @@ async function loginUser(req, res) {
     );
 
     const refreshToken = jwt.sign(
-      { userId: user.id, email: user.email },
+      { userId: user.id},
       process.env.REFRESH_SECRET,
       { expiresIn: "7d" }
     );
@@ -88,7 +92,7 @@ async function loginUser(req, res) {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // only over HTTPS in prod
-      sameSite: "Strict",
+      sameSite: "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -109,7 +113,6 @@ async function refreshToken(req, res) {
   try {
     const payload = jwt.verify(token, process.env.REFRESH_SECRET);
 
-    // Optional: you can also verify if the user still exists
     const user = await prisma.user.findUnique({ where: { id: payload.userId } });
     if (!user) {
       return res.status(401).json({ error: "User no longer exists" });
@@ -121,12 +124,26 @@ async function refreshToken(req, res) {
       { expiresIn: "1h" }
     );
 
+    const newRefreshToken = jwt.sign(
+      { userId: user.id },
+      process.env.REFRESH_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({ token: newAccessToken });
   } catch (err) {
     console.error("Refresh token error:", err);
     return res.status(403).json({ error: "Invalid or expired refresh token" });
   }
 }
+
 
 const crypto = require("crypto");
 
@@ -200,9 +217,9 @@ async function resetPassword(req, res) {
 
 
 module.exports = {
-    registerUser,
-    loginUser,
-    refreshToken,
-    forgotPassword,
-    resetPassword,
+  registerUser,
+  loginUser,
+  refreshToken,
+  forgotPassword,
+  resetPassword,
 };
