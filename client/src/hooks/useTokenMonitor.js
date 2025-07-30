@@ -11,7 +11,8 @@ const useTokenMonitor = () => {
 
   const refreshToken = async () => {
     try {
-      const res = await API.get("/auth/refresh", { withCredentials: true });
+      const res = await API.post("/auth/refresh");
+
       const newToken = res.data.token;
       if (newToken) {
         localStorage.setItem("token", newToken);

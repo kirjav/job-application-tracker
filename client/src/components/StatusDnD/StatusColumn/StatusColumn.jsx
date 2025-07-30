@@ -1,7 +1,7 @@
 import React from "react";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
-import ApplicationCard from "./ApplicationCard";
+import ApplicationCard from "../ApplicationCard/ApplicationCard";
 
 function StatusColumn({ status, applications, expandedView, onHide }) {
 

@@ -11,12 +11,7 @@ async function hashPassword(password) {
 }
 
 async function verifyPasswordMatch(inputPassword, hashedPassword) {
-  const isValid = await bcrypt.compare(inputPassword, hashedPassword);
-  if (!isValid) {
-    const err = new Error("Invalid credentials");
-    err.status = 401;
-    throw err;
-  }
+  return await bcrypt.compare(inputPassword, hashedPassword);
 }
 
 module.exports = {

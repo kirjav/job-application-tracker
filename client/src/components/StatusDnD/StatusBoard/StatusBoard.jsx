@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { DndContext } from "@dnd-kit/core";
-import StatusColumn from "../StatusColumn";
+import StatusColumn from "..//StatusColumn/StatusColumn";
 import axios from "../../../utils/api";
 import { STATUS_OPTIONS } from "../../../constants/ApplicationStatuses";
-
-// Group applications by status based on known statuses
-const grouped = STATUS_OPTIONS.reduce((acc, status) => {
-    acc[status] = applications.filter((app) => app.status === status);
-    return acc;
-}, {});
-
 
 import { closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
@@ -43,30 +36,34 @@ function StatusBoard() {
         if (!over || active.id === over.id) return;
 
         const activeId = active.id;
-        const overColumn = over?.id;
 
-        // Find the dragged application
+        // Step 1: Find dragged item
         const draggedApp = applications.find((a) => a.id === activeId);
         if (!draggedApp) return;
 
-        // If it's already in the target status, do nothing
-        if (draggedApp.status === overColumn) return;
+        // Step 2: Find the actual column from `over.id`
+        // If over.id is a column ID (like "Applied"), fine.
+        // But if it's a card ID, get that card's status.
+        const overApp = applications.find((a) => a.id === over.id);
+        const overColumn = STATUS_OPTIONS.includes(over.id) ? over.id : overApp?.status;
 
-        // Update the local state first
+        if (!overColumn || draggedApp.status === overColumn) return;
+
+        // Step 3: Optimistic UI update
         const updatedApplications = applications.map((app) =>
             app.id === activeId ? { ...app, status: overColumn } : app
         );
         setApplications(updatedApplications);
 
-        // Now update on the server
+        // Step 4: Persist to server
         axios
             .patch(`/applications/${activeId}`, { status: overColumn })
             .catch((err) => {
-                console.error("Failed to update application status:", err);
-                // Optionally revert UI if needed
-                setApplications(applications); // revert on failure
+                console.error("Failed to update application status:", err?.response?.data || err);
+                setApplications(applications); // revert if failed
             });
     }
+
 
 
     return (
@@ -76,8 +73,10 @@ function StatusBoard() {
             </button>
 
             <DndContext
+                collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}
             >
+
 
                 <div className="status-columns" style={{ display: "flex", gap: "1rem" }}>
                     {Object.entries(grouped).map(([status, apps]) =>

@@ -4,7 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
-const { generalLimiter, authLimiter } = require("./middleware/rateLimiter");
+const { generalLimiter, authLimiter, applicationsLimiter } = require("./middleware/rateLimiter");
 
 // Load env FIRST
 dotenv.config();
@@ -36,13 +36,13 @@ app.use(cookieParser());
 const healthRoutes = require("./routes/health");
 app.use("/health", healthRoutes);
 
-app.use(generalLimiter);
-
 const authRoutes = require("./routes/auth");
 app.use("/auth", authLimiter, authRoutes);
 
 const applicationRoutes = require("./routes/application");
-app.use("/applications", applicationRoutes);
+app.use("/applications", applicationsLimiter, applicationRoutes);
+
+app.use(generalLimiter);
 
 const tagRoutes = require("./routes/tag");
 app.use("/tags", tagRoutes);
