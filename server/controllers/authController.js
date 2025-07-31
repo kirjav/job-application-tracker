@@ -103,6 +103,17 @@ async function loginUser(req, res) {
   }
 }
 
+function logoutUser(req, res) {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax",
+  });
+
+  return res.status(200).json({ message: "Logged out successfully" });
+}
+
+
 async function refreshToken(req, res) {
   const token = req.cookies.refreshToken;
 
@@ -219,6 +230,7 @@ async function resetPassword(req, res) {
 module.exports = {
   registerUser,
   loginUser,
+  logoutUser,
   refreshToken,
   forgotPassword,
   resetPassword,
