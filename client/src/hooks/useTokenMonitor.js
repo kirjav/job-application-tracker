@@ -26,10 +26,17 @@ const useTokenMonitor = () => {
     }
   };
 
-  const logoutUser = () => {
+const handleLogout = async () => {
+  try {
+    await API.post("/auth/logout");
+  } catch (err) {
+    console.warn("Logout failed or already logged out", err);
+  } finally {
     localStorage.removeItem("token");
-    navigate("/");
-  };
+    navigate("/", { replace: true });
+  }
+};
+
 
   useEffect(() => {
     const checkToken = () => {
