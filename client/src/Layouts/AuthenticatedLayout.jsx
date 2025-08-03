@@ -7,11 +7,11 @@ import { Outlet } from "react-router-dom"; // for nested routes
 
 const AuthenticatedLayout = () => {
   const {
-    showWarningModal,
-    timeRemaining,
-    renewToken,
-    logoutUser,
+    showWarning,
+    onStayLoggedIn,
+    onLogout,
   } = useTokenMonitor();
+
 
   return (
     <>
@@ -24,13 +24,13 @@ const AuthenticatedLayout = () => {
       <Outlet />
 
       {/* Session timeout modal */}
-      {showWarningModal && (
+      {showWarning && (
         <SessionWarningModal
-          timeRemaining={timeRemaining}
-          onRenew={renewToken}
-          onLogout={logoutUser}
+          onRenew={onStayLoggedIn}
+          onLogout={onLogout}
         />
       )}
+
     </>
   );
 };

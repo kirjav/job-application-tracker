@@ -16,7 +16,7 @@ async function getUserTags(req, res) {
 // creates a Tag or returns an already existing Tag.
 async function createTag(req, res) {
 
-    const name = req.validated.name?.trim();
+    const name = req.validated.body.name?.trim();
     if (!name) return res.status(400).json({ error: "Tag name is required" });
 
     try {

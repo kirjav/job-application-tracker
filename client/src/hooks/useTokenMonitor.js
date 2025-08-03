@@ -59,7 +59,7 @@ const handleLogout = async () => {
   return {
     showWarning,
     onStayLoggedIn: refreshToken,
-    onLogout: logoutUser,
+    onLogout: handleLogout,
   };
 };
 

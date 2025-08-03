@@ -3,7 +3,7 @@ const { handleError } = require("../utils/handleError");
 const { getPaginatedApplications } = require("../services/applicationService");
 
 async function createApplication(req, res) {
-  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated;
+  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated.body;
 
   try {
     const safeTagIds = (tagIds ?? []).filter((id) => typeof id === "number");
@@ -46,7 +46,7 @@ async function createApplication(req, res) {
 
 async function getUserApplications(req, res) {
   const userId = req.user.userId;
-  const { page = 1, pageSize = 10, tags: tagFilter = [] } = req.validated;
+  const { page = 1, pageSize = 10, tags: tagFilter = [] } = req.validated.query;
 
   try {
     const result = await getPaginatedApplications({
@@ -169,7 +169,7 @@ async function updateApplicationPartial(req, res) {
 
 
 async function deleteApplication(req, res) {
-  const { id } = req.validated;
+  const { id } = req.validated.params;
 
   try {
     const existingApp = await prisma.application.findUnique({

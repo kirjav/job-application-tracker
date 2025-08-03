@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 
 
 async function deleteUser(req, res) {
-    const { password } = req.validated;
+    const { password } = req.validated.body;
     
     if (!password) {
         return res.status(400).json({ error: "Password required" });
@@ -33,7 +33,7 @@ async function deleteUser(req, res) {
 }
 
 async function updateEmail(req, res) {
-    const { password, newEmail } = req.validated;
+    const { password, newEmail } = req.validated.body;
 
     if (!password) {
         return res.status(400).json({ error: "Password required" });
@@ -78,7 +78,7 @@ async function updateEmail(req, res) {
 }
 
 async function updatePassword(req, res) {
-    const { oldPassword, newPassword } = req.validated;
+    const { oldPassword, newPassword } = req.validated.body;
 
     if (!oldPassword || !newPassword) {
         return res.status(400).json({ error: "Incomplete information" });
@@ -107,7 +107,7 @@ async function updatePassword(req, res) {
 }
 
 async function updateName(req, res) {
-    const { newName } = req.validated;
+    const { newName } = req.validated.body;
 
     if (!newName) {
         return res.status(400).json({ error: "New name input is invalid" });

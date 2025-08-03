@@ -4,6 +4,7 @@ import API from "../utils/api";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: ""
   });
@@ -26,7 +27,7 @@ const RegisterForm = () => {
       const token = res.data.token;
       if (token) {
         localStorage.setItem("token", token);
-        navigate("/dashboard"); 
+        navigate("/dashboard");
       }
 
       setMessage("Registration successful!");
@@ -42,6 +43,14 @@ const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Register</h2>
+      <input
+        type="name"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        placeholder="Name"
+        required
+      />
       <input
         type="email"
         name="email"

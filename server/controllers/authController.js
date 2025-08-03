@@ -5,7 +5,7 @@ const prisma = require("../utils/prisma");
 const jwt = require("jsonwebtoken");
 
 async function registerUser(req, res) {
-  const { email, password } = req.validated;
+  const { name, email, password } = req.validated.body;
 
   try {
     const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -21,6 +21,7 @@ async function registerUser(req, res) {
 
     const newUser = await prisma.user.create({
       data: {
+        name,
         email,
         password: hashedPassword,
       },
@@ -54,7 +55,7 @@ async function registerUser(req, res) {
 }
 
 async function loginUser(req, res) {
-  const { email, password } = req.validated;
+  const { email, password } = req.validated.body;
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -151,7 +152,7 @@ async function refreshToken(req, res) {
 const crypto = require("crypto");
 
 async function forgotPassword(req, res) {
-  const { email } = req.validated;
+  const { email } = req.validated.body;
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -178,7 +179,7 @@ async function forgotPassword(req, res) {
 }
 
 async function resetPassword(req, res) {
-  const { token, newPassword } = req.validated;
+  const { token, newPassword } = req.validated.body;
 
   if (!token || !newPassword) {
     return res.status(400).json({ error: "Token and new password are required" });
