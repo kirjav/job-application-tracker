@@ -3,7 +3,7 @@ const { handleError } = require("../utils/handleError");
 const { getPaginatedApplications } = require("../services/applicationService");
 
 async function createApplication(req, res) {
-  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.body;
+  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated;
 
   try {
     const safeTagIds = (tagIds ?? []).filter((id) => typeof id === "number");
@@ -46,13 +46,7 @@ async function createApplication(req, res) {
 
 async function getUserApplications(req, res) {
   const userId = req.user.userId;
-  const page = parseInt(req.query.page, 10) || 1;
-  const pageSize = parseInt(req.query.pageSize, 10) || 10;
-  const tagFilter = Array.isArray(req.query.tags)
-    ? req.query.tags
-    : req.query.tags
-      ? [req.query.tags]
-      : [];
+  const { page = 1, pageSize = 10, tags: tagFilter = [] } = req.validated;
 
   try {
     const result = await getPaginatedApplications({
@@ -89,8 +83,8 @@ async function getAllUserApplications(req, res) {
 }
 
 async function updateApplication(req, res) {
-  const { id } = req.params;
-  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.body;
+  const { id } = req.validated.params;
+  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated.body;
 
 
   try {
@@ -144,8 +138,8 @@ async function updateApplication(req, res) {
 }
 
 async function updateApplicationPartial(req, res) {
-  const { id } = req.params;
-  const updates = req.validated;
+  const { id } = req.validated.params;
+  const updates = req.validated.body;
 
   try {
     const app = await prisma.application.findUnique({
@@ -175,7 +169,7 @@ async function updateApplicationPartial(req, res) {
 
 
 async function deleteApplication(req, res) {
-  const { id } = req.params;
+  const { id } = req.validated;
 
   try {
     const existingApp = await prisma.application.findUnique({

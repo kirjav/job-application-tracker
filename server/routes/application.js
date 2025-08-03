@@ -26,7 +26,7 @@ router.put(
     "/:id",
     authenticateToken,
     validate(paramIdSchema, "params"),
-    validate(updateApplicationSchema),
+    validate(updateApplicationSchema, "body"),
     updateApplication
 );
 
@@ -34,7 +34,7 @@ router.patch(
   "/:id",
   authenticateToken,
   validate(paramIdSchema, "params"),
-  validate(updateApplicationSchema),
+  validate(updateApplicationSchema, "body"),
   updateApplicationPartial
 );
 

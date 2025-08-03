@@ -1,0 +1,20 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --primary-color: #4f46e5; /* Indigo-600 */
+  --accent-color: #9333ea;  /* Purple-600 */
+}
+
+[data-theme="dark"] {
+  --bg-color: #1e1e1e;
+  --text-color: #f3f3f3;
+  --primary-color: #60a5fa; /* Light blue */
+  --accent-color: #a855f7;  /* Lighter purple */
+}
+
+[data-theme="solarized"] {
+  --bg-color: #fdf6e3;
+  --text-color: #657b83;
+  --primary-color: #268bd2;
+  --accent-color: #2aa198;
+}

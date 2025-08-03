@@ -5,7 +5,24 @@ function validate(schema, source = "body") {
     try {
       const data = req[source];
       const parsed = schema.parse(data);
-      req.validated = parsed;
+
+      // If only one schema is being validated, store as req.validated
+      if (!req._validatedSources) {
+        req.validated = parsed;
+        req._validatedSources = [source];
+      } else {
+        // Multiple schemas detected — use dictionary form
+        if (!req.validated || typeof req.validated !== "object") {
+          req.validated = {};
+        }
+        req.validated[source] = parsed;
+
+        // Prevent overwrite on subsequent calls
+        if (!req._validatedSources.includes(source)) {
+          req._validatedSources.push(source);
+        }
+      }
+
       next();
     } catch (err) {
       if (err instanceof ZodError) {

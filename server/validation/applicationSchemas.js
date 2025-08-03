@@ -13,19 +13,19 @@ const applicationSchema = z.object({
   company: nonEmptyString,
   position: nonEmptyString,
   status: z.enum(STATUS_VALUES),
-  source: z.string().optional().nullable(),
-  notes: z.string().optional().nullable(),
+  source: z.string().optional(),
+  notes: z.string().optional(),
   dateApplied: z.coerce.date(),
-  resumeUrl: z.string().url().optional().nullable(),
+  resumeUrl: z.string().url().optional(),
   tagIds: z.array(z.number().int()).optional(),
-  tailoredResume: z.boolean().optional(),
-  tailoredCoverLetter: z.boolean().optional(),   
-});
+  tailoredResume: z.boolean().optional().default(false),
+  tailoredCoverLetter: z.boolean().optional().default(false),   
+}).strict();
 
 // ─── Application Update Schema (can allow partial fields) ────
 const updateApplicationSchema = applicationSchema.partial().extend({
   tagIds: z.array(z.number().int()).optional(),
-});
+}).strict();
 
 // ─── GET /applications query schema ──────────────────────────
 const querySchema = z.object({

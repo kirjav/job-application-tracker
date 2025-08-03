@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 
 
 async function deleteUser(req, res) {
-    const { password } = req.body;
+    const { password } = req.validated;
     
     if (!password) {
         return res.status(400).json({ error: "Password required" });
@@ -33,7 +33,7 @@ async function deleteUser(req, res) {
 }
 
 async function updateEmail(req, res) {
-    const { password, newEmail } = req.body;
+    const { password, newEmail } = req.validated;
 
     if (!password) {
         return res.status(400).json({ error: "Password required" });
@@ -78,22 +78,22 @@ async function updateEmail(req, res) {
 }
 
 async function updatePassword(req, res) {
-    const { old_password, new_password } = req.body;
+    const { oldPassword, newPassword } = req.validated;
 
-    if (!old_password || !new_password) {
+    if (!oldPassword || !newPassword) {
         return res.status(400).json({ error: "Incomplete information" });
     }
 
     try {
-        if (!isPasswordComplex(new_password)) {
+        if (!isPasswordComplex(newPassword)) {
             return res.status(400).json({ error: "Password does not meet complexity requirements" });
         }
 
         const user = await getAuthenticatedUser(req.user.userId);
 
-        await verifyPasswordMatch(old_password, user.password);
+        await verifyPasswordMatch(oldPassword, user.password);
 
-        const hashedPassword = await hashPassword(new_password);
+        const hashedPassword = await hashPassword(newPassword);
 
         const updatedUser = await prisma.user.update({
             where: { id: req.user.userId },
@@ -106,8 +106,33 @@ async function updatePassword(req, res) {
     }
 }
 
+async function updateName(req, res) {
+    const { newName } = req.validated;
+
+    if (!newName) {
+        return res.status(400).json({ error: "New name input is invalid" });
+    }
+
+    try {
+        const user = await getAuthenticatedUser(req.user.userId);
+
+        await prisma.user.update({
+            where: { id: req.user.userId },
+            data: { name: newName },
+        });
+
+        return res.json({ message: "Name updated successfully" });
+
+    } catch (err) {
+        return handleError(res, err, "Failed to update Name");
+    }
+}
+
+
+
 module.exports = {
     deleteUser,
     updateEmail,
     updatePassword,
+    updateName,
 };
