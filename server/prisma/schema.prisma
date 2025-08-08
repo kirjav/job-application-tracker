@@ -20,6 +20,8 @@ model User {
   tags     Tag[]
   resetToken        String?     
   resetTokenExpiry  DateTime?
+  inactivityGraceDays Int? @default(30)
+  dailyApplicationGoal Int? @default(3)
 }
 
 model Application {

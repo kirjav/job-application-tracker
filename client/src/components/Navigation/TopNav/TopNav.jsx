@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
-const TopNav = () => {
+const TopNav = ({ onAddApplicationClick}) => {
     return (
-        <h2>Top Nav</h2>
+        <div>
+            <h2>Top Nav</h2>
+            <button onClick={onAddApplicationClick} className="application-button">Add Application</button>
+        </div>
     )
 };
 
