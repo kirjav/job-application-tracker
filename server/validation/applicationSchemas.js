@@ -1,6 +1,7 @@
 const { z } = require("zod");
 
 const STATUS_VALUES = ["Wishlist", "Applied", "Interviewing", "Offer", "Rejected", "Ghosted", "Withdrawn"];
+const MODE_VALUES = ["In-Office", "Hybrid", "Remote"];
 
 // Helper: no special chars or spaces in tags
 const tagNameRegex = /^[a-zA-Z0-9_-]+$/;
@@ -13,6 +14,7 @@ const applicationSchema = z.object({
   company: nonEmptyString,
   position: nonEmptyString,
   status: z.enum(STATUS_VALUES),
+  mode: z.enum(MODE_VALUES).default("In-Office"),
   source: z.string().optional(),
   notes: z.string().optional(),
   dateApplied: z.coerce.date(),

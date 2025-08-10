@@ -29,6 +29,7 @@ model Application {
   company     String
   position    String
   status      String
+  mode        String
   source      String?
   notes       String?
   tailoredResume Boolean

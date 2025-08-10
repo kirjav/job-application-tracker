@@ -3,7 +3,7 @@ const { handleError } = require("../utils/handleError");
 const { getPaginatedApplications } = require("../services/applicationService");
 
 async function createApplication(req, res) {
-  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated.body;
+  const { company, position, status, mode, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated.body;
 
   try {
     const safeTagIds = (tagIds ?? []).filter((id) => typeof id === "number");
@@ -23,6 +23,7 @@ async function createApplication(req, res) {
         company,
         position,
         status,
+        mode,
         source,
         notes,
         tailoredResume,
@@ -84,7 +85,7 @@ async function getAllUserApplications(req, res) {
 
 async function updateApplication(req, res) {
   const { id } = req.validated.params;
-  const { company, position, status, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated.body;
+  const { company, position, status, mode, source, notes, tailoredCoverLetter, tailoredResume, dateApplied, resumeUrl, tagIds } = req.validated.body;
 
 
   try {
@@ -118,6 +119,7 @@ async function updateApplication(req, res) {
         company,
         position,
         status,
+        mode,
         source,
         notes,
         tailoredCoverLetter,

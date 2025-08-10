@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import API from "../utils/api";
 import TagInput from "../components/TagInput/TagInput";
 import { STATUS_OPTIONS } from "../constants/ApplicationStatuses";
+import { MODE_OPTIONS } from "../constants/ApplicationModes";
 
 
-const ApplicationForm = ({ existingApp, onSuccess }) => {
+const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
   const isEditMode = !!existingApp;
 
   const [selectedTags, setSelectedTags] = useState(() =>
@@ -15,6 +16,7 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
     company: existingApp?.company || "",
     position: existingApp?.position || "",
     status: existingApp?.status || "",
+    mode: existingApp?.mode || "",
     source: existingApp?.source || "",
     notes: existingApp?.notes || "",
     tailoredResume: existingApp?.tailoredResume || false,
@@ -106,6 +108,22 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
         ))}
       </select>
 
+      <select
+        name="mode"
+        value={formData.status}
+        onChange={handleChange}
+        required
+      >
+        <option value="" disabled>
+          Select Work Arrangement
+        </option>
+        {MODE_OPTIONS.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+
 
       <input
         type="text"
@@ -156,6 +174,11 @@ const ApplicationForm = ({ existingApp, onSuccess }) => {
       />
 
       <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
+      {onCancel && (
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
+      )}
     </form>
   );
 };
