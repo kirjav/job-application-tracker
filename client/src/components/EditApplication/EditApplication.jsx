@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import API from "../utils/api";
-import ApplicationForm from "./ApplicationForm";
+import API from "../../utils/api";
+import ApplicationForm from "../ApplicationForm/ApplicationForm";
 
 const EditApplication = ({ applicationId, onSuccess, onClose }) => {
   const [appData, setAppData] = useState(null);

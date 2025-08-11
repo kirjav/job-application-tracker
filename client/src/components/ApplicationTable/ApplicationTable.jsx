@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../../utils/api";
-import EditApplication from "../EditApplication";
+import EditApplication from "../EditApplication/EditApplication";
 import "./ApplicationTable.css";
 
 const ApplicationTable = () => {
