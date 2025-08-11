@@ -9,6 +9,7 @@ const { generalLimiter, authLimiter, applicationsLimiter } = require("./middlewa
 // Load env FIRST
 dotenv.config();
 
+const isProd = process.env.NODE_ENV === "production";
 // Parse allowed origins from env
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(s => s.trim()) || [];
 
@@ -18,18 +19,26 @@ const corsOptions = {
       callback(null, true);
     } else {
       console.warn(`CORS blocked request from origin: ${origin}`);
-      callback(new Error("Not allowed by CORS"));
+      return callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
 };
 
 const app = express();
+app.set("trust proxy", 1);
 
 // Middleware setup
-app.use(helmet());
+app.use(helmet({
+  // Typical API tweaks:
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  // HSTS only in prod + over HTTPS
+  hsts: isProd ? undefined : false,
+}));
+
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
 
 // Routes and rate limiting
@@ -49,5 +58,15 @@ app.use("/tags", tagRoutes);
 
 const userRoutes = require("./routes/user");
 app.use("/user", userRoutes);
+
+app.use((err, req, res, next) => {
+  // Treat CORS errors & other thrown errors uniformly
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  if (status >= 500) {
+    console.error(err);
+  }
+  res.status(status).json({ error: message });
+});
 
 module.exports = app;

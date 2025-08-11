@@ -40,8 +40,9 @@ async function createApplication(req, res) {
 
     res.status(201).json(newApp);
   } catch (err) {
-
-    return handleError(res, err, "Failed to create application");
+      console.error("Create application error:", err.code, err.message, err.meta);
+      return res.status(500).json({ error: err.message, code: err.code, meta: err.meta });
+    //return handleError(res, err, "Failed to create application");
   }
 }
 

@@ -1,12 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ApplicationForm from "./components/ApplicationForm";
 import Dashboard from "./pages/Dashboard";
-import Dashboard from "./pages/ApplicationOverview";
+import ApplicationOverview from "./pages/ApplicationOverview";
 import Auth from "./pages/Auth";
 import AuthRoute from "./routes/AuthRoute";
 import GuestRoute from "./routes/GuestRoute";
 import AuthenticatedLayout from "./Layouts/AuthenticatedLayout"; // New layout
-import ApplicationOverview from "./pages/ApplicationOverview";
 
 function App() {
   return (

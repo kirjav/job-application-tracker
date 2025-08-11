@@ -4,7 +4,8 @@ import AddApplication from "../components/AddApplication/AddApplication"
 import TopNav from "../components/Navigation/TopNav/TopNav";
 import SideNav from "../components/Navigation/SideNav/SideNav";
 import LogoutButton from "../components/LogoutButton";
-import { useState, Outlet } from "react-router-dom"; // for nested routes
+import { Outlet } from "react-router-dom"; // for nested routes
+import { useState } from "react";
 
 const AuthenticatedLayout = () => {
   const {

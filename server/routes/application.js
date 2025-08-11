@@ -5,11 +5,13 @@ const validate = require("../middleware/schemaValidation");
 const authenticateToken = require("../middleware/authMiddleware");
 
 const {
-    applicationSchema,
-    updateApplicationSchema,
-    querySchema,
-    paramIdSchema,
+  applicationSchema,
+  updateApplicationSchema,
+  querySchema,
+  paramIdSchema,
 } = require("../validation/applicationSchemas");
+
+//router.use(authenticateToken);
 
 // POST /applications – body validation
 router.post("/", authenticateToken, validate(applicationSchema), createApplication);
@@ -23,11 +25,11 @@ router.get("/:id", authenticateToken, getSingleApplication);
 
 // PUT /applications/:id – body + param validation
 router.put(
-    "/:id",
-    authenticateToken,
-    validate(paramIdSchema, "params"),
-    validate(updateApplicationSchema, "body"),
-    updateApplication
+  "/:id",
+  authenticateToken,
+  validate(paramIdSchema, "params"),
+  validate(updateApplicationSchema, "body"),
+  updateApplication
 );
 
 router.patch(

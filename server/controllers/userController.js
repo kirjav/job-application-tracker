@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 
 // Utils
-const { isPasswordComplex, hashPassword, verifyPasswordMatch} = require("../utils/passwordUtils");
+const { isPasswordComplex, hashPassword, verifyPasswordMatch } = require("../utils/passwordUtils");
 const { getAuthenticatedUser } = require("../utils/authHelpers");
 const { handleError } = require("../utils/handleError");
 
@@ -12,7 +12,7 @@ const jwt = require("jsonwebtoken");
 
 async function deleteUser(req, res) {
     const { password } = req.validated.body;
-    
+
     if (!password) {
         return res.status(400).json({ error: "Password required" });
     }
@@ -80,14 +80,7 @@ async function updateEmail(req, res) {
 async function updatePassword(req, res) {
     const { oldPassword, newPassword } = req.validated.body;
 
-    if (!oldPassword || !newPassword) {
-        return res.status(400).json({ error: "Incomplete information" });
-    }
-
     try {
-        if (!isPasswordComplex(newPassword)) {
-            return res.status(400).json({ error: "Password does not meet complexity requirements" });
-        }
 
         const user = await getAuthenticatedUser(req.user.userId);
 
@@ -106,33 +99,45 @@ async function updatePassword(req, res) {
     }
 }
 
-async function updateName(req, res) {
-    const { newName } = req.validated.body;
-
-    if (!newName) {
-        return res.status(400).json({ error: "New name input is invalid" });
+function pruneUndefined(obj) {
+    const out = {};
+    for (const [k, v] of Object.entries(obj)) {
+        if (v !== undefined) out[k] = v; // keep null if you want to explicitly clear
     }
-
-    try {
-        const user = await getAuthenticatedUser(req.user.userId);
-
-        await prisma.user.update({
-            where: { id: req.user.userId },
-            data: { name: newName },
-        });
-
-        return res.json({ message: "Name updated successfully" });
-
-    } catch (err) {
-        return handleError(res, err, "Failed to update Name");
-    }
+    return out;
 }
 
+async function updateMe(req, res) {
+    try {
+        const allowed = pruneUndefined(req.validated.body);
 
+        // In case transform stripped everything (e.g., only empty strings were sent)
+        if (Object.keys(allowed).length === 0) {
+            return res.status(400).json({ error: "No valid fields to update" });
+        }
+        await getAuthenticatedUser(req.user.userId);
+
+        const updated = await prisma.user.update({
+            where: { id: req.user.userId },
+            data: allowed,
+            select: {
+                id: true,
+                name: true,
+                dailyApplicationGoal: true,
+                inactivityGraceDays: true,
+                // add new fields here
+            },
+        });
+
+        return res.json({ message: "Updated successfully", user: updated });
+    } catch (err) {
+        return handleError(res, err, "Failed to update profile");
+    }
+}
 
 module.exports = {
     deleteUser,
     updateEmail,
     updatePassword,
-    updateName,
+    updateMe,
 };

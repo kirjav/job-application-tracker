@@ -110,7 +110,7 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
 
       <select
         name="mode"
-        value={formData.status}
+        value={formData.mode}
         onChange={handleChange}
         required
       >

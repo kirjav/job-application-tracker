@@ -59,6 +59,7 @@ const ApplicationTable = () => {
               <th>Company</th>
               <th>Position</th>
               <th>Status</th>
+               <th>Mode</th>
               <th>Date Applied</th>
               <th>Actions</th>
             </tr>
@@ -69,6 +70,7 @@ const ApplicationTable = () => {
                 <td>{app.company}</td>
                 <td>{app.position}</td>
                 <td>{app.status}</td>
+                <td>{app.mode}</td>
                 <td>{new Date(app.dateApplied).toLocaleDateString()}</td>
                 <td>
                   <button onClick={() => setEditAppId(app.id)}>Edit</button>

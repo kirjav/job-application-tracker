@@ -1,22 +1,23 @@
 const { ZodError } = require("zod");
 
 function validate(schema, source = "body") {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
-      const data = req[source];
-      const parsed = schema.parse(data);
+      const data = req[source] ?? {};
+      const result = await schema.safeParseAsync(data);
 
-      // Always use object structure
-      if (!req.validated) {
-        req.validated = {};
+      if (!result.success) {
+        const { fieldErrors, formErrors } = result.error.flatten();
+        return res.status(422).json({ errors: fieldErrors, formErrors });
       }
 
-      req.validated[source] = parsed;
-
+      req.validated = req.validated || {};
+      req.validated[source] = result.data;
       next();
     } catch (err) {
+      // If something truly unexpected happens
       if (err instanceof ZodError) {
-        return res.status(400).json({ errors: err.errors });
+        return res.status(422).json({ errors: err.flatten().fieldErrors, formErrors: err.flatten().formErrors });
       }
       return res.status(500).json({ error: "Unexpected validation error" });
     }
@@ -24,3 +25,4 @@ function validate(schema, source = "body") {
 }
 
 module.exports = validate;
+// optionally also export validateAll from above
