@@ -12,26 +12,21 @@ const Auth = () => {
 
   return (
     <div className="guest-page">
-    <div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
-      {isLogin ? <LoginForm /> : <RegisterForm />}
+      <div className="guest-container">
+        <div className="left-side">x</div>
+        <div className="right-side">
+        <div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
+          {isLogin ? <LoginForm /> : <RegisterForm />}
 
-      <p style={{ marginTop: "1rem" }}>
-        {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-        <button
-          onClick={toggleForm}
-          style={{
-            textDecoration: "underline",
-            background: "none",
-            border: "none",
-            color: "blue",
-            cursor: "pointer"
-          }}
-        >
-          {isLogin ? "Register here" : "Login here"}
-        </button>
-      </p>
-    </div></div>
-    
+          <p>
+            {isLogin ? "Don't have an account yet?" : "Already have an account?"}{" "}
+            <button
+              onClick={toggleForm}>
+              {isLogin ? "Sign up for free" : "Login"}
+            </button>
+          </p>
+        </div></div></div></div>
+
   );
 };
 

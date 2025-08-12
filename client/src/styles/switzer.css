@@ -1,0 +1,23 @@
+/* switzer.css — variable font setup (recommended) */
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer/Switzer-Variable.woff2") format("woff2"),
+       url("/fonts/Switzer/Switzer-Variable.woff") format("woff");
+  font-weight: 100 900;   /* full variable weight range */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer/Switzer-VariableItalic.woff2") format("woff2"),
+       url("/fonts/Switzer/Switzer-VariableItalic.woff") format("woff");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* optional: define tokens 
+:root {
+  --font-sans: "Switzer", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}*/

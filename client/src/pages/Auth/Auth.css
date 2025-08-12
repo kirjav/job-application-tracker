@@ -1,10 +1,11 @@
 :root {
   --color-start: #3C6251;
-  --color-end: #6F9774; 
+  --color-end: #6F9774;
 }
 
 .guest-page {
-  --primary-dark-color: #284C3C; /* whatever your guest route color is */
+  --primary-dark-color: #284C3C;
+  /* whatever your guest route color is */
   --background-color: #ffffff;
   --primary-medium-color: #C1D8B2;
   --primary-light-color: #CFDDC4;
@@ -12,6 +13,58 @@
 
   height: 100vh;
   width: 100wh;
-  margin: 0; /* remove default spacing */
+  margin: 0;
+  /* remove default spacing */
   background: linear-gradient(to bottom, var(--color-start), var(--color-end));
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 }
+
+.guest-container {
+  width: 70%;
+  min-width: 300px;
+  min-height: 80%;
+  background-color: var(--background-color);
+  border-radius: 25px;
+
+  display: flex;
+  overflow: hidden;
+
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.left-side {
+  flex: 1;
+  background-color: var(--color-end);
+  background-image: url("/GuestRouteBackground.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.right-side {
+  flex: 1;
+
+  background-color: var(--background-color);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+p {
+  font-size: 14px;
+}
+
+.guest-page h2 {
+  font-size: 3rem;
+  font-weight: 400;
+  font-family: 'Gambarino';
+  color: var(--primary-dark-color)
+}
+
+/* Div container
++ 2 column div flex box
++ right column has flex box 1 column */
