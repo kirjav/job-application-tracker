@@ -1,6 +1,7 @@
 import { useState } from "react";
-import LoginForm from "../components/LoginForm/LoginForm";
-import RegisterForm from "../components/RegisterForm/RegisterForm";
+import "./Auth.css";
+import LoginForm from "../../components/LoginForm/LoginForm";
+import RegisterForm from "../../components/RegisterForm/RegisterForm";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,6 +11,7 @@ const Auth = () => {
   };
 
   return (
+    <div className="guest-page">
     <div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
       {isLogin ? <LoginForm /> : <RegisterForm />}
 
@@ -28,7 +30,8 @@ const Auth = () => {
           {isLogin ? "Register here" : "Login here"}
         </button>
       </p>
-    </div>
+    </div></div>
+    
   );
 };
 

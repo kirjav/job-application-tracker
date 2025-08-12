@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import API from "../utils/api";
-import TagInput from "../components/TagInput/TagInput";
-import { STATUS_OPTIONS } from "../constants/ApplicationStatuses";
-import { MODE_OPTIONS } from "../constants/ApplicationModes";
+import API from "../../utils/api";
+import TagInput from "../TagInput/TagInput";
+import { STATUS_OPTIONS } from "../../constants/ApplicationStatuses";
+import { MODE_OPTIONS } from "../../constants/ApplicationModes";
 
 
 const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {

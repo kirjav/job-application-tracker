@@ -1,4 +1,4 @@
-import ApplicationForm from "../ApplicationForm";
+import ApplicationForm from "../ApplicationForm/ApplicationForm";
 
 const AddApplication = ({ onClose }) => {
   return (

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../utils/api";
-import ResetPasswordForm from "./ResetPasswordForm/ResetPasswordForm";
+import API from "../../utils/api";
+import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });

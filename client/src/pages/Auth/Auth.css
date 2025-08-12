@@ -1,0 +1,17 @@
+:root {
+  --color-start: #3C6251;
+  --color-end: #6F9774; 
+}
+
+.guest-page {
+  --primary-dark-color: #284C3C; /* whatever your guest route color is */
+  --background-color: #ffffff;
+  --primary-medium-color: #C1D8B2;
+  --primary-light-color: #CFDDC4;
+  --link-color: #74925D;
+
+  height: 100vh;
+  width: 100wh;
+  margin: 0; /* remove default spacing */
+  background: linear-gradient(to bottom, var(--color-start), var(--color-end));
+}

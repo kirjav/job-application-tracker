@@ -3,7 +3,7 @@ import SessionWarningModal from "../components/SessionWarningModal/SessionWarnin
 import AddApplication from "../components/AddApplication/AddApplication"
 import TopNav from "../components/Navigation/TopNav/TopNav";
 import SideNav from "../components/Navigation/SideNav/SideNav";
-import LogoutButton from "../components/LogoutButton";
+import LogoutButton from "../components/LogoutButton/LogoutButton";
 import { Outlet } from "react-router-dom"; // for nested routes
 import { useState } from "react";
 

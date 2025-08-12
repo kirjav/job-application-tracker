@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ApplicationOverview from "./pages/ApplicationOverview";
-import Auth from "./pages/Auth";
+import Auth from "./pages/Auth/Auth";
 import AuthRoute from "./routes/AuthRoute";
 import GuestRoute from "./routes/GuestRoute";
 import AuthenticatedLayout from "./Layouts/AuthenticatedLayout"; // New layout
