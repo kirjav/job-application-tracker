@@ -19,20 +19,20 @@ const ResetPasswordForm = ({ onBack }) => {
   };
 
   return (
-    <form onSubmit={handleReset}>
+    <form className="guest-form-container" onSubmit={handleReset}>
       <h2>Reset Password</h2>
+      <div className="input-wrapper">
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Your email"
         required
-      />
+      /></div>
       <button type="submit">Send Reset Link</button>
       <button
         type="button"
         onClick={onBack}
-        style={{ marginTop: "0.5rem" }}
       >
         Back to Login
       </button>

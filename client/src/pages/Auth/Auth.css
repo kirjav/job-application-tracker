@@ -6,6 +6,16 @@
 /* {
   outline: 1px solid red !important;
 }*/
+@media (max-width: 768px) { /* adjust breakpoint as needed */
+  .guest-page .left-side {
+    display: none;
+  }
+
+    .guest-page .right-side {
+    flex: 1 1 100%;
+    width: 80%;
+  }
+}
 
 
 .guest-page {
@@ -58,6 +68,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 50px;
   gap: 5px;
 }
 
@@ -66,7 +77,7 @@ p {
 }
 
 .guest-page h2 {
-  font-size: 3rem;
+   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
   font-family: 'Gambarino';
   color: var(--primary-dark-color);
@@ -81,8 +92,8 @@ p {
 .guest-page input {
 
   box-shadow: none;
-  border-radius: 15px;
-  border-width: 4px;
+  border-radius: 24px;
+  border-width: 3px;
   border-style: solid;
   border-color: var(--primary-medium-color);
   height: 73px;
@@ -90,7 +101,7 @@ p {
   color: var(--primary-dark-color);
   font-size: 18px;
 
-  padding: 10px;
+  padding: 24px;
 }
 
 .guest-page input::placeholder {
@@ -125,7 +136,8 @@ p {
 .guest-form-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: center;
+  gap: 5px;
 }
 
 .guest-form-container button {
@@ -157,6 +169,8 @@ p {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-bottom: 14px;
+  padding-right: 4px;
 }
 
 .guest-page .forgotPassword button {
