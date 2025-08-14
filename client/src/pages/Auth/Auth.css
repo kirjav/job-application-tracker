@@ -3,16 +3,22 @@
   --color-end: #6F9774;
 }
 
+/* {
+  outline: 1px solid red !important;
+}*/
+
+
 .guest-page {
   --primary-dark-color: #284C3C;
   /* whatever your guest route color is */
   --background-color: #ffffff;
-  --primary-medium-color: #C1D8B2;
-  --primary-light-color: #CFDDC4;
+  --primary-medium-color: #6D9573;
+  --primary-light-color: #C1D8B2;
+  --primary-lightest-color: #CFDDC4;
+  --primary-font-color-light: #A4B398;
   --link-color: #74925D;
 
   height: 100vh;
-  width: 100wh;
   margin: 0;
   /* remove default spacing */
   background: linear-gradient(to bottom, var(--color-start), var(--color-end));
@@ -20,7 +26,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
 }
 
 .guest-container {
@@ -37,7 +43,7 @@
 }
 
 .left-side {
-  flex: 1;
+  flex: 1 1 0;
   background-color: var(--color-end);
   background-image: url("/GuestRouteBackground.png");
   background-size: cover;
@@ -45,13 +51,14 @@
 }
 
 .right-side {
-  flex: 1;
-
+  flex: 1 1 0;
+  
   background-color: var(--background-color);
-
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
 p {
@@ -62,7 +69,133 @@ p {
   font-size: 3rem;
   font-weight: 400;
   font-family: 'Gambarino';
+  color: var(--primary-dark-color);
+  padding: 0 20px 0 20px;
+  margin: 0px;
+}
+
+.guest-page input:focus {
+  outline: none;
+}
+
+.guest-page input {
+
+  box-shadow: none;
+  border-radius: 15px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: var(--primary-medium-color);
+  height: 73px;
+  width: 100%;
+  color: var(--primary-dark-color);
+  font-size: 18px;
+
+  padding: 10px;
+}
+
+.guest-page input::placeholder {
+  color: var(--primary-font-color-light);
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.password-wrapper input {
+  flex: 1 1 0;
+  padding-right: 40px;
+
+}
+
+.password-wrapper .toggle-password {
+  position: absolute;
+  right: 10px; /* space from right edge */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: .7rem;
+  color: var(--primary-medium-color);
+}
+
+.guest-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.guest-form-container button {
+  flex: 0 1 0;
+}
+
+.guest-page .component-toggle {
+  font-family: 'Gambarino';
   color: var(--primary-dark-color)
+}
+
+.guest-page .component-toggle button {
+  color: var(--primary-medium-color);
+  font-family: 'Gambarino';
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.guest-page .component-toggle button:hover {
+  color: var(--primary-dark-color);
+}
+
+.guest-page .forgotPassword {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.guest-page .forgotPassword button {
+  font-family: 'Inter';
+  font-size: 14px;
+  color: var(--primary-medium-color);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.guest-page .forgotPassword button:hover {
+  color: var(--primary-dark-color);
+}
+
+.guest-page .input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.guest-page button[type="submit"]{
+  
+  font-family: "Switzer", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-style: normal;
+  font-size: 24px;
+  color: white;
+  background: var(--primary-medium-color);
+  border-style: none;
+  border-radius: 32px;
+  padding: 10px;
+  margin: 0;
+}
+
+.guest-page button[type="submit"]:hover{
+  background: var(--primary-dark-color);
 }
 
 /* Div container

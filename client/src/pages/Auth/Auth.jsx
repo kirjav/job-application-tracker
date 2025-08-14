@@ -13,20 +13,22 @@ const Auth = () => {
   return (
     <div className="guest-page">
       <div className="guest-container">
-        <div className="left-side">x</div>
+        <div className="left-side"></div>
         <div className="right-side">
-        <div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
-          {isLogin ? <LoginForm /> : <RegisterForm />}
 
-          <p>
+
+          {isLogin ? <LoginForm /> : <RegisterForm />}
+          
+          
+          
+          <p className="component-toggle">
             {isLogin ? "Don't have an account yet?" : "Already have an account?"}{" "}
             <button
               onClick={toggleForm}>
               {isLogin ? "Sign up for free" : "Login"}
             </button>
           </p>
-        </div></div></div></div>
-
+        </div></div></div>
   );
 };
 

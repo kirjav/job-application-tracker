@@ -7,7 +7,10 @@ const LoginForm = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState(null);
   const [showReset, setShowReset] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,8 +39,9 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="guest-form-container" onSubmit={handleSubmit}>
       <h2>Welcome Back</h2>
+      <div className="input-wrapper">
       <input
         type="email"
         name="email"
@@ -46,29 +50,31 @@ const LoginForm = () => {
         placeholder="Email"
         required
       />
-      <input
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-        placeholder="Password"
-        required
-      />
-      <button type="submit">Login</button>
+      <div className="password-wrapper">
+        <input
+          type={showPassword ? "text" : "password"}
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="toggle-password"
+          >
+            {showPassword ? "HIDE" : "SHOW"}
+        </button>
+      </div></div>
+      <div className="forgotPassword">
       <button
         type="button"
         onClick={() => setShowReset(true)}
-        style={{
-          marginTop: "0.5rem",
-          background: "none",
-          border: "none",
-          color: "blue",
-          textDecoration: "underline",
-          cursor: "pointer",
-        }}
       >
         Forgot your password?
-      </button>
+      </button></div>
+      <button type="submit">Log In</button>
       {message && <p>{message}</p>}
     </form>
   );
