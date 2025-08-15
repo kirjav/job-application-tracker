@@ -20,7 +20,7 @@ const RegisterForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-    const passwordsMatch = useMemo(() => {
+  const passwordsMatch = useMemo(() => {
     return (
       formData.password.length > 0 &&
       formData.confirmPassword.length > 0 &&
@@ -32,7 +32,7 @@ const RegisterForm = () => {
     e.preventDefault();
     setMessage(null);
 
-        // Only send the real password (omit confirmPassword)
+    // Only send the real password (omit confirmPassword)
     const payload = {
       name: formData.name,
       email: formData.email,
@@ -62,71 +62,77 @@ const RegisterForm = () => {
     <form className="guest-form-container" onSubmit={handleSubmit}>
       <h2>Create Account</h2>
       <div className="input-wrapper">
-      <input
-        type="name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        placeholder="Name"
-        required
-      />
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        placeholder="Email"
-        required
-      />
-      {/* Password */}
-      <div className="password-wrapper">
         <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          value={formData.password}
+          type="name"
+          name="name"
+          value={formData.name}
           onChange={handleChange}
-          placeholder="Password"
-          required
-          aria-invalid={!passwordsMatch && formData.confirmPassword !== ""}
-          aria-describedby="pwd-help"
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword((prev) => !prev)}
-          className="toggle-password"
-          aria-label={showPassword ? "Hide password" : "Show password"}
-        >
-          {showPassword ? "HIDE" : "SHOW"}
-        </button>
-      </div>
-      {/* Confirm Password */}
-      <div className="password-wrapper">
-        <input
-          type={showConfirmPassword ? "text" : "password"}
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          placeholder="Confirm Password"
-          aria-invalid={!passwordsMatch && formData.confirmPassword !== ""}
+          placeholder="Name"
           required
         />
-        <button
-          type="button"
-          onClick={() => setShowConfirmPassword((prev) => !prev)}
-          className="toggle-password"
-          aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
-        >
-          {showConfirmPassword ? "HIDE" : "SHOW"}
-        </button>
-      </div>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
+        />
+        {/* Password */}
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+            aria-invalid={!passwordsMatch && formData.confirmPassword !== ""}
+            aria-describedby="pwd-help"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="toggle-password"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            <img
+              src={showPassword ? "/icons/auth/eyeHIDE.svg" : "/icons/auth/eyeSHOW.svg"}
+              alt={showPassword ? "Hide password" : "Show password"}
+            />
+          </button>
+        </div>
+        {/* Confirm Password */}
+        <div className="password-wrapper">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm Password"
+            aria-invalid={!passwordsMatch && formData.confirmPassword !== ""}
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+            className="toggle-password"
+            aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+          >
+            <img
+              src={showConfirmPassword ? "/icons/auth/eyeHIDE.svg" : "/icons/auth/eyeSHOW.svg"}
+              alt={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+            />
+          </button>
+        </div>
 
-      {!passwordsMatch && formData.confirmPassword !== "" && (
-        <p id="pwd-help" role="alert" style={{ fontSize: 12 }}>
-          Passwords don’t match.
-        </p>
-      )}
+        {/*{!passwordsMatch && formData.confirmPassword !== "" && (
+          <p id="pwd-help" role="alert" style={{ fontSize: 12 }}>
+            Passwords don’t match.
+          </p>
+        )}*/}
 
-      <button type="submit">Register</button></div>
+        <button type="submit">Register</button></div>
 
       {message && <p>{message}</p>}
     </form>

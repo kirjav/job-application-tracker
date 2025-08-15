@@ -13,7 +13,9 @@ const Auth = () => {
   return (
     <div className="guest-page">
       <div className="guest-container">
-        <div className="left-side"></div>
+        <div className="left-side">
+          <div className="slide-show"></div>
+        </div>
         <div className="right-side">
 
 

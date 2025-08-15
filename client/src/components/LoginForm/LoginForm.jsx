@@ -42,38 +42,41 @@ const LoginForm = () => {
     <form className="guest-form-container" onSubmit={handleSubmit}>
       <h2>Welcome Back</h2>
       <div className="input-wrapper">
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        placeholder="Email"
-        required
-      />
-      <div className="password-wrapper">
         <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          value={formData.password}
+          type="email"
+          name="email"
+          value={formData.email}
           onChange={handleChange}
-          placeholder="Password"
+          placeholder="Email"
           required
         />
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="toggle-password"
+          >
+            <img
+              src={showPassword ? "/icons/auth/eyeHIDE.svg" : "/icons/auth/eyeSHOW.svg"}
+              alt={showPassword ? "Hide password" : "Show password"}
+            />
+          </button>
+        </div></div>
+      <div className="forgotPassword">
         <button
           type="button"
-          onClick={() => setShowPassword((prev) => !prev)}
-          className="toggle-password"
-          >
-            {showPassword ? "HIDE" : "SHOW"}
-        </button>
-      </div></div>
-      <div className="forgotPassword">
-      <button
-        type="button"
-        onClick={() => setShowReset(true)}
-      >
-        Forgot your password?
-      </button></div>
+          onClick={() => setShowReset(true)}
+        >
+          Forgot your password?
+        </button></div>
       <button type="submit">Log In</button>
       {message && <p>{message}</p>}
     </form>

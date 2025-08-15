@@ -1,0 +1,18 @@
+.auth-layout {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.side-nav {
+    flex: 1 1 0;
+}
+
+.main-page {
+    flex: 8 1 0;
+}
+
+/* {
+  outline: 1px solid red !important;
+}*/

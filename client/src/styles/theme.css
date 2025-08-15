@@ -3,6 +3,12 @@
   --text-color: #111111;
   --primary-color: #4f46e5; /* Indigo-600 */
   --accent-color: #9333ea;  /* Purple-600 */
+
+  --decor-line-color: #DDDDDD;
+  --primary-darkest-font-color: #284C3C;/* Dark Font color */
+
+
+  --secondary-light-color: #E3F0DA; /* Sidebar Nav Select BG */
 }
 
 [data-theme="dark"] {

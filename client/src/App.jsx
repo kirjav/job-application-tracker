@@ -4,7 +4,7 @@ import ApplicationOverview from "./pages/ApplicationOverview";
 import Auth from "./pages/Auth/Auth";
 import AuthRoute from "./routes/AuthRoute";
 import GuestRoute from "./routes/GuestRoute";
-import AuthenticatedLayout from "./Layouts/AuthenticatedLayout"; // New layout
+import AuthenticatedLayout from "./Layouts/AuthenticatedLayout/AuthenticatedLayout"; // New layout
 
 function App() {
   return (
