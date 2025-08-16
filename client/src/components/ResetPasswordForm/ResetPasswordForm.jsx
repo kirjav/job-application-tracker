@@ -1,5 +1,6 @@
 import { useState } from "react";
 import API from "../../utils/api";
+import "./ResetPasswordForm.css"
 
 const ResetPasswordForm = ({ onBack }) => {
   const [email, setEmail] = useState("");
@@ -31,6 +32,7 @@ const ResetPasswordForm = ({ onBack }) => {
       /></div>
       <button type="submit">Send Reset Link</button>
       <button
+      className="return-btn"
         type="button"
         onClick={onBack}
       >
