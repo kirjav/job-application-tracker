@@ -15,6 +15,8 @@ const AuthenticatedLayout = () => {
     onLogout,
   } = useTokenMonitor();
 
+   const [forceWarning, setForceWarning] = useState(false);
+
   const [showAddApplication, setShowAddApplicationPopUp] = useState(false);
 
   return (
@@ -33,7 +35,7 @@ const AuthenticatedLayout = () => {
       {/* Session timeout modal */}
       {showWarning && (
         <SessionWarningModal
-          onRenew={onStayLoggedIn}
+          onStayLoggedIn={onStayLoggedIn}
           onLogout={onLogout}
         />
       )}

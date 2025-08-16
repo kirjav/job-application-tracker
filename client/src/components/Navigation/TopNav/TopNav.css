@@ -10,20 +10,26 @@
 }
 
 .account-icon {
-    width: 46px;
-    height: 46px;
+    width: 45px;
+    height: 45px;
     border-radius: 100px;
     background-color: var(--account-icon-background-color);
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-family: 'Gambarino';
+    font-family: 'Inter';
     font-size: 2rem;
     color: var(--account-icon-text-color);
 }
 
 .top-nav .application-button {
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    
     background-color: var(--secondary-background-color);
     font-family: 'Switzer';
     font-size: 1.2rem;
