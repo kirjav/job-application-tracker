@@ -3,7 +3,7 @@
 /* Variable font — covers all weights/styles */
 @font-face {
   font-family: "Inter";
-  src: url("InterVariable.woff2") format("woff2");
+  src: url("/fonts/Inter/InterVariable.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -11,7 +11,7 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("InterVariable-Italic.woff2") format("woff2");
+  src: url("/fonts/Inter/InterVariable-Italic.woff2") format("woff2");
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -20,7 +20,7 @@
 /* Optional fallback statics (keeps file size low but supports old browsers) */
 @font-face {
   font-family: "Inter";
-  src: url("Inter-Regular.woff2") format("woff2");
+  src: url("/fonts/Inter/Inter-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -28,7 +28,7 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("Inter-Bold.woff2") format("woff2");
+  src: url("/fonts/Inter/Inter-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

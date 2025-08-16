@@ -4,11 +4,18 @@
 }
 
 .side-nav-content.collapsed {
-    width: 100px;
+    width: 70px;
 }
 
 .side-nav-content.collapsed h2 {
-    display: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-nav-content.collapsed h2 button {
+    position: absolute;
+    left: 60px;
+    background-color: white;
 }
 
 .side-nav-content.expanded {
@@ -27,6 +34,14 @@
     gap: 5px;
 }
 
+.side-nav-content h2 button {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: flex-end;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
 .side-nav-content h2 img {
     height: 50px;
 }
@@ -40,18 +55,27 @@
 }
 
 .side-nav-content nav a {
-  font-family: "Switzer", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--text-color);
-  height: 45px;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  justify-content: center;
-  padding: 20px 0 20px 0;
-  border-radius: 5px;
+    font-family: "Switzer", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--secondary-dark-grey-color);
+    height: 45px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 0 20px 0;
+    border-radius: 5px;
+    gap: 5px;
+}
 
+.side-nav-content.collapsed nav a {
+    gap: 2px;
+}
+
+.side-nav-content.collapsed .nav-label {
+    display: none;
+    /* add !important if something is overriding it */
 }
 
 .side-nav-content .intermission .decor-line {
@@ -60,7 +84,7 @@
     background-color: var(--decor-line-color);
 }
 
-.side-nav-content .intermission p{
+.side-nav-content .intermission p {
     font-family: 'Switzer';
     color: #949494;
     font-size: .8rem;
@@ -68,10 +92,16 @@
     margin: 0;
 }
 
+.nav-icon {
+    color: var(--secondary-dark-grey-color);
+}
 
-
-.tab-active {
+.side-nav-content nav a.tab-active {
     background-color: var(--secondary-light-color);
+    color: var(--primary-darkest-font-color);
+}
+
+.side-nav-content .tab-active .nav-icon {
     color: var(--primary-darkest-font-color);
 }
 

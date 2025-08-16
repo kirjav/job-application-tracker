@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
+
+{/** Nav Icon SVGs */}
+import NavigationNavArrow from "../../../assets/icons/nav/NavigationNavArrow.svg?react";
+import DashboardNavIcon from "../../../assets/icons/nav/DashboardNavIcon.svg?react";
+import MyApplicationsNavIcon from "../../../assets/icons/nav/MyApplicationsNavIcon.svg?react";
+import NavCollapseIcon from "../../../assets/icons/nav/NavCollapseIcon.svg?react";
+import NavExpandIcon from "../../../assets/icons/nav/NavExpandIcon.svg?react";
+
+
 import "./SideNav.css";
 
 const SideNav = () => {
@@ -25,14 +34,12 @@ const SideNav = () => {
                     aria-expanded={!collapsed}
                     title={collapsed ? "Expand" : "Collapse"}>
                     {/* simple chevron */}
-                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                        <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" />
-                    </svg>
+                    {collapsed ? <NavExpandIcon/> : <NavCollapseIcon/>}
                 </button></h2>
                 <div className="intermission"><div className="decor-line"></div>{!collapsed && (<p>OVERVIEW</p>)}</div>
                 <nav>
-                    <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}>Dashboard</NavLink>
-                    <NavLink to="/applications" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}>My Applications</NavLink>
+                    <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><NavigationNavArrow className="nav-icon"/><DashboardNavIcon className="nav-icon"/><span className="nav-label">Dashboard</span></NavLink>
+                    <NavLink to="/applications" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><NavigationNavArrow className="nav-icon"/><MyApplicationsNavIcon className="nav-icon"/><span className="nav-label">My Applications</span></NavLink>
                 </nav>
         </aside >
     )
