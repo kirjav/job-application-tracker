@@ -1,6 +1,7 @@
 :root {
   --bg-color: #ffffff;
   --text-color: #111111;
+  --contrast-text-color: white;
   --primary-color: #4f46e5; /* Indigo-600 */
   --accent-color: #9333ea;  /* Purple-600 */
 
@@ -10,6 +11,13 @@
   --secondary-dark-grey-color: #3C3C3C;
   --secondary-grey-color: #626262;
   --secondary-light-color: #E3F0DA; /* Sidebar Nav Select BG */
+
+  --account-icon-background-color: #284C3C;
+  --account-icon-text-color: #ffffff;
+
+  --secondary-background-color: #83A878; /* Add application bg*/
+  --secondary-background-hover-color: #74925D; /* Hover Add application bg*/
+
 }
 
 [data-theme="dark"] {

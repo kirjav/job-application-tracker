@@ -6,7 +6,7 @@
 /* {
   outline: 1px solid red !important;
 }*/
-@media (max-width: 768px) { /* adjust breakpoint as needed */
+@media (max-width: 768px) {
   .guest-page .left-side {
     display: none;
   }
@@ -20,7 +20,6 @@
 
 .guest-page {
   --primary-dark-color: #284C3C;
-  /* whatever your guest route color is */
   --background-color: #ffffff;
   --primary-medium-color: #6D9573;
   --primary-light-color: #C1D8B2;
@@ -30,7 +29,7 @@
 
   height: 100vh;
   margin: 0;
-  /* remove default spacing */
+
   background: linear-gradient(to bottom, var(--color-start), var(--color-end));
 
   display: flex;
@@ -224,7 +223,3 @@
   background: var(--primary-dark-color);
   cursor: pointer;
 }
-
-/* Div container
-+ 2 column div flex box
-+ right column has flex box 1 column */
