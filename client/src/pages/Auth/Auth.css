@@ -109,7 +109,7 @@
   height: 73px;
   width: 100%;
   color: var(--primary-dark-color);
-  font-size: 18px;
+  font-size: 1rem;
 
   padding: 24px;
 }
@@ -148,6 +148,10 @@
   flex-direction: column;
   justify-content: center;
   gap: 5px;
+}
+
+.guest-form-container.reset-password {
+  gap:12px;
 }
 
 .guest-form-container button {
@@ -207,15 +211,14 @@
 }
 
 .guest-page button[type="submit"]{
-  
   font-family: "Switzer", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   font-style: normal;
-  font-size: 24px;
+  font-size: 1.2rem;
   color: white;
   background: var(--primary-medium-color);
   border-style: none;
   border-radius: 32px;
-  padding: 10px;
+  padding: 12px;
   margin: 0;
 }
 

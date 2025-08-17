@@ -20,7 +20,7 @@ const ResetPasswordForm = ({ onBack }) => {
   };
 
   return (
-    <form className="guest-form-container" onSubmit={handleReset}>
+    <form className="guest-form-container reset-password" onSubmit={handleReset}>
       <h2>Reset Password</h2>
       <div className="input-wrapper">
       <input
