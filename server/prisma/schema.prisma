@@ -25,21 +25,27 @@ model User {
 }
 
 model Application {
-  id          Int      @id @default(autoincrement())
-  company     String
-  position    String
-  status      String
-  mode        String
-  source      String?
-  notes       String?
-  tailoredResume Boolean
+  id               Int      @id @default(autoincrement())
+  company          String
+  position         String
+  status           String
+  mode             String
+  source           String?
+  notes            String?
+  tailoredResume   Boolean
   tailoredCoverLetter Boolean
-  dateApplied DateTime
-  dateUpdated DateTime @updatedAt
-  resumeUrl   String?
-  tags        Tag[]
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int
+  dateApplied      DateTime
+  dateUpdated      DateTime @updatedAt
+  resumeUrl        String?
+  tags             Tag[]
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           Int
+  @@index([userId, dateApplied])
+  @@index([userId, status])
+  @@index([userId, mode])
+  @@index([userId, company])
+  @@index([userId, position])
+  @@index([userId, dateUpdated])
 }
 
 model Tag {
@@ -50,4 +56,5 @@ model Tag {
   apps   Application[]
 
   @@unique([userId, name]) // A user can't create two tags with same name
+  @@index([userId])
 }

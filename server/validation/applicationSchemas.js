@@ -24,6 +24,38 @@ const applicationSchema = z.object({
   tailoredCoverLetter: z.boolean().optional().default(false),   
 }).strict();
 
+// sorting options you support
+const SortBy  = z.enum(["company","position","status","mode","dateApplied","salary"]);
+const SortDir = z.enum(["asc","desc"]);
+
+// ─── Filters / Query for GET /applications ───────────────────
+const filterSchema = z.object({
+  // filters
+  statuses: z.preprocess(
+    v => (Array.isArray(v) ? v : v ? [v] : []),
+    z.array(z.enum(STATUS_VALUES))
+  ).optional(),
+  modes: z.preprocess(
+    v => (Array.isArray(v) ? v : v ? [v] : []),
+    z.array(z.enum(MODE_VALUES))
+  ).optional(),
+  dateFrom: z.coerce.date().optional(),
+  dateTo:   z.coerce.date().optional(),
+  minSalary: z.coerce.number().optional(),
+  maxSalary: z.coerce.number().optional(),
+  tagIds: z.preprocess(
+    v => (Array.isArray(v) ? v : v ? [v] : []),
+    z.array(z.coerce.number().int())
+  ).optional(),
+  q: z.string().trim().optional(),
+
+  // sorting & paging
+  sortBy: SortBy.default("dateApplied"),
+  sortDir: SortDir.default("desc"),
+  itemsPerPage: z.coerce.number().min(5).max(100).default(10),
+  page: z.coerce.number().min(1).default(1),
+});
+
 // ─── Application Update Schema (can allow partial fields) ────
 const updateApplicationSchema = applicationSchema.partial().extend({
   tagIds: z.array(z.number().int()).optional(),
@@ -50,6 +82,7 @@ const paramIdSchema = z.object({
 
 module.exports = {
   applicationSchema,
+  filterSchema,
   updateApplicationSchema,
   querySchema,
   paramIdSchema,

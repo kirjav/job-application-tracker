@@ -30,3 +30,18 @@
 .edit-application button {
   margin-top: 1rem;
 }
+
+/* ApplicationTable.css */
+.th-sort {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+.th-sort:hover { background: #eef5ee; }
+th[aria-sort="ascending"] .th-sort,
+th[aria-sort="descending"] .th-sort { font-weight: 600; }
+

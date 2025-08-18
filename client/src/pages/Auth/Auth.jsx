@@ -14,7 +14,7 @@ const Auth = () => {
     <div className="guest-page">
       <div className="guest-container">
         <div className="left-side">
-          <div className="slide-show"></div>
+          <div className="slide-show"><img src="art_placeholder.png" alt="image of a hawk in pursuit"></img></div>
         </div>
         <div className="right-side">
 

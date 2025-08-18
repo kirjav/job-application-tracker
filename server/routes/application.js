@@ -7,6 +7,7 @@ const authenticateToken = require("../middleware/authMiddleware");
 const {
   applicationSchema,
   updateApplicationSchema,
+  filterSchema,
   querySchema,
   paramIdSchema,
 } = require("../validation/applicationSchemas");
@@ -16,8 +17,8 @@ const {
 // POST /applications – body validation
 router.post("/", authenticateToken, validate(applicationSchema), createApplication);
 
-// GET /applications – query validation
-router.get("/", authenticateToken, validate(querySchema, "query"), getUserApplications);
+// GET /applications – query validation for filter stuff
+router.get("/", authenticateToken, validate(filterSchema, "query"), getUserApplications);
 
 router.get("/all", authenticateToken, getAllUserApplications);
 

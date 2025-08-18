@@ -6,7 +6,12 @@ WORKDIR /app
 
 # Copy package.json and install deps
 COPY package*.json ./
-RUN npm install
+RUN npm ci
+#    IMPORTANT: ensure .dockerignore does NOT exclude the prisma/ dir
+COPY prisma ./prisma
+
+# 3) Generate Prisma Client (point to schema explicitly)
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # Copy the rest of your backend code
 COPY . .

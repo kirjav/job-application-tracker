@@ -38,8 +38,8 @@ const SideNav = () => {
                 </button></h2>
                 <div className="intermission"><div className="decor-line"></div>{!collapsed && (<p>OVERVIEW</p>)}</div>
                 <nav>
-                    <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><NavigationNavArrow className="nav-icon"/><DashboardNavIcon className="nav-icon"/><span className="nav-label">Dashboard</span></NavLink>
-                    <NavLink to="/applications" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><NavigationNavArrow className="nav-icon"/><MyApplicationsNavIcon className="nav-icon"/><span className="nav-label">My Applications</span></NavLink>
+                    <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><DashboardNavIcon className="nav-icon"/><span className="nav-label">Dashboard</span></NavLink>
+                    <NavLink to="/applications" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><MyApplicationsNavIcon className="nav-icon"/><span className="nav-label">My Applications</span></NavLink>
                 </nav>
         </aside >
     )

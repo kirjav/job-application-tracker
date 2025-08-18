@@ -26,6 +26,7 @@ services:
       - "5555:5555"     # expose Prisma Studio
     volumes:
       - ./server:/app
+      - /app/node_modules
     command: ["node", "index.js"]
 
 volumes:
