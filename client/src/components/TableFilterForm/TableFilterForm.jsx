@@ -9,8 +9,8 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
     modes: value.modes ?? [],
     dateFrom: value.dateFrom ?? "",
     dateTo: value.dateTo ?? "",
-    minSalary: value.minSalary ?? "",
-    maxSalary: value.maxSalary ?? "",
+    salaryMin: value.salaryMin ?? "",
+    salaryMax: value.salaryMax ?? "",
     tagIds: value.tagIds ?? [],
     q: value.q ?? "",
   });
@@ -22,8 +22,8 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
       modes: value.modes ?? [],
       dateFrom: value.dateFrom ?? "",
       dateTo: value.dateTo ?? "",
-      minSalary: value.minSalary ?? "",
-      maxSalary: value.maxSalary ?? "",
+      salaryMin: value.salaryMin ?? "",
+      salaryMax: value.salaryMax ?? "",
       tagIds: value.tagIds ?? [],
       q: value.q ?? "",
     });
@@ -39,8 +39,8 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
       modes: draft.modes?.length ? draft.modes : undefined,
       dateFrom: draft.dateFrom || undefined,
       dateTo: draft.dateTo || undefined,
-      minSalary: draft.minSalary !== "" ? Number(draft.minSalary) : undefined,
-      maxSalary: draft.maxSalary !== "" ? Number(draft.maxSalary) : undefined,
+      salaryMin: draft.salaryMin !== "" ? Number(draft.salaryMin) : undefined,
+      salaryMax: draft.salaryMax !== "" ? Number(draft.salaryMax) : undefined,
       tagIds: draft.tagIds?.length ? draft.tagIds : undefined,
       q: draft.q || undefined,
     });
@@ -52,8 +52,8 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
       modes: [],
       dateFrom: "",
       dateTo: "",
-      minSalary: "",
-      maxSalary: "",
+      salaryMin: "",
+      salaryMax: "",
       tagIds: [],
       q: "",
     };
@@ -68,7 +68,7 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
         <select
           multiple
           value={draft.statuses}
-          onChange={(e) => update({ statuses: [...e.target.selectedOptions].map(o => o.value) })}
+          onChange={(e) => update({ statuses: Array.from(e.target.selectedOptions, o => o.value) })}
         >
           {STATUS_VALUES.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
@@ -79,7 +79,7 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
         <select
           multiple
           value={draft.modes}
-          onChange={(e) => update({ modes: [...e.target.selectedOptions].map(o => o.value) })}
+          onChange={(e) => update({ modes: Array.from(e.target.selectedOptions, o => o.value) })}
         >
           {MODE_VALUES.map(m => <option key={m} value={m}>{m}</option>)}
         </select>
@@ -96,11 +96,11 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
 
       <label>
         Min $
-        <input type="number" min="0" value={draft.minSalary} onChange={(e)=>update({minSalary:e.target.value})}/>
+        <input type="number" min="0" value={draft.salaryMin} onChange={(e)=>update({salaryMin:e.target.value})}/>
       </label>
       <label>
         Max $
-        <input type="number" min="0" value={draft.maxSalary} onChange={(e)=>update({maxSalary:e.target.value})}/>
+        <input type="number" min="0" value={draft.salaryMax} onChange={(e)=>update({salaryMax:e.target.value})}/>
       </label>
 
       <label style={{flex:1}}>

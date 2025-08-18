@@ -1,44 +1,96 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import API from "../../utils/api";
 import EditApplication from "../EditApplication/EditApplication";
 import TableFilterForm from "../TableFilterForm/TableFilterForm";
 import "./ApplicationTable.css";
+import qs from "qs";
 
 const ApplicationTable = () => {
-  // ---- local state (no filters prop) ----
-  const [filters, setFilters] = useState({});
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [sortBy, setSortBy] = useState("dateApplied");
-  const [sortDir, setSortDir] = useState("desc");
+  function readFiltersFromUrl(sp) {
+    const statuses = sp.getAll("statuses");
+    const modes = sp.getAll("modes");
+    const dateFrom = sp.get("dateFrom") || undefined;
+    const dateTo = sp.get("dateTo") || undefined;
+    const q = sp.get("q") || undefined;
+
+    const f = {};
+    if (statuses.length) f.statuses = statuses;
+    if (modes.length) f.modes = modes;
+    if (dateFrom) f.dateFrom = dateFrom;
+    if (dateTo) f.dateTo = dateTo;
+    if (q) f.q = q;
+    return f;
+  }
+
+  const [filters, setFilters] = useState(() => readFiltersFromUrl(searchParams));
+  const [page, setPage] = useState(() => Number(searchParams.get("page") || 1));
+  const [pageSize, setPageSize] = useState(() => Number(searchParams.get("itemsPerPage") || 10));
+  const [sortBy, setSortBy] = useState(() => searchParams.get("sortBy") || "dateApplied");
+  const [sortDir, setSortDir] = useState(() => searchParams.get("sortDir") || "desc");
 
   const [windowData, setWindowData] = useState({ items: [], total: 0, take: 0, skip: 0 });
   const [loading, setLoading] = useState(false);
   const [editAppId, setEditAppId] = useState(null);
 
   const windowIndex = useMemo(() => Math.floor((page - 1) / 5), [page]);
-  const windowSize  = 5 * pageSize;
+  const windowSize = 5 * pageSize;
 
-  // Reset to page 1 when filters/sort/pageSize change
-  useEffect(() => { setPage(1); }, [JSON.stringify(filters), sortBy, sortDir, pageSize]);
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    // arrays: repeat keys
+    (filters.statuses || []).forEach(v => params.append("statuses", v));
+    (filters.modes || []).forEach(v => params.append("modes", v));
+
+    if (filters.dateFrom) params.set("dateFrom", filters.dateFrom);
+    if (filters.dateTo) params.set("dateTo", filters.dateTo);
+    if (filters.q) params.set("q", filters.q);
+
+    params.set("sortBy", sortBy);
+    params.set("sortDir", sortDir);
+    params.set("itemsPerPage", String(pageSize));
+    params.set("page", String(page));
+
+    // replace avoids polluting browser history on every keystroke
+    setSearchParams(params, { replace: true });
+  }, [filters, sortBy, sortDir, pageSize, page, setSearchParams]);
+
+  useEffect(() => {
+  // Re-read from URL when it changes (e.g., back/forward)
+  const f = readFiltersFromUrl(searchParams);
+  const nextSortBy   = searchParams.get("sortBy") || "dateApplied";
+  const nextSortDir  = searchParams.get("sortDir") || "desc";
+  const nextPage     = Number(searchParams.get("page") || 1);
+  const nextPageSize = Number(searchParams.get("itemsPerPage") || 10);
+
+  // Only update if different to avoid loops
+  if (JSON.stringify(f) !== JSON.stringify(filters)) setFilters(f);
+  if (nextSortBy  !== sortBy)    setSortBy(nextSortBy);
+  if (nextSortDir !== sortDir)   setSortDir(nextSortDir);
+  if (nextPage    !== page)      setPage(nextPage);
+  if (nextPageSize!== pageSize)  setPageSize(nextPageSize);
+}, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+
+  useEffect(() => {
+    setPage(1);
+  }, [JSON.stringify(filters), sortBy, sortDir, pageSize]);
 
   const fetchApplications = async () => {
     setLoading(true);
     try {
       const res = await API.get("/applications", {
-        params: {
-          ...filters,
-          sortBy, sortDir,
-          itemsPerPage: pageSize,
-          page,
-        },
+        params: { ...filters, sortBy, sortDir, itemsPerPage: pageSize, page },
+        paramsSerializer: p => qs.stringify(p, { arrayFormat: "repeat" }),
       });
       setWindowData({
         items: res.data.items ?? [],
         total: res.data.total ?? 0,
-        take : res.data.window?.take ?? windowSize,
-        skip : res.data.window?.skip ?? windowIndex * windowSize,
+        take: res.data.window?.take ?? windowSize,
+        skip: res.data.window?.skip ?? windowIndex * windowSize,
       });
     } catch (err) {
       console.error("Failed to fetch applications", err);
@@ -54,7 +106,7 @@ const ApplicationTable = () => {
 
   const idxInWindow = (page - 1) % 5;
   const start = idxInWindow * pageSize;
-  const rows  = windowData.items.slice(start, start + pageSize);
+  const rows = windowData.items.slice(start, start + pageSize);
   const totalPages = Math.max(1, Math.ceil(windowData.total / pageSize));
 
   function toggleSort(column) {
@@ -80,7 +132,7 @@ const ApplicationTable = () => {
         <label style={{ marginLeft: "auto" }}>
           Rows:
           <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
-            {[10,20,30,50].map(n => <option key={n} value={n}>{n}</option>)}
+            {[10, 20, 30, 50].map(n => <option key={n} value={n}>{n}</option>)}
           </select>
         </label>
       </div>
@@ -93,12 +145,12 @@ const ApplicationTable = () => {
         <table>
           <thead>
             <tr>
-              <th aria-sort={ariaSort("company")}><button type="button" className="th-sort" onClick={()=>toggleSort("company")}>Company{caret("company")}</button></th>
-              <th aria-sort={ariaSort("position")}><button type="button" className="th-sort" onClick={()=>toggleSort("position")}>Position{caret("position")}</button></th>
-              <th aria-sort={ariaSort("status")}><button type="button" className="th-sort" onClick={()=>toggleSort("status")}>Status{caret("status")}</button></th>
-              <th aria-sort={ariaSort("mode")}><button type="button" className="th-sort" onClick={()=>toggleSort("mode")}>Mode{caret("mode")}</button></th>
-              <th aria-sort={ariaSort("dateApplied")}><button type="button" className="th-sort" onClick={()=>toggleSort("dateApplied")}>Date Applied{caret("dateApplied")}</button></th>
-              <th aria-sort={ariaSort("salary")}><button type="button" className="th-sort" onClick={()=>toggleSort("salary")}>Salary{caret("salary")}</button></th>
+              <th aria-sort={ariaSort("company")}><button type="button" className="th-sort" onClick={() => toggleSort("company")}>Company{caret("company")}</button></th>
+              <th aria-sort={ariaSort("position")}><button type="button" className="th-sort" onClick={() => toggleSort("position")}>Position{caret("position")}</button></th>
+              <th aria-sort={ariaSort("status")}><button type="button" className="th-sort" onClick={() => toggleSort("status")}>Status{caret("status")}</button></th>
+              <th aria-sort={ariaSort("mode")}><button type="button" className="th-sort" onClick={() => toggleSort("mode")}>Mode{caret("mode")}</button></th>
+              <th aria-sort={ariaSort("dateApplied")}><button type="button" className="th-sort" onClick={() => toggleSort("dateApplied")}>Date Applied{caret("dateApplied")}</button></th>
+              <th aria-sort={ariaSort("salary")}><button type="button" className="th-sort" onClick={() => toggleSort("salary")}>Salary{caret("salary")}</button></th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -129,9 +181,9 @@ const ApplicationTable = () => {
 
       {/* Pager */}
       <div className="pager" style={{ marginTop: "1rem" }}>
-        <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page<=1}>Previous</button>
+        <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}>Previous</button>
         <span style={{ margin: "0 1rem" }}>Page {page} of {totalPages}</span>
-        <button onClick={()=>setPage(p=>Math.min(totalPages,p+1))} disabled={page>=totalPages}>Next</button>
+        <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}>Next</button>
       </div>
 
       {editAppId && (

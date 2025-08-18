@@ -35,6 +35,9 @@ model Application {
   tailoredResume   Boolean
   tailoredCoverLetter Boolean
   dateApplied      DateTime
+  salaryExact      Int?
+  salaryMin        Int?
+  salaryMax        Int?
   dateUpdated      DateTime @updatedAt
   resumeUrl        String?
   tags             Tag[]

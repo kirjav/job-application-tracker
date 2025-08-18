@@ -5,7 +5,7 @@ async function createApplication(req, res) {
   const {
     company, position, status, mode, source, notes,
     tailoredCoverLetter, tailoredResume,
-    dateApplied, resumeUrl, tagIds
+    dateApplied, salaryExact, salaryMin, salaryMax, resumeUrl, tagIds
   } = req.validated.body;
 
   try {
@@ -23,13 +23,16 @@ async function createApplication(req, res) {
         company,
         position,
         status,
-        mode, // ✅ make sure mode is saved
+        mode,
         source,
         notes,
         tailoredResume: !!tailoredResume,
         tailoredCoverLetter: !!tailoredCoverLetter,
         resumeUrl,
         dateApplied: new Date(dateApplied),
+        salaryExact,
+        salaryMin,
+        salaryMax,
         userId: req.user.userId,
         // implicit M:N: connect tags directly by id
         ...(validatedTagIds.length
@@ -171,7 +174,7 @@ async function updateApplication(req, res) {
   const {
     company, position, status, mode, source, notes,
     tailoredCoverLetter, tailoredResume,
-    dateApplied, resumeUrl, tagIds
+    dateApplied, salaryExact, salaryMin, salaryMax, resumeUrl, tagIds
   } = req.validated.body;
 
   try {
@@ -189,7 +192,7 @@ async function updateApplication(req, res) {
       const validatedTagIds = userTags.map(t => t.id);
       // replace full set
       tagOps = {
-        set: [], // clear all
+        set: [],
         ...(validatedTagIds.length
           ? { connect: validatedTagIds.map(id => ({ id })) }
           : {}),
@@ -202,7 +205,7 @@ async function updateApplication(req, res) {
         company,
         position,
         status,
-        mode, // ✅
+        mode,
         source,
         notes,
         tailoredCoverLetter,
@@ -210,6 +213,9 @@ async function updateApplication(req, res) {
         resumeUrl,
         dateApplied: dateApplied ? new Date(dateApplied) : undefined,
         ...(tagOps ? { tags: tagOps } : {}),
+        salaryExact,
+        salaryMin,
+        salaryMax,
       },
       include: { tags: true },
     });
@@ -222,7 +228,7 @@ async function updateApplication(req, res) {
 
 async function updateApplicationPartial(req, res) {
   const { id } = req.validated.params;
-  const updates = { ...req.validated.body }; // clone so we can prune tagIds
+  const updates = { ...req.validated.body };
 
   try {
     const app = await prisma.application.findUnique({ where: { id: Number(id) } });
@@ -240,14 +246,13 @@ async function updateApplicationPartial(req, res) {
       const validatedTagIds = userTags.map(t => t.id);
 
       tagOps = {
-        set: [], // replace full set
+        set: [],
         ...(validatedTagIds.length ? { connect: validatedTagIds.map(id => ({ id })) } : {}),
       };
 
-      delete updates.tagIds; // important: not a scalar field
+      delete updates.tagIds;
     }
 
-    // If dateApplied came via Zod coerce, it’s already a Date
     const updated = await prisma.application.update({
       where: { id: Number(id) },
       data: {

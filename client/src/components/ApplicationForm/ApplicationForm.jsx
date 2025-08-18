@@ -23,7 +23,10 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
     tailoredCoverLetter: existingApp?.tailoredCoverLetter || false,
     dateApplied: existingApp?.dateApplied
       ? existingApp.dateApplied.split("T")[0]
-      : "",
+      : new Date().toISOString().split("T")[0],
+    salaryExact: existingApp?.salaryExact || "",
+    salaryMin: existingApp?.salaryMin || "",
+    salaryMax: existingApp?.salaryMax || "",
     tagIds: existingApp?.tags?.map((tag) => tag.id) || [],
   });
 
@@ -123,7 +126,28 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
           </option>
         ))}
       </select>
+      <input
+        type="number"
+        name="salaryExact"
+        value={formData.salaryExact || ""}
+        onChange={handleChange}
+        placeholder="Exact Salary"
+      />
 
+      <input
+        type="number"
+        name="salaryMin"
+        value={formData.salaryMin || ""}
+        onChange={handleChange}
+        placeholder="Min Salary"
+      />
+      <input
+        type="number"
+        name="salaryMax"
+        value={formData.salaryMax || ""}
+        onChange={handleChange}
+        placeholder="Max Salary"
+      />
 
       <input
         type="text"
