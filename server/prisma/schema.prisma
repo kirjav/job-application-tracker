@@ -38,6 +38,7 @@ model Application {
   salaryExact      Int?
   salaryMin        Int?
   salaryMax        Int?
+  effectiveSalary  Decimal? @db.Decimal(65,30)
   dateUpdated      DateTime @updatedAt
   resumeUrl        String?
   tags             Tag[]

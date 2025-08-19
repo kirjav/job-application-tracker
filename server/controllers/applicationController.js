@@ -93,12 +93,38 @@ function buildWhere(userId, f) {
     });
   }
 
+  if (f.salaryMin != null || f.salaryMax != null) {
+    const exactInside = {
+      AND: [
+        f.salaryMin != null ? { salaryExact: { gte: f.salaryMin } } : {},
+        f.salaryMax != null ? { salaryExact: { lte: f.salaryMax } } : {},
+      ],
+    };
+
+    const rangeContained = {
+      AND: [
+        { salaryMin: { not: null } },
+        { salaryMax: { not: null } },
+        f.salaryMin != null ? { salaryMin: { gte: f.salaryMin } } : {},
+        f.salaryMax != null ? { salaryMax: { lte: f.salaryMax } } : {},
+      ],
+    };
+
+    AND.push({
+      OR: [exactInside, rangeContained],
+    });
+  }
+
   return { AND };
 }
 /**
  * Only these can be ordered directly in SQL without custom logic
  */
 function buildOrderBy(f) {
+
+  if (f.sortBy === "salary" || f.sortBy === "effectiveSalary") {
+    return [{ effectiveSalary: { sort: f.sortDir, nulls: "last" } }];
+  }
   // These can be SQL-ordered directly
   if (["company", "position", "mode", "dateApplied"].includes(f.sortBy)) {
     return [{ [f.sortBy]: f.sortDir }];

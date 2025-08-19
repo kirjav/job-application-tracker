@@ -124,7 +124,6 @@ const ApplicationTable = () => {
 
   return (
     <div className="app-table">
-      {/* ✅ Render filter form INSIDE and wire it */}
       <TableFilterForm value={filters} onSubmit={setFilters} />
 
       <div className="table-topbar">
