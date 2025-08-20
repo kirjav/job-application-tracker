@@ -1,0 +1,81 @@
+/* TagFilterInput.css */
+.tfi {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+}
+
+.tfi-label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 12px;
+    opacity: .85;
+}
+
+.tfi-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px;
+    min-height: 40px;
+    border: 2px solid var(--primary-medium-color);
+    border-radius: 10px;
+    background: #fff;
+    cursor: text;
+}
+
+.tfi-token {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(109, 149, 115, 0.12);
+    border: 1px solid var(--primary-medium-color);
+    font-size: 12px;
+    color: var(--primary-dark-color);
+}
+
+.tfi-x {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.tfi-input {
+    flex: 1;
+    min-width: 120px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding: 6px;
+}
+
+.tfi-listbox {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin-top: 6px;
+    padding: 6px 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    max-height: 240px;
+    overflow: auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+}
+
+.tfi-option {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.tfi-option:hover,
+.tfi-option.is-active {
+    background: rgba(109, 149, 115, 0.12);
+}

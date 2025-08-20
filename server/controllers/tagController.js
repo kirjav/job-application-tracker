@@ -5,9 +5,28 @@ async function getUserTags(req, res) {
     try {
         const userTags = await prisma.tag.findMany({
             where: { userId: req.user.userId },
+            select: { id: true, name: true },
         });
 
         res.status(200).json(userTags);
+    } catch (err) {
+        return handleError(res, err, "Failed to fetch tags");
+    }
+}
+
+async function getFilterUserTags(req, res) {
+    try {
+        const userId = req.user.userId;
+        const q = req.validated.query.q.trim();
+
+        const tags = await prisma.tag.findMany({
+            where: { userId, name: { startsWith: q, mode: "insensitive" } },
+            select: { id: true, name: true },
+            orderBy: { name: "asc" },
+            take: 50,
+        });
+
+        res.json(tags);
     } catch (err) {
         return handleError(res, err, "Failed to fetch tags");
     }
@@ -74,4 +93,4 @@ async function deleteTag(req, res) {
     }
 }
 
-module.exports = { getUserTags, createTag, deleteTag }
+module.exports = { getFilterUserTags, getUserTags, createTag, deleteTag }

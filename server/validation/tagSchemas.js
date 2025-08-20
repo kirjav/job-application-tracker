@@ -8,6 +8,11 @@ const tagSchema = z.object({
     .regex(/^[a-zA-Z0-9_-]+$/, "Tag name must not contain spaces or special characters"),
 });
 
+const tagSearchSchema = z.object({
+  q: z.string().trim().min(1).max(50)
+});
+
 module.exports = {
   tagSchema,
+  tagSearchSchema,
 };

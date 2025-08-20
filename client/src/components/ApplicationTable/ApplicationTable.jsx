@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import API from "../../utils/api";
 import EditApplication from "../EditApplication/EditApplication";
 import TableFilterForm from "../TableFilterForm/TableFilterForm";
+import ActiveFilters from "../ActiveFilters/ActiveFilters";
 import "./ApplicationTable.css";
 import qs from "qs";
 
@@ -22,6 +23,8 @@ const ApplicationTable = () => {
     if (dateFrom) f.dateFrom = dateFrom;
     if (dateTo) f.dateTo = dateTo;
     if (q) f.q = q;
+    const tagNames = sp.getAll("tagNames");
+    if (tagNames.length) f.tagNames = tagNames;
     return f;
   }
 
@@ -44,6 +47,9 @@ const ApplicationTable = () => {
     // arrays: repeat keys
     (filters.statuses || []).forEach(v => params.append("statuses", v));
     (filters.modes || []).forEach(v => params.append("modes", v));
+    // write
+    (filters.tagNames || []).forEach(n => params.append("tagNames", n));
+
 
     if (filters.dateFrom) params.set("dateFrom", filters.dateFrom);
     if (filters.dateTo) params.set("dateTo", filters.dateTo);
@@ -59,20 +65,20 @@ const ApplicationTable = () => {
   }, [filters, sortBy, sortDir, pageSize, page, setSearchParams]);
 
   useEffect(() => {
-  // Re-read from URL when it changes (e.g., back/forward)
-  const f = readFiltersFromUrl(searchParams);
-  const nextSortBy   = searchParams.get("sortBy") || "dateApplied";
-  const nextSortDir  = searchParams.get("sortDir") || "desc";
-  const nextPage     = Number(searchParams.get("page") || 1);
-  const nextPageSize = Number(searchParams.get("itemsPerPage") || 10);
+    // Re-read from URL when it changes (e.g., back/forward)
+    const f = readFiltersFromUrl(searchParams);
+    const nextSortBy = searchParams.get("sortBy") || "dateApplied";
+    const nextSortDir = searchParams.get("sortDir") || "desc";
+    const nextPage = Number(searchParams.get("page") || 1);
+    const nextPageSize = Number(searchParams.get("itemsPerPage") || 10);
 
-  // Only update if different to avoid loops
-  if (JSON.stringify(f) !== JSON.stringify(filters)) setFilters(f);
-  if (nextSortBy  !== sortBy)    setSortBy(nextSortBy);
-  if (nextSortDir !== sortDir)   setSortDir(nextSortDir);
-  if (nextPage    !== page)      setPage(nextPage);
-  if (nextPageSize!== pageSize)  setPageSize(nextPageSize);
-}, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+    // Only update if different to avoid loops
+    if (JSON.stringify(f) !== JSON.stringify(filters)) setFilters(f);
+    if (nextSortBy !== sortBy) setSortBy(nextSortBy);
+    if (nextSortDir !== sortDir) setSortDir(nextSortDir);
+    if (nextPage !== page) setPage(nextPage);
+    if (nextPageSize !== pageSize) setPageSize(nextPageSize);
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   useEffect(() => {
@@ -125,6 +131,7 @@ const ApplicationTable = () => {
   return (
     <div className="app-table">
       <TableFilterForm value={filters} onSubmit={setFilters} />
+      <ActiveFilters filters={filters} onChange={setFilters} />
 
       <div className="table-topbar">
         <h2>Applications</h2>
@@ -150,6 +157,7 @@ const ApplicationTable = () => {
               <th aria-sort={ariaSort("mode")}><button type="button" className="th-sort" onClick={() => toggleSort("mode")}>Mode{caret("mode")}</button></th>
               <th aria-sort={ariaSort("dateApplied")}><button type="button" className="th-sort" onClick={() => toggleSort("dateApplied")}>Date Applied{caret("dateApplied")}</button></th>
               <th aria-sort={ariaSort("salary")}><button type="button" className="th-sort" onClick={() => toggleSort("salary")}>Salary{caret("salary")}</button></th>
+              <th aria-sort={ariaSort("Tags")}>Tags</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -167,6 +175,15 @@ const ApplicationTable = () => {
                     : (app.salaryMin != null || app.salaryMax != null)
                       ? `$${(app.salaryMin ?? 0).toLocaleString()}–$${(app.salaryMax ?? 0).toLocaleString()}`
                       : "—"}
+                </td>
+                <td className="tag-cell">
+                  {app.tags?.length ? (
+                    <div className="tags">
+                      {app.tags.map(t => (
+                        <span key={t.id} className="tag-chip">{t.name}</span>
+                      ))}
+                    </div>
+                  ) : "—"}
                 </td>
                 <td>
                   <button onClick={() => setEditAppId(app.id)}>Edit</button>

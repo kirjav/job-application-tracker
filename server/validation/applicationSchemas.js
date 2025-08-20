@@ -75,9 +75,9 @@ const filterSchema = z.object({
   salaryExact: z.coerce.number().optional(),
   salaryMax: z.coerce.number().optional(),
   salaryMin: z.coerce.number().optional(),
-  tagIds: z.preprocess(
+  tagNames: z.preprocess(
     v => (Array.isArray(v) ? v : v ? [v] : []),
-    z.array(z.coerce.number().int())
+    z.array(z.string().trim().min(1))
   ).optional(),
   q: z.string().trim().optional(),
 

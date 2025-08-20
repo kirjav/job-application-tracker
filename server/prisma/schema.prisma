@@ -61,4 +61,5 @@ model Tag {
 
   @@unique([userId, name]) // A user can't create two tags with same name
   @@index([userId])
+  @@index([userId, name])
 }

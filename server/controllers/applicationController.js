@@ -79,9 +79,9 @@ function buildWhere(userId, f) {
     });
   }
 
-  if (f.tagIds?.length) {
-    // implicit M:N → filter directly on Tag.id
-    AND.push({ tags: { some: { id: { in: f.tagIds } } } });
+  if (f.tagNames?.length) {
+    // App has at least one Tag whose name is in the set
+    AND.push({ tags: { some: { name: { in: f.tagNames } } } });
   }
 
   if (f.q) {

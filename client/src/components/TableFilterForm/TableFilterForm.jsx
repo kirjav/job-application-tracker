@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { MODE_OPTIONS as MODE_VALUES } from "../../constants/ApplicationModes";
 import { STATUS_OPTIONS as STATUS_VALUES } from "../../constants/ApplicationStatuses";
+import ModeToggles from "../FilterModeToggle/ModeToggles";
+import TagFilterPicker from "../TagFilterPicker/TagFilterPicker";
 
 export default function TableFilterForm({ value = {}, onSubmit }) {
   // local draft state
@@ -11,7 +13,7 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
     dateTo: value.dateTo ?? "",
     salaryMin: value.salaryMin ?? "",
     salaryMax: value.salaryMax ?? "",
-    tagIds: value.tagIds ?? [],
+    tagNames: value.tagNames ?? [],
     q: value.q ?? "",
   });
 
@@ -24,7 +26,7 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
       dateTo: value.dateTo ?? "",
       salaryMin: value.salaryMin ?? "",
       salaryMax: value.salaryMax ?? "",
-      tagIds: value.tagIds ?? [],
+      tagNames: value.tagNames ?? [],
       q: value.q ?? "",
     });
   }, [JSON.stringify(value)]);
@@ -41,7 +43,7 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
       dateTo: draft.dateTo || undefined,
       salaryMin: draft.salaryMin !== "" ? Number(draft.salaryMin) : undefined,
       salaryMax: draft.salaryMax !== "" ? Number(draft.salaryMax) : undefined,
-      tagIds: draft.tagIds?.length ? draft.tagIds : undefined,
+      tagNames: draft.tagNames?.length ? draft.tagNames : undefined,
       q: draft.q || undefined,
     });
   };
@@ -54,7 +56,7 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
       dateTo: "",
       salaryMin: "",
       salaryMax: "",
-      tagIds: [],
+      tagNames: [],
       q: "",
     };
     setDraft(cleared);
@@ -74,39 +76,40 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
         </select>
       </label>
 
-      <label>
-        Mode
-        <select
-          multiple
-          value={draft.modes}
-          onChange={(e) => update({ modes: Array.from(e.target.selectedOptions, o => o.value) })}
-        >
-          {MODE_VALUES.map(m => <option key={m} value={m}>{m}</option>)}
-        </select>
-      </label>
+      <ModeToggles
+        options={MODE_VALUES}
+        value={draft.modes ?? []}
+        onChange={(modes) => update({ modes })}
+      />
 
       <label>
         From
-        <input type="date" value={draft.dateFrom} onChange={(e)=>update({dateFrom:e.target.value})}/>
+        <input type="date" value={draft.dateFrom} onChange={(e) => update({ dateFrom: e.target.value })} />
       </label>
       <label>
         To
-        <input type="date" value={draft.dateTo} onChange={(e)=>update({dateTo:e.target.value})}/>
+        <input type="date" value={draft.dateTo} onChange={(e) => update({ dateTo: e.target.value })} />
       </label>
 
       <label>
         Min $
-        <input type="number" min="0" value={draft.salaryMin} onChange={(e)=>update({salaryMin:e.target.value})}/>
+        <input type="number" min="0" value={draft.salaryMin} onChange={(e) => update({ salaryMin: e.target.value })} />
       </label>
       <label>
         Max $
-        <input type="number" min="0" value={draft.salaryMax} onChange={(e)=>update({salaryMax:e.target.value})}/>
+        <input type="number" min="0" value={draft.salaryMax} onChange={(e) => update({ salaryMax: e.target.value })} />
       </label>
 
-      <label style={{flex:1}}>
+      <label style={{ flex: 1 }}>
         Search
-        <input type="search" placeholder="Company or Position" value={draft.q} onChange={(e)=>update({q:e.target.value})}/>
+        <input type="search" placeholder="Company or Position" value={draft.q} onChange={(e) => update({ q: e.target.value })} />
       </label>
+
+      <TagFilterPicker
+        value={draft.tagNames ?? []}
+        onChange={(names) => update({ tagNames: names.length ? names : undefined })}
+      />
+
 
       <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
         <button type="button" onClick={handleClear}>Clear</button>

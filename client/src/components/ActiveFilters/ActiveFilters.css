@@ -1,0 +1,34 @@
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  border: 2px solid var(--primary-medium-color);
+  background: rgba(109,149,115,0.10); /* subtle */
+  color: var(--primary-dark-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.pill:hover { background: rgba(109,149,115,0.18); }
+.pill:focus { outline: 2px solid var(--primary-dark-color); outline-offset: 2px; }
+
+.pill .pill-x {
+  display: inline-block;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.pill-clear {
+  border-color: transparent;
+  background: #eee;
+}
+.pill-clear:hover { background: #e2e2e2; }

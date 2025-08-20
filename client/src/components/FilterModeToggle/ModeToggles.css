@@ -1,0 +1,23 @@
+.toggle-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.toggle {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 2px solid var(--primary-medium-color);
+    background: transparent;
+    cursor: pointer;
+}
+
+.toggle.is-selected {
+    background: var(--primary-medium-color);
+    color: white;
+    border-color: var(--primary-medium-color);
+}
+
+.toggle:focus {
+    outline: 2px solid var(--primary-dark-color);
+}

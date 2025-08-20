@@ -45,3 +45,16 @@
 th[aria-sort="ascending"] .th-sort,
 th[aria-sort="descending"] .th-sort { font-weight: 600; }
 
+.tag-cell .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.6;
+  border: 1px solid var(--primary-medium-color);
+  background: rgba(109,149,115,0.10);
+  color: var(--primary-dark-color);
+  white-space: nowrap;
+}
+
+
