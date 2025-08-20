@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createApplication, getUserApplications, updateApplication, updateApplicationPartial, deleteApplication, getSingleApplication, getAllUserApplications } = require("../controllers/applicationController");
+const { createApplication, getUserApplications, updateApplication, updateApplicationPartial, updateApplicationsStatus, deleteApplication, getSingleApplication, getAllUserApplications } = require("../controllers/applicationController");
 const validate = require("../middleware/schemaValidation");
 const authenticateToken = require("../middleware/authMiddleware");
 
@@ -8,8 +8,8 @@ const {
   applicationSchema,
   updateApplicationSchema,
   filterSchema,
-  querySchema,
   paramIdSchema,
+  updateGroupApplicationsSchema,
 } = require("../validation/applicationSchemas");
 
 //router.use(authenticateToken);
@@ -40,6 +40,8 @@ router.patch(
   validate(updateApplicationSchema, "body"),
   updateApplicationPartial
 );
+
+router.patch("/statusUpdate", authenticateToken, validate(updateGroupApplicationsSchema, "body"), updateApplicationsStatus);
 
 
 // DELETE /applications/:id – param validation only

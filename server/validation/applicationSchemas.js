@@ -103,9 +103,25 @@ const paramIdSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
+// ─── Group Update: batch status change ───────────────────────
+const updateGroupApplicationsSchema = z.object({
+  applicationIds: z
+    .array(z.coerce.number().int().positive())
+    .min(1, "Provide at least one application id")
+    .transform(ids => Array.from(new Set(ids))), 
+  update: z
+    .object({
+      status: z.enum(STATUS_VALUES, {
+        required_error: "status is required for a group update",
+      }),
+    })
+    .strict(),
+}).strict();
+
 module.exports = {
   applicationSchema,
   filterSchema,
   updateApplicationSchema,
   paramIdSchema,
+  updateGroupApplicationsSchema,
 };

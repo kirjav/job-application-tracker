@@ -294,6 +294,24 @@ async function updateApplicationPartial(req, res) {
   }
 }
 
+async function updateApplicationsStatus(req, res) {
+  try {
+    const { applicationIds, update } = req.validated.body;
+    const { status } = update;
+
+    const result = await prisma.application.updateMany({
+      where: { id: { in: applicationIds } },
+      data: { status },
+    });
+
+    return res.status(200).json({
+      updatedCount: result.count,
+      status,
+    });
+  } catch (err) {
+    return handleError(res, err, "Failed to update list of applications.");
+  }
+}
 
 
 
@@ -350,6 +368,7 @@ module.exports = {
   getAllUserApplications,
   updateApplication,
   updateApplicationPartial,
+  updateApplicationsStatus,
   deleteApplication,
   getSingleApplication,
 };
