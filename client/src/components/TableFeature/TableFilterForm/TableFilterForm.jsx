@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { MODE_OPTIONS as MODE_VALUES } from "../../constants/ApplicationModes";
-import { STATUS_OPTIONS as STATUS_VALUES } from "../../constants/ApplicationStatuses";
+import { MODE_OPTIONS as MODE_VALUES } from "../../../constants/ApplicationModes";
+import { STATUS_OPTIONS as STATUS_VALUES } from "../../../constants/ApplicationStatuses";
 import ModeToggles from "../FilterModeToggle/ModeToggles";
 import TagFilterPicker from "../TagFilterPicker/TagFilterPicker";
 

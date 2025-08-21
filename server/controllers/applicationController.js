@@ -296,22 +296,47 @@ async function updateApplicationPartial(req, res) {
 
 async function updateApplicationsStatus(req, res) {
   try {
+    const userId = req.user.userId; // from your auth middleware
     const { applicationIds, update } = req.validated.body;
     const { status } = update;
 
+    // Get only IDs this user actually owns
+    const owned = await prisma.application.findMany({
+      where: { userId, id: { in: applicationIds } },
+      select: { id: true },
+    });
+    const ownedIds = owned.map(a => a.id);
+
+    if (ownedIds.length === 0) {
+      return res.status(200).json({
+        attempted: applicationIds.length,
+        eligible: 0,
+        updated: 0,
+        skipped: applicationIds,
+        status,
+      });
+    }
+
     const result = await prisma.application.updateMany({
-      where: { id: { in: applicationIds } },
-      data: { status },
+      where: { userId, id: { in: ownedIds } },
+      data: {
+        status,
+        dateUpdated: new Date(), // optional: touch updated timestamp
+      },
     });
 
     return res.status(200).json({
-      updatedCount: result.count,
+      attempted: applicationIds.length,
+      eligible: ownedIds.length,
+      updated: result.count,
+      skipped: applicationIds.filter(id => !ownedIds.includes(id)),
       status,
     });
   } catch (err) {
     return handleError(res, err, "Failed to update list of applications.");
   }
 }
+
 
 
 

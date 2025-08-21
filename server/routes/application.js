@@ -22,6 +22,13 @@ router.get("/", authenticateToken, validate(filterSchema, "query"), getUserAppli
 
 router.get("/all", authenticateToken, getAllUserApplications);
 
+router.patch(
+  "/statusUpdate",
+  authenticateToken,
+  validate(updateGroupApplicationsSchema, "body"),
+  updateApplicationsStatus
+);
+
 router.get("/:id", authenticateToken, getSingleApplication);
 
 // PUT /applications/:id – body + param validation
@@ -41,7 +48,6 @@ router.patch(
   updateApplicationPartial
 );
 
-router.patch("/statusUpdate", authenticateToken, validate(updateGroupApplicationsSchema, "body"), updateApplicationsStatus);
 
 
 // DELETE /applications/:id – param validation only

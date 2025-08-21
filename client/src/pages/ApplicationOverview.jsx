@@ -1,9 +1,9 @@
-import ApplicationTable from "../components/ApplicationTable/ApplicationTable";
+import ApplicationTablePage from "../components/TableFeature/ApplicationTablePage/ApplicationTablePage";
 
 const ApplicationOverview = () => {
     return (
         <div>
-            <ApplicationTable />
+            <ApplicationTablePage />
         </div>
     );
 };
