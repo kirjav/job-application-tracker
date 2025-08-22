@@ -3,6 +3,7 @@ import { MODE_OPTIONS as MODE_VALUES } from "../../../constants/ApplicationModes
 import { STATUS_OPTIONS as STATUS_VALUES } from "../../../constants/ApplicationStatuses";
 import ModeToggles from "../FilterModeToggle/ModeToggles";
 import TagFilterPicker from "../TagFilterPicker/TagFilterPicker";
+import "./TableFilterForm.css";
 
 export default function TableFilterForm({ value = {}, onSubmit }) {
   // local draft state
@@ -63,59 +64,70 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
     onSubmit?.({}); // clears filters → table refetches
   };
 
+  const [showForm, setShowForm] = useState(false);
+
+  const handleToggle = () => {
+    setShowForm(prev => !prev);
+  };
+
+
   return (
-    <form className="filters" onSubmit={handleSubmit}>
-      <label>
-        Status
-        <select
-          multiple
-          value={draft.statuses}
-          onChange={(e) => update({ statuses: Array.from(e.target.selectedOptions, o => o.value) })}
-        >
-          {STATUS_VALUES.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-      </label>
+    <div className="filterForm">
+      <form className="searchbar" onSubmit={handleSubmit}>
+        <label style={{ flex: 1 }}>
+          Search
+          <input type="search" placeholder="Company or Position" value={draft.q} onChange={(e) => update({ q: e.target.value })} />
+        </label><button type="submit">Apply</button></form>
+      <button className="toggleFilter" onClick={handleToggle}>Filter</button>
 
-      <ModeToggles
-        options={MODE_VALUES}
-        value={draft.modes ?? []}
-        onChange={(modes) => update({ modes })}
-      />
+      {showForm && (<form className="filters" onSubmit={handleSubmit}>
+        <label>
+          Status
+          <select
+            multiple
+            value={draft.statuses}
+            onChange={(e) => update({ statuses: Array.from(e.target.selectedOptions, o => o.value) })}
+          >
+            {STATUS_VALUES.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </label>
 
-      <label>
-        From
-        <input type="date" value={draft.dateFrom} onChange={(e) => update({ dateFrom: e.target.value })} />
-      </label>
-      <label>
-        To
-        <input type="date" value={draft.dateTo} onChange={(e) => update({ dateTo: e.target.value })} />
-      </label>
+        <ModeToggles
+          options={MODE_VALUES}
+          value={draft.modes ?? []}
+          onChange={(modes) => update({ modes })}
+        />
 
-      <label>
-        Min $
-        <input type="number" min="0" value={draft.salaryMin} onChange={(e) => update({ salaryMin: e.target.value })} />
-      </label>
-      <label>
-        Max $
-        <input type="number" min="0" value={draft.salaryMax} onChange={(e) => update({ salaryMax: e.target.value })} />
-      </label>
+        <label>
+          From
+          <input type="date" value={draft.dateFrom} onChange={(e) => update({ dateFrom: e.target.value })} />
+        </label>
+        <label>
+          To
+          <input type="date" value={draft.dateTo} onChange={(e) => update({ dateTo: e.target.value })} />
+        </label>
 
-      <label style={{ flex: 1 }}>
-        Search
-        <input type="search" placeholder="Company or Position" value={draft.q} onChange={(e) => update({ q: e.target.value })} />
-      </label>
+        <label>
+          Min $
+          <input type="number" min="0" value={draft.salaryMin} onChange={(e) => update({ salaryMin: e.target.value })} />
+        </label>
+        <label>
+          Max $
+          <input type="number" min="0" value={draft.salaryMax} onChange={(e) => update({ salaryMax: e.target.value })} />
+        </label>
 
-      <TagFilterPicker
-        value={draft.tagNames ?? []}
-        onChange={(names) => update({ tagNames: names.length ? names : undefined })}
-      />
+        <TagFilterPicker
+          value={draft.tagNames ?? []}
+          onChange={(names) => update({ tagNames: names.length ? names : undefined })}
+        />
 
 
-      <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
-        <button type="button" onClick={handleClear}>Clear</button>
-        <button type="submit">Apply</button>
-      </div>
-    </form>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+          <button type="button" onClick={handleClear}>Clear</button>
+          <button type="submit">Apply</button>
+        </div>
+      </form>)}
+    </div>
   );
 }
 

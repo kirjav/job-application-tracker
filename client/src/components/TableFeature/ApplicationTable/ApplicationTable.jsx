@@ -1,6 +1,7 @@
 // src/components/ApplicationTable/ApplicationTable.jsx
 import { useEffect, useRef } from "react";
 import "./ApplicationTable.css";
+import TagOverflow from "../TagOverflow/TagOverflow";
 
 export default function ApplicationTable({
   loading,
@@ -34,19 +35,13 @@ export default function ApplicationTable({
     if (headerCbRef.current) headerCbRef.current.indeterminate = someOnPageSelected;
   }, [someOnPageSelected]);
 
-  const caret = (col) => (sortBy === col ? (sortDir === "asc" ? " ▲" : " ▼") : "");
+  const caret = (col) => (sortBy === col ? (sortDir === "asc" ? " ▲" : " ▼") : "<>");
   const ariaSort = (col) => (sortBy === col ? (sortDir === "asc" ? "ascending" : "descending") : "none");
 
   return (
     <div className="app-table">
       <div className="table-topbar">
         <h2>Applications</h2>
-        <label style={{ marginLeft: "auto" }}>
-          Rows:
-          <select value={pageSize} onChange={e => onPageSizeChange(Number(e.target.value))}>
-            {[10, 20, 30, 50].map(n => <option key={n} value={n}>{n}</option>)}
-          </select>
-        </label>
       </div>
 
       {loading ? (
@@ -134,12 +129,11 @@ export default function ApplicationTable({
                       : "—"}
                 </td>
 
-                <td className="tag-cell">
+                <td className="tag-cell" style={{ width: "200px" }}>
                   {app.tags?.length ? (
                     <div className="tags">
-                      {app.tags.map(t => (
-                        <span key={t.id} className="tag-chip">{t.name}</span>
-                      ))}
+                      <TagOverflow tags={app.tags} />
+
                     </div>
                   ) : "—"}
                 </td>
@@ -155,6 +149,13 @@ export default function ApplicationTable({
       )}
 
       {/* Pagination UI (controlled) */}
+
+              <label style={{ marginLeft: "auto" }}>
+          Rows:
+          <select value={pageSize} onChange={e => onPageSizeChange(Number(e.target.value))}>
+            {[10, 20, 30, 50].map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </label>
       <div className="pager" style={{ marginTop: "1rem" }}>
         <button onClick={() => onPageChange(Math.max(1, page - 1))} disabled={page <= 1}>
           Previous
@@ -162,6 +163,7 @@ export default function ApplicationTable({
         <span style={{ margin: "0 1rem" }}>
           Page {page} of {totalPages}
         </span>
+        
         <button onClick={() => onPageChange(Math.min(totalPages, page + 1))} disabled={page >= totalPages}>
           Next
         </button>

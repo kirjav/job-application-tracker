@@ -18,6 +18,13 @@
   --secondary-background-color: #83A878; /* Add application bg*/
   --secondary-background-hover-color: #74925D; /* Hover Add application bg*/
 
+  /*Application Table Style */
+  --table-border: #CCDFD7;
+  --table-head: #F7FFF0;
+  --row-odd: #ffffff;
+  --row-even: #EEEEEE;
+  --row-hover: #eef2f7;
+
 }
 
 [data-theme="dark"] {

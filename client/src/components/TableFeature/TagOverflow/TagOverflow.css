@@ -1,0 +1,22 @@
+.tag-row {
+  display: inline-flex;   /* stays on one line */
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: hidden;       /* hide anything that might slip past */
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #d0d5dd;
+  background: #f8f9fb;
+  font-size: 12px;
+  line-height: 20px;
+  white-space: nowrap;    /* measure as single tokens */
+}
+
+.pill.counter {
+  font-weight: 600;
+  background: #eef2f7;
+}

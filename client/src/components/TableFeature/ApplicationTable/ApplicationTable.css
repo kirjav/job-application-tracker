@@ -1,0 +1,65 @@
+.app-table table {
+    table-layout: fixed;
+    width: 95%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    font-family: 'Inter';
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.app-table thead th {
+    position: sticky;
+    /* nice with long tables */
+    top: 0;
+    background: var(--table-head);
+    z-index: 1;
+    font-size: 1rem;
+    font-family: 'Inter';
+    font-weight: 500;
+    color: var(--primary-darkest-font-color);
+
+}
+
+.th-sort {
+    all: unset;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 4px;
+    border-radius: 6px;
+    appearance: none;
+    background: None;
+    border-style: None;
+    font: inherit;
+}
+
+.th-sort:hover {
+    background: #eef5ee;
+}
+
+.app-table tbody tr:nth-child(odd) {
+    background: var(--row-odd);
+}
+
+.app-table tbody tr:nth-child(even) {
+    background: var(--row-even);
+}
+
+.app-table tbody tr:hover {
+    background: var(--row-hover);
+}
+
+/* Optional: borders & spacing */
+.app-table th,
+.app-table td {
+    padding: 8px 12px;
+    border: 2px solid var(--table-border);
+}
+
+
+th[aria-sort="ascending"] .th-sort,
+th[aria-sort="descending"] .th-sort {
+    font-weight: 600;
+}

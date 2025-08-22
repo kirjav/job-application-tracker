@@ -49,7 +49,6 @@ router.patch(
 );
 
 
-
 // DELETE /applications/:id – param validation only
 router.delete("/:id", authenticateToken, validate(paramIdSchema, "params"), deleteApplication);
 

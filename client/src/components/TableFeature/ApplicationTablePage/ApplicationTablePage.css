@@ -45,7 +45,6 @@
 th[aria-sort="ascending"] .th-sort,
 th[aria-sort="descending"] .th-sort { font-weight: 600; }
 
-.tag-cell .tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag-chip {
   padding: 2px 8px;
   border-radius: 999px;
