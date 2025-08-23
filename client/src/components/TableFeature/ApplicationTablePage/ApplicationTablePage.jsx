@@ -4,6 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import qs from "qs";
 import API from "../../../utils/api";
 
+import "./ApplicationTablePage.css";
+
 import TableFilterForm from "../TableFilterForm/TableFilterForm";
 import ActiveFilters from "../ActiveFilters/ActiveFilters";
 import ApplicationTable from "../ApplicationTable/ApplicationTable";
@@ -173,7 +175,8 @@ export default function ApplicationTablePage() {
 
       await API.patch('/applications/statusUpdate', {
         applicationIds: ids,
-        update: { status: newStatus }},
+        update: { status: newStatus }
+      },
         { withCredentials: true },
       );
 
@@ -189,9 +192,42 @@ export default function ApplicationTablePage() {
     }
   };
 
+  const bulkDeleteSelected = async () => {
+    const ids = Array.from(selectedIds);
+    if (!ids.length) return;
+    if (!window.confirm(`Delete ${ids.length} applications?`)) return;
+
+    setLoading(true);
+    try {
+      // If you have a bulk endpoint:
+      // await API.delete("/applications/bulk", { data: { ids }, withCredentials: true });
+
+      // Fallback: delete one-by-one (still fine; server enforces auth)
+      await Promise.all(ids.map((id) => API.delete(`/applications/${id}`, { withCredentials: true })));
+
+      setSelectedIds(new Set());
+      await fetchApplications();
+    } catch (e) {
+      console.error("Bulk delete failed", e);
+      alert("Bulk delete failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="app-table-page">
-      <TableFilterForm value={filters} onSubmit={setFilters} />
+      <div className="table-topbar">
+        <h2>My Applications</h2>
+      </div>
+      <TableFilterForm
+        value={filters}
+        onSubmit={setFilters}
+        selectedCount={selectedIds.size}
+        onBulkUpdateStatus={updateSelectedApplicationStatus}
+        onBulkDelete={bulkDeleteSelected}
+      // onExport={() => exportCsv(selectedRows, applicationColumns)} // optional
+      />
       <ActiveFilters filters={filters} onChange={setFilters} />
 
       {/* example bulk actions */}

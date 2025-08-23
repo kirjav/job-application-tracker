@@ -56,4 +56,11 @@ th[aria-sort="descending"] .th-sort { font-weight: 600; }
   white-space: nowrap;
 }
 
+.app-table-page h2 {
+  font-size: 2rem;
+  font-family: 'Gambarino';
+  font-weight: 300;
+  color: var(--primary-darkest-font-color);
+}
+
 

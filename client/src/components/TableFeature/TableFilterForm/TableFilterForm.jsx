@@ -4,8 +4,12 @@ import { STATUS_OPTIONS as STATUS_VALUES } from "../../../constants/ApplicationS
 import ModeToggles from "../FilterModeToggle/ModeToggles";
 import TagFilterPicker from "../TagFilterPicker/TagFilterPicker";
 import "./TableFilterForm.css";
+import { GlobalActionsMenu } from "../../Popover/GlobalActionsMenu";
 
-export default function TableFilterForm({ value = {}, onSubmit }) {
+export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 0,
+  onBulkUpdateStatus,
+  onBulkDelete,
+  onExport }) {
   // local draft state
   const [draft, setDraft] = useState({
     statuses: value.statuses ?? [],
@@ -73,12 +77,19 @@ export default function TableFilterForm({ value = {}, onSubmit }) {
 
   return (
     <div className="filterForm">
-      <form className="searchbar" onSubmit={handleSubmit}>
-        <label style={{ flex: 1 }}>
-          Search
-          <input type="search" placeholder="Company or Position" value={draft.q} onChange={(e) => update({ q: e.target.value })} />
-        </label><button type="submit">Apply</button></form>
-      <button className="toggleFilter" onClick={handleToggle}>Filter</button>
+      <div className="searchbar">
+        <form onSubmit={handleSubmit}>
+          <label style={{ flex: 1 }}>
+            <input type="search" placeholder="Search" value={draft.q} onChange={(e) => update({ q: e.target.value })} />
+          </label><button type="submit">Apply</button></form>
+        <button className="toggleFilter" onClick={handleToggle}>Filter</button>
+        <GlobalActionsMenu
+          selectedCount={selectedCount}
+          onBulkUpdateStatus={onBulkUpdateStatus}
+          onBulkDelete={onBulkDelete}
+          onExport={onExport}
+          align="right"
+        /></div>
 
       {showForm && (<form className="filters" onSubmit={handleSubmit}>
         <label>
