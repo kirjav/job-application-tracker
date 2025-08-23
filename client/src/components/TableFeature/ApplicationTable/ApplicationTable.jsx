@@ -1,8 +1,8 @@
 // src/components/ApplicationTable/ApplicationTable.jsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "./ApplicationTable.css";
 import TagOverflow from "../TagOverflow/TagOverflow";
-import { RowActionsMenu } from "../../Popover/RowActionsMenu";
+import { Dropdown } from "../../Popover/Dropdown";
 
 export default function ApplicationTable({
   loading,
@@ -38,8 +38,6 @@ export default function ApplicationTable({
 
   const caret = (col) => (sortBy === col ? (sortDir === "asc" ? " ▲" : " ▼") : "<>");
   const ariaSort = (col) => (sortBy === col ? (sortDir === "asc" ? "ascending" : "descending") : "none");
-
-  const [openRowId, setOpenRowId] = useState(null);
 
   return (
     <div className="app-table">
@@ -138,13 +136,19 @@ export default function ApplicationTable({
                 </td>
 
                 <td>
-                  <RowActionsMenu
-                    appId={app.id}
-                    onEdit={() => onEdit(app.id)}
-                    onDelete={() => onDelete(app.id)}
-                    isOpen={openRowId === app.id}
-                    onOpenChange={(o) => setOpenRowId(o ? app.id : null)}
-                  />
+
+                  <Dropdown trigger={<button type="button" aria-label="Row actions" style={{ border: 0, background: "transparent", cursor: "pointer", padding: 4 }}>⋯</button>} align="right">
+                    {({ close }) => (
+                      <div role="menu" style={{ minWidth: 160 }}>
+                        <button type="button" onClick={() => { onEdit(app.id); close(); }}>
+                          Edit
+                        </button>
+                        <button type="button" onClick={() => { onDelete(app.id); close(); }}>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </Dropdown>
                 </td>
               </tr>
             ))}

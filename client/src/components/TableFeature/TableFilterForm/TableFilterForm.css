@@ -3,3 +3,30 @@
     flex-direction: row;
     gap: 20px;
 }
+
+.dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+  padding: 4px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.menu-item:hover,
+.menu-item:focus { background: #f3f4f6; outline: none; }
+
+.menu-item:disabled { cursor: not-allowed; opacity: 0.5; }
+
+.menu-item.danger { color: #b42318; }

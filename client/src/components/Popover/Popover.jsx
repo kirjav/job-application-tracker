@@ -1,21 +1,12 @@
+// src/components/Popover/Popover.jsx
 import { useEffect, useId, useRef, useState } from "react";
 
-/**
- * Headless popover: handles open/close, outside click, Escape, and focus return.
- * Usage (render prop):
- * <Popover>
- *   {({ open, setOpen, triggerProps, panelProps }) => (
- *     <div style={{ position: "relative", display: "inline-block" }}>
- *       <button {...triggerProps}>Open ▾</button>
- *       {open && <div {...panelProps}>...content...</div>}
- *     </div>
- *   )}
- * </Popover>
- */
+/** Headless popover primitive */
 export function Popover({
   open: controlledOpen,
   onOpenChange,
-  align = "right", // 'left' | 'right'
+  side = "bottom",      // ⬅️ add: 'bottom' | 'right'
+  align = "right",      // for bottom: 'left' | 'right'
   offset = 6,
   children,
 }) {
@@ -27,24 +18,20 @@ export function Popover({
   const panelRef = useRef(null);
   const id = useId();
 
-  // Close on outside click and Escape; return focus to trigger
   useEffect(() => {
     if (!open) return;
-
     const onPointerDown = (e) => {
       if (!panelRef.current || !btnRef.current) return;
       const inPanel = panelRef.current.contains(e.target);
       const inButton = btnRef.current.contains(e.target);
       if (!inPanel && !inButton) setOpen(false);
     };
-
     const onKeyDown = (e) => {
       if (e.key === "Escape") {
         setOpen(false);
         btnRef.current?.focus();
       }
     };
-
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
     return () => {
@@ -52,6 +39,12 @@ export function Popover({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open, setOpen]);
+
+  // Position styles
+  const panelPos =
+    side === "right"
+      ? { left: "100%", top: 0, marginLeft: offset }                  // submenu to the right of trigger
+      : { top: "100%", [align]: 0, marginTop: offset };               // default dropdown below trigger
 
   return children({
     open,
@@ -70,17 +63,15 @@ export function Popover({
       role: "menu",
       style: {
         position: "absolute",
-        top: "100%",
-        [align]: 0,
-        marginTop: offset,
         background: "#fff",
         border: "1px solid #e5e7eb",
         borderRadius: 8,
         boxShadow: "0 8px 24px rgba(0,0,0,.12)",
-        zIndex: 1000,
-        minWidth: 180,
+        zIndex: 2000,
+        minWidth: 200,
+        padding: 4,
+        ...panelPos,
       },
-      // Stop clicks inside panel from bubbling to the outside-click handler
       onClick: (e) => e.stopPropagation(),
     },
   });

@@ -4,12 +4,14 @@ import { STATUS_OPTIONS as STATUS_VALUES } from "../../../constants/ApplicationS
 import ModeToggles from "../FilterModeToggle/ModeToggles";
 import TagFilterPicker from "../TagFilterPicker/TagFilterPicker";
 import "./TableFilterForm.css";
-import { GlobalActionsMenu } from "../../Popover/GlobalActionsMenu";
+
+import { Dropdown } from "../../Popover/Dropdown";
+import { Submenu } from "../../Popover/Submenu";
 
 export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 0,
   onBulkUpdateStatus,
   onBulkDelete,
-  onExport }) {
+  onExport, }) {
   // local draft state
   const [draft, setDraft] = useState({
     statuses: value.statuses ?? [],
@@ -75,6 +77,18 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
   };
 
 
+  // simple menu item style -- GET RID OF THIS SOON
+  const itemStyle = {
+    width: "100%",
+    textAlign: "left",
+    padding: "8px 12px",
+    border: 0,
+    background: "transparent",
+    cursor: "pointer",
+    borderRadius: 6,
+  };
+  const sectionLabelStyle = { padding: "6px 10px", fontWeight: 600, opacity: 0.8 };
+
   return (
     <div className="filterForm">
       <div className="searchbar">
@@ -83,13 +97,49 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
             <input type="search" placeholder="Search" value={draft.q} onChange={(e) => update({ q: e.target.value })} />
           </label><button type="submit">Apply</button></form>
         <button className="toggleFilter" onClick={handleToggle}>Filter</button>
-        <GlobalActionsMenu
-          selectedCount={selectedCount}
-          onBulkUpdateStatus={onBulkUpdateStatus}
-          onBulkDelete={onBulkDelete}
-          onExport={onExport}
-          align="right"
-        /></div>
+
+        <Dropdown trigger={<button type="button" className="toggleActions">Actions ▾</button>} align="right">
+          {({ close }) => (
+            <div role="menu" className="dropdown-menu">
+              <button
+                type="button"
+                className="menu-item"
+                onClick={async () => { await onExport?.(); close(); }}
+              >
+                {selectedCount > 0 ? `Export selected (${selectedCount})` : "Export all (current filters)"}
+              </button>
+
+              <Submenu label="Bulk update status…" disabled={selectedCount === 0}>
+                {({ close: closeSub }) => (
+                  <>
+                    {STATUS_VALUES.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        className="menu-item"
+                        onClick={async () => { await onBulkUpdateStatus?.(s); closeSub(); close(); }}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </>
+                )}
+              </Submenu>
+
+              <button
+                type="button"
+                className="menu-item danger"
+                disabled={selectedCount === 0}
+                onClick={async () => { await onBulkDelete?.(); close(); }}
+              >
+                Bulk delete selected
+              </button>
+            </div>
+          )}
+        </Dropdown>
+
+
+      </div>
 
       {showForm && (<form className="filters" onSubmit={handleSubmit}>
         <label>
