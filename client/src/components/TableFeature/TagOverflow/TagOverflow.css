@@ -5,18 +5,19 @@
   overflow: hidden;       /* hide anything that might slip past */
 }
 
-.pill {
+.tag-overflow .pill {
   display: inline-block;
-  padding: 2px 8px;
+  font-family: 'Inter';
+  font-size: .9rem;
+  padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid #d0d5dd;
-  background: #f8f9fb;
-  font-size: 12px;
-  line-height: 20px;
+  border: none;
+  background: var(--tag-color);
+  color: var(--contrast-text-color);
   white-space: nowrap;    /* measure as single tokens */
 }
 
-.pill.counter {
+.tag-row .pill-counter {
   font-weight: 600;
-  background: #eef2f7;
+  color: var(--secondary-grey-color);
 }

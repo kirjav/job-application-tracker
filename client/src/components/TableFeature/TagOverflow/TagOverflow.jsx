@@ -102,7 +102,7 @@ export default function TagOverflow({
           <span className="pill" key={id ?? `${label}-${i}`}>{label}</span>
         ))}
         {remaining > 0 && (
-          <span className="pill counter" title={counterTitle(remaining)}>
+          <span className="pill-counter" title={counterTitle(remaining)}>
             +{remaining}
           </span>
         )}

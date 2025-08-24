@@ -1,3 +1,44 @@
+/* ApplicationTable.css */
+
+.app-table input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 3px solid var(--check-box-color);
+    border-radius: 4px;
+    cursor: pointer;
+    accent-color: var(--check-box-color);
+}
+
+.th-sort {
+    all: unset;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    border-radius: 6px;
+}
+
+.th-sort:hover {
+    background: #eef5ee;
+}
+
+th[aria-sort="ascending"] .th-sort,
+th[aria-sort="descending"] .th-sort {
+    font-weight: 600;
+}
+
+.tag-chip {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 1.6;
+    border: 1px solid var(--primary-medium-color);
+    background: rgba(109, 149, 115, 0.10);
+    color: var(--primary-dark-color);
+    white-space: nowrap;
+}
+
 .app-table table {
     table-layout: fixed;
     width: 95%;
@@ -11,7 +52,6 @@
 
 .app-table thead th {
     position: sticky;
-    /* nice with long tables */
     top: 0;
     background: var(--table-head);
     z-index: 1;
@@ -22,17 +62,36 @@
 
 }
 
+.app-table .tag-col span {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+}
+
 .th-sort {
     all: unset;
     cursor: pointer;
-    display: inline-flex;
+    width: 100%;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 2px 4px;
     border-radius: 6px;
     appearance: none;
     background: None;
     border-style: None;
     font: inherit;
+
+}
+
+.th-sort .unsorted {
+    height: 17px;
+    color: var(--table-unsorted);
+}
+
+.th-sort .sorted {
+    height: 17px;
+    color: var(--table-sorted);
 }
 
 .th-sort:hover {
@@ -56,6 +115,43 @@
 .app-table td {
     padding: 8px 12px;
     border: 2px solid var(--table-border);
+}
+
+/* Customized Column Sizes for optimal content fit */
+.app-table th.row-actions-col {
+    width: 45px;
+    /* use width with table-layout: fixed */
+    padding: 0 6px;
+    /* shrink padding so the width can be small */
+
+}
+
+.row-actions-dropdown {
+    text-align: center;
+    /* horizontal center */
+    vertical-align: middle;
+    /* vertical center */
+}
+
+
+.app-table th.mode-col {
+    width: 150px;
+}
+
+.app-table th.select-col {
+    width: 50px;
+}
+
+.app-table th.date-col {
+    width: 130px;
+}
+
+.app-table th.status-col {
+    width: 150px;
+}
+
+.app-table th.salary-col {
+    width: 220px;
 }
 
 

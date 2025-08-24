@@ -5,6 +5,11 @@ import ModeToggles from "../FilterModeToggle/ModeToggles";
 import TagFilterPicker from "../TagFilterPicker/TagFilterPicker";
 import "./TableFilterForm.css";
 
+import FilterIcon from "../../../assets/icons/table/FilterIcon.svg?react";
+import ActionsIconGear from "../../../assets/icons/table/ActionsIconGear.svg?react";
+import ThinDownArrow from "../../../assets/icons/table/ThinDownArrow.svg?react";
+import SearchGlassIcon from "../../../assets/icons/table/SearchGlassIcon.svg?react";
+
 import { Dropdown } from "../../Popover/Dropdown";
 import { Submenu } from "../../Popover/Submenu";
 
@@ -93,12 +98,19 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
     <div className="filterForm">
       <div className="searchbar">
         <form onSubmit={handleSubmit}>
-          <label style={{ flex: 1 }}>
-            <input type="search" placeholder="Search" value={draft.q} onChange={(e) => update({ q: e.target.value })} />
-          </label><button type="submit">Apply</button></form>
-        <button className="toggleFilter" onClick={handleToggle}>Filter</button>
+          <label className="search-wrapper">
+            <SearchGlassIcon className="search-icon" />
+            <input
+              type="search"
+              placeholder="Search"
+              value={draft.q}
+              onChange={(e) => update({ q: e.target.value })}
+            />
+          </label><button type="submit">Apply</button>
+        </form>
+        <button className="toggleFilter" onClick={handleToggle}><FilterIcon />Filter <ThinDownArrow /></button>
 
-        <Dropdown trigger={<button type="button" className="toggleActions">Actions ▾</button>} align="right">
+        <Dropdown trigger={<button type="button" className="toggleActions"><ActionsIconGear />Actions <ThinDownArrow /></button>} align="right">
           {({ close }) => (
             <div role="menu" className="dropdown-menu">
               <button

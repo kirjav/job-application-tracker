@@ -1,6 +1,7 @@
 // ActiveFilters.jsx
-import React from "react";
 import "./ActiveFilters.css";
+
+import TagClose from "../../../assets/icons/table/tagClose.svg?react";
 
 function isEmpty(val) {
   return (
@@ -21,7 +22,7 @@ export default function ActiveFilters({ filters, onChange }) {
   (filters.statuses ?? []).forEach(s => {
     pills.push({
       key: `status:${s}`,
-      label: <>Status: <strong>{s}</strong></>,
+      label: <><strong>Status:</strong> {s}</>,
       remove: () =>
         onChange({ ...filters, statuses: (filters.statuses ?? []).filter(x => x !== s) })
     });
@@ -31,7 +32,7 @@ export default function ActiveFilters({ filters, onChange }) {
   (filters.modes ?? []).forEach(m => {
     pills.push({
       key: `mode:${m}`,
-      label: <>Mode: <strong>{m}</strong></>,
+      label: <><strong>Mode:</strong> {m}</>,
       remove: () =>
         onChange({ ...filters, modes: (filters.modes ?? []).filter(x => x !== m) })
     });
@@ -45,7 +46,7 @@ export default function ActiveFilters({ filters, onChange }) {
       (filters.dateTo ? fmtDate(filters.dateTo) : "…");
     pills.push({
       key: "date",
-      label: <>Date: <strong>{range}</strong></>,
+      label: <><strong>Date:</strong> {range}</>,
       remove: () => {
         const next = { ...filters };
         delete next.dateFrom; delete next.dateTo;
@@ -60,7 +61,7 @@ export default function ActiveFilters({ filters, onChange }) {
     const sMax = filters.salaryMax != null ? `$${Number(filters.salaryMax).toLocaleString()}` : "…";
     pills.push({
       key: "salary",
-      label: <>Salary: <strong>{sMin} – {sMax}</strong></>,
+      label: <><strong>Salary:</strong> {sMin} – {sMax}</>,
       remove: () => {
         const next = { ...filters };
         delete next.salaryMin; delete next.salaryMax;
@@ -73,7 +74,7 @@ export default function ActiveFilters({ filters, onChange }) {
   (filters.tagNames ?? []).forEach(name => {
     pills.push({
       key: `tag:${name}`,
-      label: <>Tag: {name}</>, // or look up tag name if you have it
+      label: <><strong>Tag: </strong>{name}</>, // or look up tag name if you have it
       remove: () =>
         onChange({ ...filters, tagNames: (filters.tagNames ?? []).filter(x => x !== name) })
     });
@@ -83,7 +84,7 @@ export default function ActiveFilters({ filters, onChange }) {
   if (!isEmpty(filters.q)) {
     pills.push({
       key: "q",
-      label: <>Search: <strong>{filters.q}</strong></>,
+      label: <><strong>Search:</strong> {filters.q}</>,
       remove: () => {
         const next = { ...filters };
         delete next.q;
@@ -110,7 +111,7 @@ export default function ActiveFilters({ filters, onChange }) {
           title="Remove filter"
         >
           {p.label}
-          <span className="pill-x" aria-hidden>×</span>
+          <span className="pill-x" aria-hidden><TagClose/></span>
         </button>
       ))}
       <button type="button" className="pill pill-clear" onClick={clearAll} title="Clear all">

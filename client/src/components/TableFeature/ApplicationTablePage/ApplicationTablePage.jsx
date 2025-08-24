@@ -232,17 +232,6 @@ export default function ApplicationTablePage() {
       />
       <ActiveFilters filters={filters} onChange={setFilters} />
 
-      {/* example bulk actions */}
-      <div style={{ margin: "8px 0" }}>
-        <button
-          type="button"
-          disabled={selectedIds.size === 0 || loading}
-          onClick={() => updateSelectedApplicationStatus("Wishlist")}
-        >
-          Move to Wishlist
-        </button>
-      </div>
-
       <ApplicationTable
         loading={loading}
         rows={rows}

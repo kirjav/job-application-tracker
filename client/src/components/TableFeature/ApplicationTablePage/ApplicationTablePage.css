@@ -31,36 +31,62 @@
   margin-top: 1rem;
 }
 
-/* ApplicationTable.css */
-.th-sort {
-  all: unset;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 4px;
-  border-radius: 6px;
-}
-.th-sort:hover { background: #eef5ee; }
-th[aria-sort="ascending"] .th-sort,
-th[aria-sort="descending"] .th-sort { font-weight: 600; }
-
-.tag-chip {
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 12px;
-  line-height: 1.6;
-  border: 1px solid var(--primary-medium-color);
-  background: rgba(109,149,115,0.10);
-  color: var(--primary-dark-color);
-  white-space: nowrap;
-}
-
 .app-table-page h2 {
   font-size: 2rem;
   font-family: 'Gambarino';
   font-weight: 300;
   color: var(--primary-darkest-font-color);
 }
+
+.app-table-page {
+  width: 100%;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.app-table .pagination-controls {
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-table .pagination-controls .pager{
+  flex: 4;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.app-table .pagination-controls .row-count-selection {
+  flex: 3;
+  flex-direction: row;
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+
+}
+
+.app-table .pagination-controls .row-count-selection label {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+}
+
 
 

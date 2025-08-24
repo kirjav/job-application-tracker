@@ -5,30 +5,33 @@
   margin: 8px 0 16px;
 }
 
-.pill {
-  display: inline-flex;
+.filter-pills .pill {
+  font-size: 1rem;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  border-radius: 999px;
-  padding: 6px 10px;
-  border: 2px solid var(--primary-medium-color);
-  background: rgba(109,149,115,0.10); /* subtle */
-  color: var(--primary-dark-color);
+  padding: 5px 10px;
+  border: 0px solid var(--primary-medium-color);
+  background: #EEEEEE; /* subtle */
+  color: var(--tertiary-grey-color);
   cursor: pointer;
   font-size: 0.9rem;
 }
 
-.pill:hover { background: rgba(109,149,115,0.18); }
-.pill:focus { outline: 2px solid var(--primary-dark-color); outline-offset: 2px; }
+.filter-pills .pill:hover { background: rgba(109,149,115,0.18); }
+.filter-pills .pill:focus { outline: 2px solid var(--primary-dark-color); outline-offset: 2px; }
 
-.pill .pill-x {
-  display: inline-block;
+.filter-pills .pill .pill-x {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   line-height: 1;
   font-weight: 600;
 }
 
-.pill-clear {
+.filter-pills .pill-clear {
   border-color: transparent;
   background: #eee;
 }
-.pill-clear:hover { background: #e2e2e2; }
+.filter-pills .pill-clear:hover { background: #e2e2e2; }

@@ -30,3 +30,25 @@
 .menu-item:disabled { cursor: not-allowed; opacity: 0.5; }
 
 .menu-item.danger { color: #b42318; }
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  display: block;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding-left: 2rem; /* space for icon */
+  box-sizing: border-box;
+}
+
+.search-wrapper .search-icon {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* let clicks pass through */
+  color: #888;          /* or use currentColor */
+}
+
