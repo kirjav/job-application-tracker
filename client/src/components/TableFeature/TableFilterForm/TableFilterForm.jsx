@@ -92,115 +92,131 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
     cursor: "pointer",
     borderRadius: 6,
   };
-  const sectionLabelStyle = { padding: "6px 10px", fontWeight: 600, opacity: 0.8 };
 
   return (
     <div className="filterForm">
-      <div className="searchbar">
-        <form onSubmit={handleSubmit}>
-          <label className="search-wrapper">
-            <SearchGlassIcon className="search-icon" />
-            <input
-              type="search"
-              placeholder="Search"
-              value={draft.q}
-              onChange={(e) => update({ q: e.target.value })}
-            />
-          </label><button type="submit">Apply</button>
-        </form>
-        <button className="toggleFilter" onClick={handleToggle}><FilterIcon />Filter <ThinDownArrow /></button>
 
-        <Dropdown trigger={<button type="button" className="toggleActions"><ActionsIconGear />Actions <ThinDownArrow /></button>} align="right">
-          {({ close }) => (
-            <div role="menu" className="dropdown-menu">
-              <button
-                type="button"
-                className="menu-item"
-                onClick={async () => { await onExport?.(); close(); }}
-              >
-                {selectedCount > 0 ? `Export selected (${selectedCount})` : "Export all (current filters)"}
-              </button>
 
-              <Submenu label="Bulk update status…" disabled={selectedCount === 0}>
-                {({ close: closeSub }) => (
-                  <>
-                    {STATUS_VALUES.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        className="menu-item"
-                        onClick={async () => { await onBulkUpdateStatus?.(s); closeSub(); close(); }}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </>
-                )}
-              </Submenu>
+      <div className="toolbar">
+        <div className="left">
+          <form onSubmit={handleSubmit}>
+            <label className="search-wrapper">
+              <SearchGlassIcon className="search-icon" />
+              <input
+                type="search"
+                placeholder="Search"
+                value={draft.q}
+                onChange={(e) => update({ q: e.target.value })}
+              />
+            </label>
+            <button type="submit">Apply</button>
 
-              <button
-                type="button"
-                className="menu-item danger"
-                disabled={selectedCount === 0}
-                onClick={async () => { await onBulkDelete?.(); close(); }}
-              >
-                Bulk delete selected
-              </button>
-            </div>
-          )}
-        </Dropdown>
+            <button
+              type="button"
+              className="toggleFilter"
+              aria-expanded={showForm}
+              aria-controls="filters-panel"
+              onClick={handleToggle}
+            >
+              <FilterIcon />Filter <ThinDownArrow />
+            </button>
+          </form>
+        </div>
+
+        <div className="right">
+          <Dropdown trigger={<button type="button" className="toggleActions"><ActionsIconGear />Actions <ThinDownArrow /></button>} align="right">
+            {({ close }) => (
+              <div role="menu" className="dropdown-menu">
+                <button
+                  type="button"
+                  className="menu-item"
+                  onClick={async () => { await onExport?.(); close(); }}
+                >
+                  {selectedCount > 0 ? `Export selected (${selectedCount})` : "Export all (current filters)"}
+                </button>
+
+                <Submenu label="Bulk update status…" disabled={selectedCount === 0}>
+                  {({ close: closeSub }) => (
+                    <>
+                      {STATUS_VALUES.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          className="menu-item"
+                          onClick={async () => { await onBulkUpdateStatus?.(s); closeSub(); close(); }}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </Submenu>
+
+                <button
+                  type="button"
+                  className="menu-item danger"
+                  disabled={selectedCount === 0}
+                  onClick={async () => { await onBulkDelete?.(); close(); }}
+                >
+                  Bulk delete selected
+                </button>
+              </div>
+            )}
+          </Dropdown></div>
 
 
       </div>
 
-      {showForm && (<form className="filters" onSubmit={handleSubmit}>
-        <label>
-          Status
-          <select
-            multiple
-            value={draft.statuses}
-            onChange={(e) => update({ statuses: Array.from(e.target.selectedOptions, o => o.value) })}
-          >
-            {STATUS_VALUES.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-        </label>
+      {
+        showForm && (<form className="filters" onSubmit={handleSubmit}>
+          <label>
+            Status
+            <select
+              multiple
+              value={draft.statuses}
+              onChange={(e) => update({ statuses: Array.from(e.target.selectedOptions, o => o.value) })}
+            >
+              {STATUS_VALUES.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </label>
 
-        <ModeToggles
-          options={MODE_VALUES}
-          value={draft.modes ?? []}
-          onChange={(modes) => update({ modes })}
-        />
+          <ModeToggles
+            options={MODE_VALUES}
+            value={draft.modes ?? []}
+            onChange={(modes) => update({ modes })}
+          />
 
-        <label>
-          From
-          <input type="date" value={draft.dateFrom} onChange={(e) => update({ dateFrom: e.target.value })} />
-        </label>
-        <label>
-          To
-          <input type="date" value={draft.dateTo} onChange={(e) => update({ dateTo: e.target.value })} />
-        </label>
+          <label>
+            From
+            <input type="date" value={draft.dateFrom} onChange={(e) => update({ dateFrom: e.target.value })} />
+          </label>
+          <label>
+            To
+            <input type="date" value={draft.dateTo} onChange={(e) => update({ dateTo: e.target.value })} />
+          </label>
 
-        <label>
-          Min $
-          <input type="number" min="0" value={draft.salaryMin} onChange={(e) => update({ salaryMin: e.target.value })} />
-        </label>
-        <label>
-          Max $
-          <input type="number" min="0" value={draft.salaryMax} onChange={(e) => update({ salaryMax: e.target.value })} />
-        </label>
+          <label>
+            Min $
+            <input type="number" min="0" value={draft.salaryMin} onChange={(e) => update({ salaryMin: e.target.value })} />
+          </label>
+          <label>
+            Max $
+            <input type="number" min="0" value={draft.salaryMax} onChange={(e) => update({ salaryMax: e.target.value })} />
+          </label>
 
-        <TagFilterPicker
-          value={draft.tagNames ?? []}
-          onChange={(names) => update({ tagNames: names.length ? names : undefined })}
-        />
+          <TagFilterPicker
+            value={draft.tagNames ?? []}
+            onChange={(names) => update({ tagNames: names.length ? names : undefined })}
+          />
 
 
-        <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
-          <button type="button" onClick={handleClear}>Clear</button>
-          <button type="submit">Apply</button>
-        </div>
-      </form>)}
-    </div>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+            <button type="button" onClick={handleClear}>Clear</button>
+            <button type="submit">Apply</button>
+          </div>
+        </form>)
+      }
+    </div >
   );
 }
 

@@ -2,22 +2,28 @@
   --bg-color: #ffffff;
   --text-color: #111111;
   --contrast-text-color: white;
-  --primary-color: #4f46e5; /* Indigo-600 */
-  --accent-color: #9333ea;  /* Purple-600 */
+  --primary-color: #4f46e5;
+  /* Indigo-600 */
+  --accent-color: #9333ea;
+  /* Purple-600 */
 
   --decor-line-color: #DDDDDD;
-  --primary-darkest-font-color: #284C3C;/* Dark Font color */
+  --primary-darkest-font-color: #284C3C;
+  /* Dark Font color */
 
   --secondary-dark-grey-color: #3C3C3C;
   --secondary-grey-color: #626262;
-  --secondary-light-color: #E3F0DA; /* Sidebar Nav Select BG */
+  --secondary-light-color: #E3F0DA;
+  /* Sidebar Nav Select BG */
   --tertiary-grey-color: #4D4D4D;
 
   --account-icon-background-color: #284C3C;
   --account-icon-text-color: #ffffff;
 
-  --secondary-background-color: #83A878; /* Add application bg*/
-  --secondary-background-hover-color: #74925D; /* Hover Add application bg*/
+  --secondary-background-color: #83A878;
+  /* Add application bg*/
+  --secondary-background-hover-color: #74925D;
+  /* Hover Add application bg*/
 
   /*Application Table Style */
   --table-border: #CCDFD7;
@@ -36,13 +42,24 @@
   --table-unsorted: #A2A2A2;
   --table-sorted: var(--primary-darkest-font-color);
 
+  /* STATUS DEFAULT COLORS */
+  --wishlist-status-color: #97D1FB;
+  --applied-status-color: #4EC0B4;
+  --interviewing-status-color: #F59E0B;
+  --offer-status-color: #10B95C;
+  --rejected-status-color: #EF4444;
+  --ghosted-status-color: #999999;
+  --withdrawn-status-color: #FF9246;
+
 }
 
 [data-theme="dark"] {
   --bg-color: #1e1e1e;
   --text-color: #f3f3f3;
-  --primary-color: #60a5fa; /* Light blue */
-  --accent-color: #a855f7;  /* Lighter purple */
+  --primary-color: #60a5fa;
+  /* Light blue */
+  --accent-color: #a855f7;
+  /* Lighter purple */
 }
 
 [data-theme="solarized"] {

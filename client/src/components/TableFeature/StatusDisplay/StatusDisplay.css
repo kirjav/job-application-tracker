@@ -1,0 +1,38 @@
+.status-pill {
+    font-family: 'Inter';
+    background-color: blue;
+    border-radius: 8px;
+    padding: 4px 16px;
+    color: var(--contrast-text-color);
+
+    width: fit-content;
+    max-width: 100%;
+}
+
+.status-pill[data-status="Wishlist"]{
+    background-color: var(--wishlist-status-color);
+}
+
+.status-pill[data-status="Applied"]{
+    background-color: var(--applied-status-color);
+}
+
+.status-pill[data-status="Interviewing"]{
+    background-color: var(--interviewing-status-color);
+}
+
+.status-pill[data-status="Offer"]{
+    background-color: var(--offer-status-color);
+}
+
+.status-pill[data-status="Rejected"]{
+    background-color: var(--rejected-status-color);
+}
+
+.status-pill[data-status="Ghosted"]{
+    background-color: var(--ghosted-status-color);
+}
+
+.status-pill[data-status="Withdrawn"]{
+    background-color: var(--withdrawn-status-color);
+}

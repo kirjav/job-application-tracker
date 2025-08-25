@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import "./ApplicationTable.css";
 import TagOverflow from "../TagOverflow/TagOverflow";
 import { Dropdown } from "../../Popover/Dropdown";
+import { StatusDisplay } from "../StatusDisplay/StatusDisplay";
 
 {/** Nav Icon SVGs */ }
 import TableSortedDownArrow from "../../../assets/icons/table/TableSortedDownArrow.svg?react";
@@ -70,7 +71,7 @@ export default function ApplicationTable({
                 />
               </th>
 
-              <th aria-sort={ariaSort("company")}>
+              <th aria-sort={ariaSort("company")} className="company-col">
                 <button type="button" className="th-sort" onClick={() => onSort("company")}>
                   <span>Company</span>{caret("company")}
                 </button>
@@ -123,9 +124,9 @@ export default function ApplicationTable({
                   />
                 </td>
 
-                <td>{app.company}</td>
-                <td>{app.position}</td>
-                <td>{app.status}</td>
+                <td className="text-col"><span class="company-col">{app.company}</span></td>
+                <td className="text-col">{app.position}</td>
+                <td className="status-td"><div className="status-display"><StatusDisplay statusType={app.status}/></div></td>
                 <td>{app.mode}</td>
                 <td>{new Date(app.dateApplied).toLocaleDateString()}</td>
 

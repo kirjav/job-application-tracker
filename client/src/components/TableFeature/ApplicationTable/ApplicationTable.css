@@ -41,7 +41,7 @@ th[aria-sort="descending"] .th-sort {
 
 .app-table table {
     table-layout: fixed;
-    width: 95%;
+    width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
 
@@ -110,27 +110,33 @@ th[aria-sort="descending"] .th-sort {
     background: var(--row-hover);
 }
 
-/* Optional: borders & spacing */
 .app-table th,
 .app-table td {
     padding: 8px 12px;
     border: 2px solid var(--table-border);
 }
 
-/* Customized Column Sizes for optimal content fit */
 .app-table th.row-actions-col {
     width: 45px;
-    /* use width with table-layout: fixed */
     padding: 0 6px;
-    /* shrink padding so the width can be small */
-
 }
 
 .row-actions-dropdown {
     text-align: center;
-    /* horizontal center */
     vertical-align: middle;
-    /* vertical center */
+}
+
+td.status-td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+td.status-td .status-display {
+    display: inline-flex;
+    /* inline so text-align works; flex for nice centering inside */
+    align-items: center;
+    justify-content: center;
+    width: auto;
 }
 
 
@@ -152,6 +158,16 @@ th[aria-sort="descending"] .th-sort {
 
 .app-table th.salary-col {
     width: 220px;
+}
+
+td.text-col {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td.tag-cell {
+    overflow:hidden;
 }
 
 
