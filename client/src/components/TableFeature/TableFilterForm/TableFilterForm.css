@@ -52,7 +52,7 @@
 
 .toolbar form input {
   outline: none;
-  border: 3px solid var(--account-icon-background-color);
+  border: 3px solid var(--primary-darkest-font-color);
   flex: 1 1 auto;
   min-width: 0;
   /* critical for flex inputs */
@@ -97,6 +97,41 @@
 
 .toolbar .left form>button {
   flex: 0 0 auto;
+}
+
+.toolbar .main-button {
+  border: 3px solid var(--primary-darkest-font-color);
+  border-radius: 24px;
+  color: var(--primary-darkest-font-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  background-color: var(--constrast-text-color);
+
+  font-size: 1rem;
+}
+
+.toolbar .main-button:hover {
+  background-color: var(--secondary-light-color);
+}
+
+.toolbar .main-button:focus-visible {
+  background-color: var(--secondary-light-color);
+}
+
+.main-button .filter-icon {
+  height: 24px;
+  width: 24px;
+}
+
+
+.main-button .action-icon {
+  margin: 3px;
+  height: 22px;
+  width: 22px;
 }
 
 .toolbar .right {

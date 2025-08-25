@@ -98,9 +98,14 @@
 }
 
 .side-nav-content nav a.tab-active {
-    background-color: var(--secondary-light-color);
+    background-color: var(--side-nav-select);
     color: var(--primary-darkest-font-color);
 }
+
+.side-nav-content nav a.tab-inactive:hover {
+    background-color: var(--side-nav-hover);
+}
+
 
 .side-nav-content .tab-active .nav-icon {
     color: var(--primary-darkest-font-color);

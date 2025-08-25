@@ -61,6 +61,7 @@ export function Popover({
       id,
       ref: panelRef,
       role: "menu",
+      tabIndex: -1,
       style: {
         position: "absolute",
         background: "#fff",

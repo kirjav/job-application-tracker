@@ -175,3 +175,40 @@ th[aria-sort="ascending"] .th-sort,
 th[aria-sort="descending"] .th-sort {
     font-weight: 600;
 }
+
+/* Pagination */
+
+.pagination-controls {
+    width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+.pagination-controls .pager {
+  grid-column: 2; /* force into center column */
+  justify-self: center;
+
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.pagination-controls .row-count-selection {
+  grid-column: 3;
+  justify-self: end;
+}
+
+.pagination-controls .row-count-selection {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination-controls .pagination-direction {
+    background:none;
+    border: none;
+}
+
+

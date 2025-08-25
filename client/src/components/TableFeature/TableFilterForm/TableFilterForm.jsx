@@ -109,22 +109,22 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
                 onChange={(e) => update({ q: e.target.value })}
               />
             </label>
-            <button type="submit">Apply</button>
+            {/*<button type="submit">Apply</button>*/}
 
             <button
               type="button"
-              className="toggleFilter"
+              className="toggleFilter main-button"
               aria-expanded={showForm}
               aria-controls="filters-panel"
               onClick={handleToggle}
             >
-              <FilterIcon />Filter <ThinDownArrow />
+              <FilterIcon className="filter-icon" />Filter <ThinDownArrow />
             </button>
           </form>
         </div>
 
         <div className="right">
-          <Dropdown trigger={<button type="button" className="toggleActions"><ActionsIconGear />Actions <ThinDownArrow /></button>} align="right">
+          <Dropdown trigger={<button type="button" className="toggleActions main-button"><ActionsIconGear className="action-icon"/>Actions <ThinDownArrow /></button>} align="right">
             {({ close }) => (
               <div role="menu" className="dropdown-menu">
                 <button

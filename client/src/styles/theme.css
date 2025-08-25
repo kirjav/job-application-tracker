@@ -14,7 +14,11 @@
   --secondary-dark-grey-color: #3C3C3C;
   --secondary-grey-color: #626262;
   --secondary-light-color: #E3F0DA;
+
+
   /* Sidebar Nav Select BG */
+  --side-nav-select: #E3F0DA;
+  --side-nav-hover: #f1f5eb;
   --tertiary-grey-color: #4D4D4D;
 
   --account-icon-background-color: #284C3C;

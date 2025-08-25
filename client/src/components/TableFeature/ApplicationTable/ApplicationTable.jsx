@@ -48,17 +48,18 @@ export default function ApplicationTable({
     if (headerCbRef.current) headerCbRef.current.indeterminate = someOnPageSelected;
   }, [someOnPageSelected]);
 
-  const caret = (col) => (sortBy === col ? (sortDir === "asc" ? <TableSortedUpArrow className="sorted"/> : <TableSortedDownArrow className="sorted" />) : <TableSortOptionArrow className="unsorted" />);
+  const caret = (col) => (sortBy === col ? (sortDir === "asc" ? <TableSortedUpArrow className="sorted" aria-hidden="true" focusable="false"/> : <TableSortedDownArrow className="sorted" aria-hidden="true" focusable="false" />) : <TableSortOptionArrow aria-hidden="true" focusable="false" className="unsorted" />);
   const ariaSort = (col) => (sortBy === col ? (sortDir === "asc" ? "ascending" : "descending") : "none");
 
   return (
-    <div className="app-table">
+    <div className="app-table" aria-busy={loading ? "true" : "false"}>
       {loading ? (
-        <p>Loading...</p>
+        <p role="status" aria-live="polite">Loading…</p>
       ) : rows.length === 0 ? (
-        <p>No applications found.</p>
+        <p role="status" aria-live="polite">No applications found.</p>
       ) : (
         <table>
+          <caption className="sr-only">Job applications</caption>
           <thead>
             <tr>
               <th className="select-col">
@@ -124,9 +125,9 @@ export default function ApplicationTable({
                   />
                 </td>
 
-                <td className="text-col"><span class="company-col">{app.company}</span></td>
+                <td className="text-col"><span className="company-col">{app.company}</span></td>
                 <td className="text-col">{app.position}</td>
-                <td className="status-td"><div className="status-display"><StatusDisplay statusType={app.status}/></div></td>
+                <td className="status-td"><div className="status-display"><StatusDisplay statusType={app.status} aria-label={app.status} /></div></td>
                 <td>{app.mode}</td>
                 <td>{new Date(app.dateApplied).toLocaleDateString()}</td>
 
@@ -170,26 +171,36 @@ export default function ApplicationTable({
 
       {/* Pagination UI (controlled) */}
       <div className="pagination-controls">
-        <div className="pager">
-          <button onClick={() => onPageChange(Math.max(1, page - 1))} disabled={page <= 1}>
-            <ThinLeftArrow />
+        <div className="pager" aria-label="Pagination">
+          <button
+            className="pagination-direction"
+            onClick={() => onPageChange(Math.max(1, page - 1))}
+            disabled={page <= 1}
+            aria-label="Previous page"
+          >
+            <ThinLeftArrow aria-hidden="true" focusable="false" />
           </button>
-          <span style={{ margin: "0 1rem" }}>
+
+          <span aria-live="polite" style={{ margin: "0 1rem" }}>
             Page {page} of {totalPages}
           </span>
 
-          <button onClick={() => onPageChange(Math.min(totalPages, page + 1))} disabled={page >= totalPages}>
-            <ThinRightArrow />
+          <button
+            className="pagination-direction"
+            onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+            disabled={page >= totalPages}
+            aria-label="Next page"
+          >
+            <ThinRightArrow aria-hidden="true" focusable="false" />
           </button>
         </div>
         <div className="row-count-selection">
-        <label>
-          <p>Items:</p>
-          <select value={pageSize} onChange={e => onPageSizeChange(Number(e.target.value))}>
+          <label htmlFor="pageSize">Rows:</label>
+          <select id="pageSize" value={pageSize} onChange={e => onPageSizeChange(Number(e.target.value))}>
             {[10, 20, 30, 50].map(n => <option key={n} value={n}>{n}</option>)}
           </select>
-        </label></div>
         </div>
+      </div>
     </div>
   );
 }
