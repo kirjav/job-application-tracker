@@ -1,17 +1,16 @@
+// components/ApplicationForm.jsx
 import { useEffect, useState } from "react";
 import API from "../../utils/api";
 import TagInput from "../TagInput/TagInput";
 import { STATUS_OPTIONS } from "../../constants/ApplicationStatuses";
 import { MODE_OPTIONS } from "../../constants/ApplicationModes";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
+  const qc = useQueryClient();
   const isEditMode = !!existingApp;
 
-  const [selectedTags, setSelectedTags] = useState(() =>
-    existingApp?.tags || []
-  );
-
+  const [selectedTags, setSelectedTags] = useState(() => existingApp?.tags || []);
   const [formData, setFormData] = useState({
     company: existingApp?.company || "",
     position: existingApp?.position || "",
@@ -30,7 +29,6 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
     tagIds: existingApp?.tags?.map((tag) => tag.id) || [],
   });
 
-  // keep tagIds in sync with selectedTags
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -38,35 +36,80 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
     }));
   }, [selectedTags]);
 
+  const resetForm = () => {
+    setSelectedTags([]);
+    setFormData({
+      company: "",
+      position: "",
+      status: "",
+      mode: "",
+      source: "",
+      notes: "",
+      tailoredResume: false,
+      tailoredCoverLetter: false,
+      dateApplied: new Date().toISOString().split("T")[0],
+      salaryExact: "",
+      salaryMin: "",
+      salaryMax: "",
+      tagIds: [],
+    });
+  };
+
+  // --- mutations ---
+  const createMutation = useMutation({
+    mutationFn: async (payload) => (await API.post("/applications", payload)).data,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["applications"] });
+      qc.invalidateQueries({ queryKey: ["applications", "stats"] });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, payload }) => (await API.put(`/applications/${id}`, payload)).data,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["applications"] });
+      qc.invalidateQueries({ queryKey: ["applications", "stats"] });
+    },
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: checked }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       if (isEditMode) {
-        await API.put(`/applications/${existingApp.id}`, formData);
+        await updateMutation.mutateAsync({ id: existingApp.id, payload: formData });
         alert("Application updated!");
       } else {
-        await API.post("/applications", formData);
+        await createMutation.mutateAsync(formData);
         alert("Application created!");
       }
+      onSuccess?.(); // close popup; page will refresh via invalidation
+    } catch (err) {
+      console.error("Application form error:", err);
+      alert("Something went wrong.");
+    }
+  };
 
-      if (onSuccess) onSuccess();
+  // Create + reset, but DO NOT call onSuccess (keeps the form open)
+  const handleAddAnother = async () => {
+    try {
+      if (isEditMode) {
+        await updateMutation.mutateAsync({ id: existingApp.id, payload: formData });
+        alert("Application updated! Starting a new blank entry…");
+      } else {
+        await createMutation.mutateAsync(formData);
+        alert("Application created! Ready for another.");
+      }
+      resetForm();
     } catch (err) {
       console.error("Application form error:", err);
       alert("Something went wrong.");
@@ -77,132 +120,60 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
     <form onSubmit={handleSubmit}>
       <h2>{isEditMode ? "Update" : "Create"} Application</h2>
 
-      <input
-        type="text"
-        name="company"
-        value={formData.company}
-        onChange={handleChange}
-        placeholder="Company"
-        required
-      />
+      <input name="company" value={formData.company} onChange={handleChange} placeholder="Company" required />
+      <input name="position" value={formData.position} onChange={handleChange} placeholder="Position" required />
 
-      <input
-        type="text"
-        name="position"
-        value={formData.position}
-        onChange={handleChange}
-        placeholder="Position"
-        required
-      />
-
-      <select
-        name="status"
-        value={formData.status}
-        onChange={handleChange}
-        required
-      >
-        <option value="" disabled>
-          Select status
-        </option>
-        {STATUS_OPTIONS.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
+      <select name="status" value={formData.status} onChange={handleChange} required>
+        <option value="" disabled>Select status</option>
+        {STATUS_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
 
-      <select
-        name="mode"
-        value={formData.mode}
-        onChange={handleChange}
-        required
-      >
-        <option value="" disabled>
-          Select Work Arrangement
-        </option>
-        {MODE_OPTIONS.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
+      <select name="mode" value={formData.mode} onChange={handleChange} required>
+        <option value="" disabled>Select Work Arrangement</option>
+        {MODE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
-      <input
-        type="number"
-        name="salaryExact"
-        value={formData.salaryExact || ""}
-        onChange={handleChange}
-        placeholder="Exact Salary"
-      />
 
-      <input
-        type="number"
-        name="salaryMin"
-        value={formData.salaryMin || ""}
-        onChange={handleChange}
-        placeholder="Min Salary"
-      />
-      <input
-        type="number"
-        name="salaryMax"
-        value={formData.salaryMax || ""}
-        onChange={handleChange}
-        placeholder="Max Salary"
-      />
-
-      <input
-        type="text"
-        name="source"
-        value={formData.source}
-        onChange={handleChange}
-        placeholder="Source (e.g. LinkedIn)"
-      />
-
-      <textarea
-        name="notes"
-        value={formData.notes}
-        onChange={handleChange}
-        placeholder="Notes"
-      />
+      <input type="number" name="salaryExact" value={formData.salaryExact || ""} onChange={handleChange} placeholder="Exact Salary" />
+      <input type="number" name="salaryMin" value={formData.salaryMin || ""} onChange={handleChange} placeholder="Min Salary" />
+      <input type="number" name="salaryMax" value={formData.salaryMax || ""} onChange={handleChange} placeholder="Max Salary" />
+      <input name="source" value={formData.source} onChange={handleChange} placeholder="Source (e.g. LinkedIn)" />
+      <textarea name="notes" value={formData.notes} onChange={handleChange} placeholder="Notes" />
 
       <label>
-        <input
-          type="checkbox"
-          name="tailoredResume"
-          checked={formData.tailoredResume}
-          onChange={handleCheckboxChange}
-        />
+        <input type="checkbox" name="tailoredResume" checked={formData.tailoredResume} onChange={handleCheckboxChange} />
         Tailored Resume
       </label>
 
       <label>
-        <input
-          type="checkbox"
-          name="tailoredCoverLetter"
-          checked={formData.tailoredCoverLetter}
-          onChange={handleCheckboxChange}
-        />
+        <input type="checkbox" name="tailoredCoverLetter" checked={formData.tailoredCoverLetter} onChange={handleCheckboxChange} />
         Tailored Cover Letter
       </label>
 
-      <input
-        type="date"
-        name="dateApplied"
-        value={formData.dateApplied}
-        onChange={handleChange}
-        required
-      />
+      <input type="date" name="dateApplied" value={formData.dateApplied} onChange={handleChange} required />
 
-      <TagInput
-        selectedTags={selectedTags}
-        setSelectedTags={setSelectedTags}
-      />
+      <TagInput selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
 
-      <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
-      {onCancel && (
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
-      )}
+      <div style={{ display: "flex", gap: 8 }}>
+        <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
+
+        {!isEditMode && (
+          <button type="button" onClick={handleAddAnother}>
+            Add another
+          </button>
+        )}
+
+        {isEditMode && (
+          <button type="button" onClick={handleAddAnother} title="Save this, then start a new blank entry">
+            Save & New
+          </button>
+        )}
+
+        {onCancel && (
+          <button type="button" onClick={onCancel}>
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 };

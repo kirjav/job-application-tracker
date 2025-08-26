@@ -81,7 +81,6 @@ th[aria-sort="descending"] .th-sort {
     background: None;
     border-style: None;
     font: inherit;
-
 }
 
 .th-sort .unsorted {
@@ -125,7 +124,7 @@ th[aria-sort="descending"] .th-sort {
     text-align: center;
     vertical-align: middle;
 }
-
+/* Align content in columns */ 
 td.status-td {
     text-align: center;
     vertical-align: middle;
@@ -133,15 +132,18 @@ td.status-td {
 
 td.status-td .status-display {
     display: inline-flex;
-    /* inline so text-align works; flex for nice centering inside */
     align-items: center;
     justify-content: center;
     width: auto;
 }
 
+td.number-col {
+    text-align: end;
+}
+
 
 .app-table th.mode-col {
-    width: 150px;
+    width: 110px;
 }
 
 .app-table th.select-col {
@@ -167,7 +169,7 @@ td.text-col {
 }
 
 td.tag-cell {
-    overflow:hidden;
+    overflow: hidden;
 }
 
 
@@ -180,35 +182,121 @@ th[aria-sort="descending"] .th-sort {
 
 .pagination-controls {
     width: 100%;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    /* Font styling */
+    font-size: 1rem;
+    font-family: 'Inter';
+    color: var(--secondary-grey-color);
+
 }
+
+/* Center Pagination controls */
 .pagination-controls .pager {
-  grid-column: 2; /* force into center column */
-  justify-self: center;
+    grid-column: 2;
+    justify-self: center;
 
-  display:flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Make sure the page buttons are centered also */
+.pagination-controls .pager button {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.pagination-direction:not(:disabled):hover {
+    color: var(--secondary-grey-color);
+    cursor: pointer;
+}
+.pagination-direction:not(:disabled):hover .page-arrow path {
+    stroke-width: 2;
+}
 
 .pagination-controls .row-count-selection {
-  grid-column: 3;
-  justify-self: end;
+    grid-column: 3;
+    justify-self: end;
 }
 
+/* Style Rows: RowCount element */
 .pagination-controls .row-count-selection {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 5px;
 }
 
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.pagination-controls .row-count-selection .select-wrapper select {
+    appearance: none;
+    /* removes default arrow in modern browsers */
+    -webkit-appearance: none;
+    /* Safari/Chrome */
+    -moz-appearance: none;
+    /* Firefox */
+    background: white;
+    /* background color */
+    border: 1px solid #ccc;
+    padding: 8px 32px 8px 12px;
+    /* right padding so arrow doesn't overlap text */
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.pagination-controls .row-count-selection .select-wrapper select:focus {
+    border-color: #ccc;
+    outline: none;
+}
+
+/* for IE/Edge legacy */
+.select-wrapper select::-ms-expand {
+    display: none;
+}
+
+.select-wrapper .select-arrow {
+
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    /* ensures clicks go to select */
+    width: 16px;
+    height: 16px;
+    color: currentColor;
+}
+
+
 .pagination-controls .pagination-direction {
-    background:none;
+    background: none;
     border: none;
 }
 
+/* keep your existing 2px borders for all cells */
+.app-table th,
+.app-table td {
+  padding: 8px 12px;
+  border: 2px solid var(--table-border);
+}
 
+/* but don't draw the bottom border on sticky headers */
+.app-table thead th {
+  border-bottom: 0;
+}
+
+/* ensure the first row draws the seam */
+.app-table tbody td {
+  border-top: 2px solid var(--table-border);
+}

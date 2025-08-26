@@ -1,0 +1,14 @@
+.logout-button {
+    background: none;
+    border: none;
+    color: var(--primary-darkest-font-color);
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background: var(--side-nav-hover);
+}
+
+.logout-button:focus-visible {
+    background: var(--side-nav-hover);
+}

@@ -29,6 +29,9 @@ body {
   border: 0;
 }
 
+button:focus-visible {
+    outline-color: var(--primary-darkest-font-color);          
+}
 * {
     box-sizing: border-box;
     font-family: 'Inter';

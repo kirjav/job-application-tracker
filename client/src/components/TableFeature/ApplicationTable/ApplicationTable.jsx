@@ -1,4 +1,3 @@
-// src/components/ApplicationTable/ApplicationTable.jsx
 import { useEffect, useRef } from "react";
 import "./ApplicationTable.css";
 import TagOverflow from "../TagOverflow/TagOverflow";
@@ -12,6 +11,7 @@ import TableSortOptionArrow from "../../../assets/icons/table/TableSortOptionArr
 
 import ThinLeftArrow from "../../../assets/icons/table/ThinLeftArrow.svg?react";
 import ThinRightArrow from "../../../assets/icons/table/ThinRightArrow.svg?react";
+import ThinDownArrow from "../../../assets/icons/table/ThinDownArrow.svg?react";
 
 import TableRowOptions from "../../../assets/icons/table/TableRowOptions.svg?react";
 
@@ -48,7 +48,7 @@ export default function ApplicationTable({
     if (headerCbRef.current) headerCbRef.current.indeterminate = someOnPageSelected;
   }, [someOnPageSelected]);
 
-  const caret = (col) => (sortBy === col ? (sortDir === "asc" ? <TableSortedUpArrow className="sorted" aria-hidden="true" focusable="false"/> : <TableSortedDownArrow className="sorted" aria-hidden="true" focusable="false" />) : <TableSortOptionArrow aria-hidden="true" focusable="false" className="unsorted" />);
+  const caret = (col) => (sortBy === col ? (sortDir === "asc" ? <TableSortedUpArrow className="sorted" aria-hidden="true" focusable="false" /> : <TableSortedDownArrow className="sorted" aria-hidden="true" focusable="false" />) : <TableSortOptionArrow aria-hidden="true" focusable="false" className="unsorted" />);
   const ariaSort = (col) => (sortBy === col ? (sortDir === "asc" ? "ascending" : "descending") : "none");
 
   return (
@@ -129,9 +129,9 @@ export default function ApplicationTable({
                 <td className="text-col">{app.position}</td>
                 <td className="status-td"><div className="status-display"><StatusDisplay statusType={app.status} aria-label={app.status} /></div></td>
                 <td>{app.mode}</td>
-                <td>{new Date(app.dateApplied).toLocaleDateString()}</td>
+                <td className="number-col">{new Date(app.dateApplied).toLocaleDateString()}</td>
 
-                <td>
+                <td className="number-col">
                   {app.salaryExact != null
                     ? `$${app.salaryExact.toLocaleString()}`
                     : (app.salaryMin != null || app.salaryMax != null)
@@ -178,7 +178,7 @@ export default function ApplicationTable({
             disabled={page <= 1}
             aria-label="Previous page"
           >
-            <ThinLeftArrow aria-hidden="true" focusable="false" />
+            <ThinLeftArrow aria-hidden="true" focusable="false" className="page-arrow" />
           </button>
 
           <span aria-live="polite" style={{ margin: "0 1rem" }}>
@@ -191,14 +191,17 @@ export default function ApplicationTable({
             disabled={page >= totalPages}
             aria-label="Next page"
           >
-            <ThinRightArrow aria-hidden="true" focusable="false" />
+            <ThinRightArrow aria-hidden="true" focusable="false" className="page-arrow" />
           </button>
         </div>
         <div className="row-count-selection">
           <label htmlFor="pageSize">Rows:</label>
-          <select id="pageSize" value={pageSize} onChange={e => onPageSizeChange(Number(e.target.value))}>
-            {[10, 20, 30, 50].map(n => <option key={n} value={n}>{n}</option>)}
-          </select>
+          <div className="select-wrapper">
+            <select id="pageSize" value={pageSize} onChange={e => onPageSizeChange(Number(e.target.value))}>
+              {[10, 20, 30, 50].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+            <ThinDownArrow className="select-arrow" />
+          </div>
         </div>
       </div>
     </div>
