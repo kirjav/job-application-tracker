@@ -1,0 +1,22 @@
+.application-overlay {
+  position: fixed;
+  inset: 0; /* shorthand for top/right/bottom/left: 0 */
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647; /* win all stacking battles */
+}
+
+.application-overlay .application-form {
+  background-color: var(--bg-color);
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 480px;
+  width: min(90vw, 480px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  text-align: center;
+
+}

@@ -1,10 +1,12 @@
 // components/ApplicationForm.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import API from "../../utils/api";
 import TagInput from "../TagInput/TagInput";
 import { STATUS_OPTIONS } from "../../constants/ApplicationStatuses";
 import { MODE_OPTIONS } from "../../constants/ApplicationModes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import "./ApplicationForm.css";
 
 const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
   const qc = useQueryClient();
@@ -116,65 +118,79 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
     }
   };
 
+  const ref = useRef();
+
+    useEffect(() => {
+    const handleClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        onCancel();
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [onCancel]);
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>{isEditMode ? "Update" : "Create"} Application</h2>
+    <div className="application-overlay">
+      <form onSubmit={handleSubmit} className="application-form" ref={ref}>
+        <h2>{isEditMode ? "Update" : "Create"} Application</h2>
 
-      <input name="company" value={formData.company} onChange={handleChange} placeholder="Company" required />
-      <input name="position" value={formData.position} onChange={handleChange} placeholder="Position" required />
+        <input name="company" value={formData.company} onChange={handleChange} placeholder="Company" required />
+        <input name="position" value={formData.position} onChange={handleChange} placeholder="Position" required />
 
-      <select name="status" value={formData.status} onChange={handleChange} required>
-        <option value="" disabled>Select status</option>
-        {STATUS_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
-      </select>
+        <select name="status" value={formData.status} onChange={handleChange} required>
+          <option value="" disabled>Select status</option>
+          {STATUS_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
 
-      <select name="mode" value={formData.mode} onChange={handleChange} required>
-        <option value="" disabled>Select Work Arrangement</option>
-        {MODE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
-      </select>
+        <select name="mode" value={formData.mode} onChange={handleChange} required>
+          <option value="" disabled>Select Work Arrangement</option>
+          {MODE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
 
-      <input type="number" name="salaryExact" value={formData.salaryExact || ""} onChange={handleChange} placeholder="Exact Salary" />
-      <input type="number" name="salaryMin" value={formData.salaryMin || ""} onChange={handleChange} placeholder="Min Salary" />
-      <input type="number" name="salaryMax" value={formData.salaryMax || ""} onChange={handleChange} placeholder="Max Salary" />
-      <input name="source" value={formData.source} onChange={handleChange} placeholder="Source (e.g. LinkedIn)" />
-      <textarea name="notes" value={formData.notes} onChange={handleChange} placeholder="Notes" />
+        <input type="number" name="salaryExact" value={formData.salaryExact || ""} onChange={handleChange} placeholder="Exact Salary" />
+        <input type="number" name="salaryMin" value={formData.salaryMin || ""} onChange={handleChange} placeholder="Min Salary" />
+        <input type="number" name="salaryMax" value={formData.salaryMax || ""} onChange={handleChange} placeholder="Max Salary" />
+        <input name="source" value={formData.source} onChange={handleChange} placeholder="Source (e.g. LinkedIn)" />
+        <textarea name="notes" value={formData.notes} onChange={handleChange} placeholder="Notes" />
 
-      <label>
-        <input type="checkbox" name="tailoredResume" checked={formData.tailoredResume} onChange={handleCheckboxChange} />
-        Tailored Resume
-      </label>
+        <label>
+          <input type="checkbox" name="tailoredResume" checked={formData.tailoredResume} onChange={handleCheckboxChange} />
+          Tailored Resume
+        </label>
 
-      <label>
-        <input type="checkbox" name="tailoredCoverLetter" checked={formData.tailoredCoverLetter} onChange={handleCheckboxChange} />
-        Tailored Cover Letter
-      </label>
+        <label>
+          <input type="checkbox" name="tailoredCoverLetter" checked={formData.tailoredCoverLetter} onChange={handleCheckboxChange} />
+          Tailored Cover Letter
+        </label>
 
-      <input type="date" name="dateApplied" value={formData.dateApplied} onChange={handleChange} required />
+        <input type="date" name="dateApplied" value={formData.dateApplied} onChange={handleChange} required />
 
-      <TagInput selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+        <TagInput selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
 
-      <div style={{ display: "flex", gap: 8 }}>
-        <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
 
-        {!isEditMode && (
-          <button type="button" onClick={handleAddAnother}>
-            Add another
-          </button>
-        )}
+          {!isEditMode && (
+            <button type="button" onClick={handleAddAnother}>
+              Add another
+            </button>
+          )}
 
-        {isEditMode && (
-          <button type="button" onClick={handleAddAnother} title="Save this, then start a new blank entry">
-            Save & New
-          </button>
-        )}
+          {isEditMode && (
+            <button type="button" onClick={handleAddAnother} title="Save this, then start a new blank entry">
+              Save & New
+            </button>
+          )}
 
-        {onCancel && (
-          <button type="button" onClick={onCancel}>
-            Cancel
-          </button>
-        )}
-      </div>
-    </form>
+          {onCancel && (
+            <button type="button" onClick={onCancel}>
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 };
 

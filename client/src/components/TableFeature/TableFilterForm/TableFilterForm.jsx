@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MODE_OPTIONS as MODE_VALUES } from "../../../constants/ApplicationModes";
 import { STATUS_OPTIONS as STATUS_VALUES } from "../../../constants/ApplicationStatuses";
 import ModeToggles from "../FilterModeToggle/ModeToggles";
@@ -93,10 +93,20 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
     borderRadius: 6,
   };
 
+    const ref = useRef();
+
+    useEffect(() => {
+    const handleClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        handleToggle();
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [handleToggle]);
+
   return (
     <div className="filterForm">
-
-
       <div className="toolbar">
         <div className="left">
           <form onSubmit={handleSubmit}>
@@ -124,7 +134,7 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
         </div>
 
         <div className="right">
-          <Dropdown trigger={<button type="button" className="toggleActions main-button"><ActionsIconGear className="action-icon"/>Actions <ThinDownArrow /></button>} align="right">
+          <Dropdown trigger={<button type="button" className="toggleActions main-button"><ActionsIconGear className="action-icon" />Actions <ThinDownArrow /></button>} align="right">
             {({ close }) => (
               <div role="menu" className="dropdown-menu">
                 <button
@@ -167,8 +177,12 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
 
       </div>
 
+
       {
-        showForm && (<form className="filters" onSubmit={handleSubmit}>
+        showForm && (<div className="filter-modal-wrapper"><form className="filters" onSubmit={handleSubmit} ref={ref}>
+
+          <button type="button" onClick={handleToggle}>X</button>
+
           <label>
             Status
             <select
@@ -214,8 +228,8 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
             <button type="button" onClick={handleClear}>Clear</button>
             <button type="submit">Apply</button>
           </div>
-        </form>)
-      }
+        </form></div>)}
+
     </div >
   );
 }
