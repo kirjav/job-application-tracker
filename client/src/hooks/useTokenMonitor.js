@@ -8,40 +8,12 @@ const POLL_MS = 15000;
 const useTokenMonitor = () => {
   const [showWarning, setShowWarning] = useState(false);
   const intervalRef = useRef(null);
+  const loggingOutRef = useRef(false); // prevent multiple logouts
   const navigate = useNavigate();
 
-  const checkToken = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setShowWarning(false);
-      return;
-    }
-    const decoded = parseJwt(token);
-    if (!decoded) {
-      setShowWarning(false);
-      return;
-    }
-    setShowWarning(isTokenExpiringSoon(decoded));
-  };
-
-  const refreshToken = async () => {
-    try {
-      const res = await API.post("/auth/refresh"); // withCredentials:true ensures cookie goes
-      const newToken = res?.data?.token;           // server returns token in body
-      if (newToken) {
-        localStorage.setItem("token", newToken);
-      }
-      setShowWarning(false); // hide immediately on success
-      checkToken();          // re-evaluate with the new expiry
-    } catch (err) {
-      console.error("Token refresh failed", err);
-      localStorage.removeItem("token");
-      setShowWarning(false);
-      navigate("/", { replace: true });
-    }
-  };
-
   const handleLogout = async () => {
+    if (loggingOutRef.current) return;
+    loggingOutRef.current = true;
     try {
       await API.post("/auth/logout");
     } catch (err) {
@@ -49,14 +21,63 @@ const useTokenMonitor = () => {
     } finally {
       localStorage.removeItem("token");
       setShowWarning(false);
+      // stop polling before navigating
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      navigate("/", { replace: true });
+    }
+  };
+
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // no token = ensure logged-out state + redirect
+      handleLogout();
+      return;
+    }
+
+    const decoded = parseJwt(token);
+    if (!decoded || !decoded.exp) {
+      // malformed token, treat as logged out
+      handleLogout();
+      return;
+    }
+
+    const nowMs = Date.now();
+    const expMs = decoded.exp * 1000;
+
+    if (expMs <= nowMs) {
+      // already expired -> logout immediately
+      handleLogout();
+      return;
+    }
+
+    // not expired yet; show warning only if within your threshold
+    setShowWarning(isTokenExpiringSoon(decoded));
+  };
+
+  const refreshToken = async () => {
+    try {
+      const res = await API.post("/auth/refresh"); // cookie-based refresh
+      const newToken = res?.data?.token;
+      if (newToken) localStorage.setItem("token", newToken);
+      setShowWarning(false);
+      checkToken(); // re-evaluate with new expiry
+    } catch (err) {
+      console.error("Token refresh failed", err);
+      localStorage.removeItem("token");
+      setShowWarning(false);
+      // stop polling before navigating
+      if (intervalRef.current) clearInterval(intervalRef.current);
       navigate("/", { replace: true });
     }
   };
 
   useEffect(() => {
-    checkToken(); // don’t wait for first interval
+    checkToken(); // check immediately
     intervalRef.current = setInterval(checkToken, POLL_MS);
-    return () => clearInterval(intervalRef.current);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
 
   return {
@@ -67,4 +88,5 @@ const useTokenMonitor = () => {
 };
 
 export default useTokenMonitor;
+
 
