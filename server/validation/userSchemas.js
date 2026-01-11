@@ -16,7 +16,7 @@ const passwordSchema = z
   .regex(/[a-z]/, "Password must include a lowercase letter")
   .regex(/[A-Z]/, "Password must include an uppercase letter")
   .regex(/\d/, "Password must include a digit")
-  .regex(/[@$!%*?&]/, "Password must include a special character");
+  .regex(/[^A-Za-z0-9]/, "Password must include a special character");
 
 const nameSchema = z.string().trim().min(1, "Name is required").max(80); // pick 80 or 100 and use it consistently
 

@@ -28,8 +28,28 @@ const LoginForm = () => {
         navigate("/dashboard");
       }
     } catch (err) {
-      const errorMsg = err.response?.data?.error || "Login failed.";
-      console.error("Login error:", errorMsg);
+      let errorMsg = "Login failed.";
+
+      if (err.response) {
+        // Server responded
+        const status = err.response.status;
+
+        if (status === 401) {
+          errorMsg = "Invalid email or password.";
+        } else if (status === 429) {
+          errorMsg = "Too many login attempts. Please try again later.";
+        } else if (status >= 500) {
+          errorMsg = "Server error. Please try again shortly.";
+        } else {
+          errorMsg = "Login failed. Please try again.";
+        }
+
+      } else if (err.request) {
+        // Request made but no response
+        errorMsg = "Unable to connect to the server. Check your connection.";
+      }
+
+      console.error("Login error:", err);
       setMessage(errorMsg);
     }
   };

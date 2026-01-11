@@ -2,6 +2,10 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../utils/api";
 
+import PasswordChecklist from "../PasswordChecklist/PasswordChecklist";
+import { usePasswordValidation } from "../../hooks/usePasswordValidation";
+
+
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -13,6 +17,10 @@ const RegisterForm = () => {
   const [message, setMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [confirmTouched, setConfirmTouched] = useState(false);
+  const { checks, isValid: isPasswordValid } = usePasswordValidation(formData.password);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,16 +29,25 @@ const RegisterForm = () => {
   };
 
   const passwordsMatch = useMemo(() => {
-    return (
-      formData.password.length > 0 &&
-      formData.confirmPassword.length > 0 &&
-      formData.password === formData.confirmPassword
-    );
+    return formData.password === formData.confirmPassword;
   }, [formData.password, formData.confirmPassword]);
+
+  const showMismatch =
+    confirmTouched && formData.confirmPassword.length > 0 && !passwordsMatch;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
+
+
+    if (!isPasswordValid) {
+      setMessage("Password does not meet requirements.");
+      return;
+    }
+    if (!passwordsMatch) {
+      setMessage("Passwords do not match.");
+      return;
+    }
 
     // Only send the real password (omit confirmPassword)
     const payload = {
@@ -63,7 +80,7 @@ const RegisterForm = () => {
       <h2>Create Account</h2>
       <div className="input-wrapper">
         <input
-          type="name"
+          type="text"
           name="name"
           value={formData.name}
           onChange={handleChange}
@@ -85,11 +102,13 @@ const RegisterForm = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            onBlur={() => setPasswordTouched(true)}
             placeholder="Password"
             required
-            aria-invalid={!passwordsMatch && formData.confirmPassword !== ""}
-            aria-describedby="pwd-help"
+            aria-invalid={passwordTouched && !isPasswordValid}
+            aria-describedby="pwd-checklist"
           />
+
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
@@ -102,6 +121,12 @@ const RegisterForm = () => {
             />
           </button>
         </div>
+        <PasswordChecklist
+          checks={checks}
+          show={passwordTouched || formData.password.length > 0}
+          id="pwd-checklist"
+        />
+
         {/* Confirm Password */}
         <div className="password-wrapper">
           <input
@@ -109,10 +134,15 @@ const RegisterForm = () => {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
+            onBlur={() => setConfirmTouched(true)}
             placeholder="Confirm Password"
-            aria-invalid={!passwordsMatch && formData.confirmPassword !== ""}
+            aria-invalid={showMismatch}
             required
           />
+
+
+
+
           <button
             type="button"
             onClick={() => setShowConfirmPassword((prev) => !prev)}
@@ -125,14 +155,21 @@ const RegisterForm = () => {
             />
           </button>
         </div>
-
+        {showMismatch && (
+          <p role="alert" style={{ fontSize: 12 }}>
+            Passwords don’t match.
+          </p>
+        )}
         {/*{!passwordsMatch && formData.confirmPassword !== "" && (
           <p id="pwd-help" role="alert" style={{ fontSize: 12 }}>
             Passwords don’t match.
           </p>
         )}*/}
 
-        <button type="submit">Register</button></div>
+        <button type="submit">
+          Register
+        </button>
+      </div>
 
       {message && <p>{message}</p>}
     </form>
