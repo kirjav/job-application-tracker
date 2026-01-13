@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import LogoutButton from "../../LogoutButton/LogoutButton";
+import LogoutButton from "../../authentication/LogoutButton/LogoutButton";
 import "./TopNav.css";
 
 import AddApplicationIcon from "../../../assets/icons/addApplicationIcon.svg?react";

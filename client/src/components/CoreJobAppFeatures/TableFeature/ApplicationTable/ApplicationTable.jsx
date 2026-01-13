@@ -1,19 +1,19 @@
 import { useEffect, useRef } from "react";
 import "./ApplicationTable.css";
 import TagOverflow from "../TagOverflow/TagOverflow";
-import { Dropdown } from "../../Popover/Dropdown";
+import { Dropdown } from "../../../Popover/Dropdown";
 import { StatusDisplay } from "../StatusDisplay/StatusDisplay";
 
 {/** Nav Icon SVGs */ }
-import TableSortedDownArrow from "../../../assets/icons/table/TableSortedDownArrow.svg?react";
-import TableSortedUpArrow from "../../../assets/icons/table/TableSortedUpArrow.svg?react";
-import TableSortOptionArrow from "../../../assets/icons/table/TableSortOptionArrow.svg?react";
+import TableSortedDownArrow from "../../../../assets/icons/table/TableSortedDownArrow.svg?react";
+import TableSortedUpArrow from "../../../../assets/icons/table/TableSortedUpArrow.svg?react";
+import TableSortOptionArrow from "../../../../assets/icons/table/TableSortOptionArrow.svg?react";
 
-import ThinLeftArrow from "../../../assets/icons/table/ThinLeftArrow.svg?react";
-import ThinRightArrow from "../../../assets/icons/table/ThinRightArrow.svg?react";
-import ThinDownArrow from "../../../assets/icons/table/ThinDownArrow.svg?react";
+import ThinLeftArrow from "../../../../assets/icons/table/ThinLeftArrow.svg?react";
+import ThinRightArrow from "../../../../assets/icons/table/ThinRightArrow.svg?react";
+import ThinDownArrow from "../../../../assets/icons/table/ThinDownArrow.svg?react";
 
-import TableRowOptions from "../../../assets/icons/table/TableRowOptions.svg?react";
+import TableRowOptions from "../../../../assets/icons/table/TableRowOptions.svg?react";
 
 
 export default function ApplicationTable({

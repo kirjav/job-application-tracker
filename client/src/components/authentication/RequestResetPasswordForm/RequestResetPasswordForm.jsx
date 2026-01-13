@@ -1,8 +1,9 @@
 import { useState } from "react";
-import API from "../../utils/api";
-import "./ResetPasswordForm.css"
+import API from "../../../utils/api";
+import "./RequestResetPasswordForm.css"
 
-const ResetPasswordForm = ({ onBack }) => {
+
+const RequestResetPasswordForm = ({ onBack }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(null);
 
@@ -43,4 +44,4 @@ const ResetPasswordForm = ({ onBack }) => {
   );
 };
 
-export default ResetPasswordForm;
+export default RequestResetPasswordForm;

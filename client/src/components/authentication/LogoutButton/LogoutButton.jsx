@@ -1,9 +1,9 @@
 
 import { useNavigate } from "react-router-dom";
-import API from "../../utils/api";
+import API from "../../../utils/api";
 import "./LogoutButton.css";
 
-import LogOutIcon from "../../assets/icons/nav/logout_icon.svg?react";
+import LogOutIcon from "../../../assets/icons/nav/logout_icon.svg?react";
 
 const LogoutButton = () => {
   const navigate = useNavigate();

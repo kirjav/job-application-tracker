@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import qs from "qs";
-import API from "../../../utils/api";
+import API from "../../../../utils/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import "./ApplicationTablePage.css";

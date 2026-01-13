@@ -1,17 +1,19 @@
 import { useEffect, useState, useRef } from "react";
-import { MODE_OPTIONS as MODE_VALUES } from "../../../constants/ApplicationModes";
-import { STATUS_OPTIONS as STATUS_VALUES } from "../../../constants/ApplicationStatuses";
+
+import { MODE_OPTIONS as MODE_VALUES } from "../../../../constants/ApplicationModes";
+import { STATUS_OPTIONS as STATUS_VALUES } from "../../../../constants/ApplicationStatuses";
+
 import ModeToggles from "../FilterModeToggle/ModeToggles";
 import TagFilterPicker from "../TagFilterPicker/TagFilterPicker";
 import "./TableFilterForm.css";
 
-import FilterIcon from "../../../assets/icons/table/FilterIcon.svg?react";
-import ActionsIconGear from "../../../assets/icons/table/ActionsIconGear.svg?react";
-import ThinDownArrow from "../../../assets/icons/table/ThinDownArrow.svg?react";
-import SearchGlassIcon from "../../../assets/icons/table/SearchGlassIcon.svg?react";
+import FilterIcon from "../../../../assets/icons/table/FilterIcon.svg?react";
+import ActionsIconGear from "../../../../assets/icons/table/ActionsIconGear.svg?react";
+import ThinDownArrow from "../../../../assets/icons/table/ThinDownArrow.svg?react";
+import SearchGlassIcon from "../../../../assets/icons/table/SearchGlassIcon.svg?react";
 
-import { Dropdown } from "../../Popover/Dropdown";
-import { Submenu } from "../../Popover/Submenu";
+import { Dropdown } from "../../../Popover/Dropdown";
+import { Submenu } from "../../../Popover/Submenu";
 
 export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 0,
   onBulkUpdateStatus,

@@ -1,9 +1,10 @@
 // components/ApplicationForm.jsx
 import { useEffect, useState, useRef } from "react";
-import API from "../../utils/api";
-import TagInput from "../TagInput/TagInput";
-import { STATUS_OPTIONS } from "../../constants/ApplicationStatuses";
-import { MODE_OPTIONS } from "../../constants/ApplicationModes";
+import API from "../../../utils/api";
+import TagInput from "../TableFeature/TagInput/TagInput";
+
+import { STATUS_OPTIONS } from "../../../constants/ApplicationStatuses";
+import { MODE_OPTIONS } from "../../../constants/ApplicationModes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import "./ApplicationForm.css";

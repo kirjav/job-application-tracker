@@ -1,7 +1,7 @@
 // ActiveFilters.jsx
 import "./ActiveFilters.css";
 
-import TagClose from "../../../assets/icons/table/tagClose.svg?react";
+import TagClose from "../../../../assets/icons/table/tagClose.svg?react";
 
 function isEmpty(val) {
   return (

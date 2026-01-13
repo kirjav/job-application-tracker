@@ -1,4 +1,4 @@
-import ApplicationTablePage from "../components/TableFeature/ApplicationTablePage/ApplicationTablePage";
+import ApplicationTablePage from "../components/CoreJobAppFeatures/TableFeature/ApplicationTablePage/ApplicationTablePage";
 
 const ApplicationOverview = () => {
     return (

@@ -1,6 +1,6 @@
 import useTokenMonitor from "../../hooks/useTokenMonitor";
 import SessionWarningModal from "../../components/SessionWarningModal/SessionWarningModal";
-import AddApplication from "../../components/AddApplication/AddApplication"
+import AddApplication from "../../components/CoreJobAppFeatures/AddApplication/AddApplication"
 import TopNav from "../../components/Navigation/TopNav/TopNav";
 import SideNav from "../../components/Navigation/SideNav/SideNav";
 

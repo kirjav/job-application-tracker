@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../../utils/api";
+import API from "../../../utils/api";
 
 import PasswordChecklist from "../PasswordChecklist/PasswordChecklist";
-import { usePasswordValidation } from "../../hooks/usePasswordValidation";
+import { usePasswordValidation } from "../../../hooks/usePasswordValidation";
 
 
 const RegisterForm = () => {

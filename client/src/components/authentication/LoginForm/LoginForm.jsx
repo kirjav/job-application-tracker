@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../../utils/api";
-import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
+import API from "../../../utils/api";
+import RequestResetPasswordForm from "../RequestResetPasswordForm/RequestResetPasswordForm";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -55,7 +55,7 @@ const LoginForm = () => {
   };
 
   if (showReset) {
-    return <ResetPasswordForm onBack={() => setShowReset(false)} />;
+    return <RequestResetPasswordForm onBack={() => setShowReset(false)} />;
   }
 
   return (
