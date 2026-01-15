@@ -20,7 +20,7 @@ model User {
   tags     Tag[]
   resetToken        String?     
   resetTokenExpiry  DateTime?
-  inactivityGraceDays Int? @default(30)
+  inactivityThresholdDays Int? @default(30)
   dailyApplicationGoal Int? @default(3)
 }
 
@@ -38,18 +38,21 @@ model Application {
   salaryExact      Int?
   salaryMin        Int?
   salaryMax        Int?
-  effectiveSalary  Decimal? @db.Decimal(65,30)
+  effectiveSalary  Decimal? @db.Decimal(12,2)
   dateUpdated      DateTime @updatedAt
+  lastProgressAt   DateTime?
   resumeUrl        String?
   tags             Tag[]
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           Int
+  @@index([userId, lastProgressAt])
   @@index([userId, dateApplied])
   @@index([userId, status])
   @@index([userId, mode])
   @@index([userId, company])
   @@index([userId, position])
   @@index([userId, dateUpdated])
+  @@index([userId, effectiveSalary])
 }
 
 model Tag {
