@@ -30,6 +30,7 @@ model Application {
   position         String
   status           String
   mode             String
+  referred         Boolean @default(false)
   source           String?
   notes            String?
   tailoredResume   Boolean
