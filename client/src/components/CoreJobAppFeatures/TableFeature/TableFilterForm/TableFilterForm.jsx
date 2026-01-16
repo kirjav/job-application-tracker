@@ -182,10 +182,14 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
 
       {
         showForm && (<div className="filter-modal-wrapper"><form className="filters" onSubmit={handleSubmit} ref={ref}>
-
+          
+          <div className="filter-modal-group">
           <button type="button" onClick={handleToggle}>X</button>
-
-          <label>
+          Filters
+          </div>
+          
+          
+          <div className="filter-modal-group"><label>
             Status
             <select
               multiple
@@ -194,14 +198,17 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
             >
               {STATUS_VALUES.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
-          </label>
+          </label></div>
 
+          <div className="filter-modal-group">
           <ModeToggles
             options={MODE_VALUES}
             value={draft.modes ?? []}
             onChange={(modes) => update({ modes })}
-          />
+          /></div>
 
+
+          <div className="filter-modal-group">
           <label>
             From
             <input type="date" value={draft.dateFrom} onChange={(e) => update({ dateFrom: e.target.value })} />
@@ -209,8 +216,9 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
           <label>
             To
             <input type="date" value={draft.dateTo} onChange={(e) => update({ dateTo: e.target.value })} />
-          </label>
+          </label></div>
 
+          <div className="filter-modal-group">
           <label>
             Min $
             <input type="number" min="0" value={draft.salaryMin} onChange={(e) => update({ salaryMin: e.target.value })} />
@@ -218,16 +226,17 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
           <label>
             Max $
             <input type="number" min="0" value={draft.salaryMax} onChange={(e) => update({ salaryMax: e.target.value })} />
-          </label>
+          </label></div>
 
+          <div className="filter-modal-group">
           <TagFilterPicker
             value={draft.tagNames ?? []}
             onChange={(names) => update({ tagNames: names.length ? names : undefined })}
-          />
+          /></div>
 
 
           <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
-            <button type="button" onClick={handleClear}>Clear</button>
+            <button type="button" onClick={handleClear}>Reset</button>
             <button type="submit">Apply</button>
           </div>
         </form></div>)}

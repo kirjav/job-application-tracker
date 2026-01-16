@@ -1,4 +1,4 @@
-import ApplicationForm from "../ApplicationForm/ApplicationForm";
+import ApplicationForm from "../../CoreJobAppFeatures/ApplicationForm/ApplicationForm";
 
 const AddApplication = ({ onClose }) => {
   return (

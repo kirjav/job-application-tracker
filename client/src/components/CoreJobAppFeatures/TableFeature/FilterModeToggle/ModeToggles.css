@@ -1,23 +1,28 @@
 .toggle-row {
     display: flex;
-    gap: 8px;
     flex-wrap: wrap;
 }
 
-.toggle {
+.mode-toggle {
     padding: 8px 12px;
     border-radius: 999px;
-    border: 2px solid var(--primary-medium-color);
-    background: transparent;
+    border-radius: 0px;
+    color: var(--contrast-text-color);
+    border: 2px solid var(--secondary-background-border-color);
+    background: var(--secondary-background-color);
     cursor: pointer;
+    margin-right: -1px;
 }
 
-.toggle.is-selected {
+.mode-toggle.is-selected {
     background: var(--primary-medium-color);
-    color: white;
-    border-color: var(--primary-medium-color);
+    color: var(--secondary-background-color);
 }
 
 .toggle:focus {
     outline: 2px solid var(--primary-dark-color);
+}
+
+.toggle-group-filter-modal {
+    border-style: none;
 }

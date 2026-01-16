@@ -19,6 +19,10 @@
   box-shadow: 0 8px 20px rgba(0,0,0,.25);
   text-align: center;
 
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+
 }
 .dropdown-menu {
   display: flex;
@@ -164,3 +168,18 @@ input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
+
+
+.filter-modal-group {
+  display: flex;
+}
+
+.filter-modal-group label {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 6px;
+    font-size: 12px;
+    opacity: .85;
+}
+
+
