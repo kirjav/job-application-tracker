@@ -85,43 +85,46 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
     setFormData((prev) => ({ ...prev, [name]: checked }));
   };
 
+  const submitIntentRef = useRef("submit"); // "submit" | "addAnother" | "saveNew"
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const form = e.currentTarget;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const intent = submitIntentRef.current; // "submit" | "addAnother" | "saveNew"
+
     try {
       if (isEditMode) {
         await updateMutation.mutateAsync({ id: existingApp.id, payload: formData });
-        alert("Application updated!");
+        alert(intent === "saveNew" ? "Application updated! Starting a new blank entry…" : "Application updated!");
       } else {
         await createMutation.mutateAsync(formData);
-        alert("Application created!");
+        alert(intent === "addAnother" ? "Application created! Ready for another." : "Application created!");
       }
-      onSuccess?.(); // close popup; page will refresh via invalidation
+
+      if (intent === "addAnother" || intent === "saveNew") {
+        resetForm();
+      } else {
+        onSuccess?.();
+      }
     } catch (err) {
       console.error("Application form error:", err);
       alert("Something went wrong.");
+    } finally {
+      submitIntentRef.current = "submit";
     }
   };
 
-  // Create + reset, but DO NOT call onSuccess (keeps the form open)
-  const handleAddAnother = async () => {
-    try {
-      if (isEditMode) {
-        await updateMutation.mutateAsync({ id: existingApp.id, payload: formData });
-        alert("Application updated! Starting a new blank entry…");
-      } else {
-        await createMutation.mutateAsync(formData);
-        alert("Application created! Ready for another.");
-      }
-      resetForm();
-    } catch (err) {
-      console.error("Application form error:", err);
-      alert("Something went wrong.");
-    }
-  };
 
   const ref = useRef();
 
-    useEffect(() => {
+  useEffect(() => {
     const handleClick = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
         onCancel();
@@ -170,16 +173,28 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
         <TagInput selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
 
         <div style={{ display: "flex", gap: 8 }}>
-          <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
+          <button
+            type="submit"
+            onClick={() => (submitIntentRef.current = "submit")}
+          >
+            {isEditMode ? "Update" : "Submit"}
+          </button>
 
           {!isEditMode && (
-            <button type="button" onClick={handleAddAnother}>
+            <button
+              type="submit"
+              onClick={() => (submitIntentRef.current = "addAnother")}
+            >
               Add another
             </button>
           )}
 
           {isEditMode && (
-            <button type="button" onClick={handleAddAnother} title="Save this, then start a new blank entry">
+            <button
+              type="submit"
+              onClick={() => (submitIntentRef.current = "saveNew")}
+              title="Save this, then start a new blank entry"
+            >
               Save & New
             </button>
           )}
@@ -190,6 +205,7 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
             </button>
           )}
         </div>
+
       </form>
     </div>
   );
