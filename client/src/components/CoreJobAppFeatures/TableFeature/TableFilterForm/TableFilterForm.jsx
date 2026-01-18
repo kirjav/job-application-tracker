@@ -95,17 +95,28 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
     borderRadius: 6,
   };
 
-    const ref = useRef();
+const ref = useRef(null);
 
-    useEffect(() => {
-    const handleClick = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        handleToggle();
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [handleToggle]);
+useEffect(() => {
+  const onPointerDown = (e) => {
+    const modal = ref.current;
+    if (!modal) return;
+
+    const target = e.target;
+
+    const clickedInsideModal = modal.contains(target);
+    const clickedInTagMenu = target.closest?.('[data-tag-menu="true"]');
+
+    if (!clickedInsideModal && !clickedInTagMenu) {
+      setShowForm(false);
+    }
+  };
+
+  document.addEventListener("pointerdown", onPointerDown);
+  return () => document.removeEventListener("pointerdown", onPointerDown);
+}, []);
+
+
 
   return (
     <div className="filterForm">
@@ -180,66 +191,161 @@ export default function TableFilterForm({ value = {}, onSubmit, selectedCount = 
       </div>
 
 
-      {
-        showForm && (<div className="filter-modal-wrapper"><form className="filters" onSubmit={handleSubmit} ref={ref}>
-          
-          <div className="filter-modal-group">
-          <button type="button" onClick={handleToggle}>X</button>
-          Filters
-          </div>
-          
-          
-          <div className="filter-modal-group"><label>
-            Status
-            <select
-              multiple
-              value={draft.statuses}
-              onChange={(e) => update({ statuses: Array.from(e.target.selectedOptions, o => o.value) })}
-            >
-              {STATUS_VALUES.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
-          </label></div>
+     {showForm && (
+  <div className="filter-modal-wrapper" role="dialog" aria-modal="true" aria-label="Filters">
+    <form className="filters-modal" onSubmit={handleSubmit} ref={ref}>
+      {/* Header */}
+      <div className="filters-header">
+        <button
+          type="button"
+          className="filters-close"
+          onClick={handleToggle}
+          aria-label="Close filters"
+        >
+          ×
+        </button>
 
-          <div className="filter-modal-group">
+        <h2 className="filters-title">Filters</h2>
+
+        {/* spacer to keep title centered */}
+        <div className="filters-header-spacer" />
+      </div>
+
+      <div className="filters-divider" />
+
+      {/* Work Arrangement */}
+      <div className="filters-section">
+        <div className="filters-label">Work Arrangement</div>
+
+        <div className="segmented">
           <ModeToggles
             options={MODE_VALUES}
             value={draft.modes ?? []}
             onChange={(modes) => update({ modes })}
-          /></div>
+          />
+        </div>
+      </div>
 
+      {/* Date Applied Range */}
+      <div className="filters-section">
+        <div className="filters-label">Date Applied Range</div>
 
-          <div className="filter-modal-group">
-          <label>
-            From
-            <input type="date" value={draft.dateFrom} onChange={(e) => update({ dateFrom: e.target.value })} />
-          </label>
-          <label>
-            To
-            <input type="date" value={draft.dateTo} onChange={(e) => update({ dateTo: e.target.value })} />
-          </label></div>
+        <div className="date-pill">
+          <input
+            className="date-input"
+            type="date"
+            value={draft.dateFrom}
+            onChange={(e) => update({ dateFrom: e.target.value })}
+            aria-label="From date"
+          />
+          <span className="date-sep">–</span>
+          <input
+            className="date-input"
+            type="date"
+            value={draft.dateTo}
+            onChange={(e) => update({ dateTo: e.target.value })}
+            aria-label="To date"
+          />
+        </div>
+      </div>
 
-          <div className="filter-modal-group">
-          <label>
-            Min $
-            <input type="number" min="0" value={draft.salaryMin} onChange={(e) => update({ salaryMin: e.target.value })} />
-          </label>
-          <label>
-            Max $
-            <input type="number" min="0" value={draft.salaryMax} onChange={(e) => update({ salaryMax: e.target.value })} />
-          </label></div>
+      {/* Salary */}
+      <div className="filters-section">
+        <div className="two-col">
+          <div>
+            <div className="filters-label">Min Salary</div>
+            <select
+              className="select"
+              value={draft.salaryMin ?? ""}
+              onChange={(e) => update({ salaryMin: e.target.value })}
+            >
+              <option value="">No Min</option>
+              <option value="50000">50,000</option>
+              <option value="75000">75,000</option>
+              <option value="100000">100,000</option>
+              <option value="125000">125,000</option>
+              <option value="150000">150,000</option>
+              <option value="175000">175,000</option>
+              <option value="200000">200,000</option>
+            </select>
+          </div>
 
-          <div className="filter-modal-group">
+          <div>
+            <div className="filters-label">Max Salary</div>
+            <select
+              className="select"
+              value={draft.salaryMax ?? ""}
+              onChange={(e) => update({ salaryMax: e.target.value })}
+            >
+              <option value="">No Max</option>
+              <option value="75000">75,000</option>
+              <option value="100000">100,000</option>
+              <option value="125000">125,000</option>
+              <option value="150000">150,000</option>
+              <option value="175000">175,000</option>
+              <option value="200000">200,000</option>
+              <option value="250000">250,000</option>
+              <option value="300000">300,000</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div className="filters-section">
+        <div className="filters-label">Tags</div>
+        <div className="boxed">
           <TagFilterPicker
             value={draft.tagNames ?? []}
             onChange={(names) => update({ tagNames: names.length ? names : undefined })}
-          /></div>
+          />
+        </div>
+      </div>
 
+      {/* Status */}
+      <div className="filters-section">
+        <div className="filters-label">Status</div>
 
-          <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
-            <button type="button" onClick={handleClear}>Reset</button>
-            <button type="submit">Apply</button>
+        <div className="boxed">
+          <div className="pills " >
+            {STATUS_VALUES.map((s) => {
+              const active = (draft.statuses ?? []).includes(s);
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  className={`status-pill ${active ? "active" : "unselected"}`}
+                  data-status={s}
+                  onClick={() => {
+                    const set = new Set(draft.statuses ?? []);
+                    if (set.has(s)) set.delete(s);
+                    else set.add(s);
+                    update({ statuses: Array.from(set) });
+                  }}
+                >
+                  {s}
+                </button>
+              );
+            })}
+            {/* optional "…" visual if you have many statuses */}
+            {/* <span className="pill-ellipsis">…</span> */}
           </div>
-        </form></div>)}
+        </div>
+      </div>
+
+      {/* Footer buttons */}
+      <div className="filters-footer">
+        <button type="button" className="btn-outline" onClick={handleClear}>
+          Reset
+        </button>
+        <button type="submit" className="btn-solid">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+)}
+
 
     </div >
   );

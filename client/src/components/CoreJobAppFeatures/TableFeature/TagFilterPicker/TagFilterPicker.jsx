@@ -78,8 +78,6 @@ export default function TagFilterPicker({ value = [], onChange }) {
 
   return (
     <div className="tfi" ref={wrapRef} onClick={focusInput}>
-      <label className="tfi-label">Tags</label>
-
       <div className="tfi-box" role="combobox" aria-expanded={open} aria-haspopup="listbox">
         {value.map(name => (
           <span key={name} className="tfi-token">
@@ -107,7 +105,7 @@ export default function TagFilterPicker({ value = [], onChange }) {
       </div>
 
       {open && options.length > 0 && (
-        <ul className="tfi-listbox" id="tfi-listbox" role="listbox">
+        <ul className="tfi-listbox" id="tfi-listbox" role="listbox" data-tag-menu="true">
           {options.map((opt, i) => (
             <li
               key={opt.id}
@@ -117,6 +115,7 @@ export default function TagFilterPicker({ value = [], onChange }) {
               onMouseDown={(e) => { e.preventDefault(); addName(opt.name); }}
               onMouseEnter={() => setHighlight(i)}
               title={opt.name}
+              data-tag-menu="true"
             >
               {opt.name}
             </li>

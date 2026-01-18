@@ -1,11 +1,5 @@
-.toggle-row {
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .mode-toggle {
-    padding: 8px 12px;
-    border-radius: 999px;
+    padding: 10px 20px;
     border-radius: 0px;
     color: var(--contrast-text-color);
     border: 2px solid var(--secondary-background-border-color);
@@ -25,4 +19,6 @@
 
 .toggle-group-filter-modal {
     border-style: none;
+    justify-content: center;
+    align-items: top;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./ModeToggles.css";
 
-export default function ModeToggles({ label = "Work Arrangement", options, value = [], onChange }) {
+export default function ModeToggles({options, value = [], onChange }) {
   const toggle = (opt) => {
     const next = value.includes(opt)
       ? value.filter(v => v !== opt)
@@ -11,7 +11,6 @@ export default function ModeToggles({ label = "Work Arrangement", options, value
 
   return (
     <fieldset className="toggle-group-filter-modal">
-     <label>{label}</label>
       <div className="toggle-row">
         {options.map(opt => (
           <button

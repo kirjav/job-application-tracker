@@ -183,3 +183,209 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 
+
+/* Overlay stays basically the same */
+.filter-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+}
+
+/* Card */
+.filters-modal {
+  width: min(92vw, 420px);
+  background: #f5f7f6;
+  border: 2px solid var(--secondary-background-border-color);         /* soft green frame like mock */
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.filters-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  padding: 10px 10px 8px;
+  background: #f5f7f6;
+}
+
+.filters-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 26px;
+  line-height: 1;
+  color: #6b7280;
+}
+
+.filters-close:hover {
+  background: rgba(0,0,0,.06);
+}
+
+.filters-title {
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.filters-header-spacer {
+  width: 36px;
+  height: 36px;
+}
+
+.filters-divider {
+  height: 1px;
+  background: rgba(0,0,0,.18);
+}
+
+/* Sections */
+.filters-section {
+  padding: 14px 16px 4px;
+}
+
+.filters-label {
+  font-size: 12px;
+  letter-spacing: .2px;
+  color: rgba(0,0,0,.55);
+  margin-bottom: 8px;
+}
+
+/* Segmented look (Work Arrangement) */
+.segmented {
+  background: #e9eeeb;
+  border: 2px solid var(--secondary-background-border-color);
+  border-radius: 6px;
+  padding: 0;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* If ModeToggles uses an inner wrapper, try to make it a row */
+.segmented > * {
+  display: flex;
+}
+
+
+/* Date pill */
+.date-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 10px 12px;
+  background: #eef2f0;
+  border: 2px solid var(--secondary-background-border-color);
+  border-radius: 10px;
+}
+
+.date-input {
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  color: rgba(0,0,0,.65);
+  outline: none;
+}
+
+.date-sep {
+  opacity: .55;
+  font-weight: 700;
+}
+
+/* Two-column row (salary) */
+.filter-modal-wrapper .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Selects */
+.filter-modal-wrapper .select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--secondary-background-border-color);
+  background: #f7faf8;
+  font-weight: 700;
+  color: rgba(0,0,0,.7);
+  outline: none;
+}
+
+/* Boxed groups (tags/status) */
+.filter-modal-wrapper .boxed {
+  border: 2px solid var(--secondary-background-border-color);
+  background: #f7faf8;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Pills row (Status) */
+.filter-modal-wrapper .pills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-modal-wrapper .status-pill {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  filter: saturate(0.1);
+}
+
+.filter-modal-wrapper .status-pill.unselected {
+  filter: saturate(0.1);
+  background-color: rgb(216, 216, 216) !important;
+  color: var(--constrast-text-color)
+}
+
+.filter-modal-wrapper .status-pill.active {
+  filter: saturate(1);
+  outline: 2px solid var(--secondary-background-border-color);
+}
+/* Footer buttons */
+.filter-modal-wrapper .filters-footer {
+  margin-top: 10px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.filter-modal-wrapper .btn-outline {
+  border: 2px solid var(--secondary-background-color);
+  background: #f7faf8;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.filter-modal-wrapper .btn-solid {
+  border: 2px solid var(--secondary-background-color);
+  background: var(--secondary-background-color);
+  color: white;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
