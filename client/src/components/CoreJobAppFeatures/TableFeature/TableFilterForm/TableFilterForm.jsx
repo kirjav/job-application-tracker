@@ -207,7 +207,6 @@ useEffect(() => {
 
         <h2 className="filters-title">Filters</h2>
 
-        {/* spacer to keep title centered */}
         <div className="filters-header-spacer" />
       </div>
 
@@ -217,13 +216,11 @@ useEffect(() => {
       <div className="filters-section">
         <div className="filters-label">Work Arrangement</div>
 
-        <div className="segmented">
           <ModeToggles
             options={MODE_VALUES}
             value={draft.modes ?? []}
             onChange={(modes) => update({ modes })}
           />
-        </div>
       </div>
 
       {/* Date Applied Range */}

@@ -8,6 +8,11 @@
     margin-right: -1px;
 }
 
+.mode-toggle:hover {
+    background: var(--  secondary-background-hover-color);
+
+}
+
 .mode-toggle.is-selected {
     background: var(--primary-medium-color);
     color: var(--secondary-background-color);
@@ -19,6 +24,7 @@
 
 .toggle-group-filter-modal {
     border-style: none;
+    display: flex;
     justify-content: center;
-    align-items: top;
+    align-items: center;
 }

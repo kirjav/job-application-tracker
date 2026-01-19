@@ -374,10 +374,15 @@ input[type="search"]::-webkit-search-cancel-button {
 .filter-modal-wrapper .btn-outline {
   border: 2px solid var(--secondary-background-color);
   background: #f7faf8;
+  color: var(--primary-darkest-font-color);
   border-radius: 10px;
   padding: 12px 14px;
   font-weight: 800;
   cursor: pointer;
+}
+
+.filter-modal-wrapper .btn-outline:hover {
+  background: var(--side-nav-select);
 }
 
 .filter-modal-wrapper .btn-solid {
@@ -388,4 +393,8 @@ input[type="search"]::-webkit-search-cancel-button {
   padding: 12px 14px;
   font-weight: 800;
   cursor: pointer;
+}
+
+.filter-modal-wrapper .btn-solid:hover {
+  background: var(--secondary-background-hover-color);
 }
