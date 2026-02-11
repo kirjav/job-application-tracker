@@ -175,18 +175,55 @@ async function getUserApplications(req, res) {
   }
 }
 
+// Short-lived cache for user's inactivity threshold to avoid repeated user lookups when toggling activity filter.
+const USER_THRESHOLD_CACHE_TTL_MS = 60_000; // 1 minute
+const userThresholdCache = new Map(); // userId -> { value: number, ts: number }
+
+function getInactivityThresholdDays(userId) {
+  const cached = userThresholdCache.get(userId);
+  if (cached && Date.now() - cached.ts < USER_THRESHOLD_CACHE_TTL_MS) {
+    return cached.value;
+  }
+  return null;
+}
+
+function setInactivityThresholdCache(userId, value) {
+  userThresholdCache.set(userId, { value, ts: Date.now() });
+}
+
 async function getAllUserApplications(req, res) {
   const userId = req.user.userId;
+  const activity = req.validated?.query?.activity ?? "all";
 
   try {
+    const where = { userId };
+
+    if (activity !== "all") {
+      let thresholdDays = getInactivityThresholdDays(userId);
+      if (thresholdDays === null) {
+        const user = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { inactivityThresholdDays: true },
+        });
+        thresholdDays = user?.inactivityThresholdDays ?? 30;
+        setInactivityThresholdCache(userId, thresholdDays);
+      }
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - thresholdDays);
+      cutoff.setHours(0, 0, 0, 0);
+
+      if (activity === "active") {
+        where.dateUpdated = { gte: cutoff };
+      } else {
+        where.dateUpdated = { lt: cutoff };
+      }
+    }
+
     const allApps = await prisma.application.findMany({
-      where: { userId },
+      where,
       include: {
         tags: true,
       },
-      /*orderBy: {
-        updatedAt: "desc",
-      },*/
     });
 
     res.json(allApps);
@@ -368,10 +405,14 @@ async function deleteApplication(req, res) {
 
 async function getSingleApplication(req, res) {
   const { id } = req.params;
+  const numId = Number(id);
+  if (Number.isNaN(numId) || numId < 1 || !Number.isInteger(numId)) {
+    return res.status(404).json({ error: "Application not found" });
+  }
 
   try {
     const app = await prisma.application.findUnique({
-      where: { id: Number(id) },
+      where: { id: numId },
       include: {
         tags: true,
       },

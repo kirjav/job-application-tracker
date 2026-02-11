@@ -14,8 +14,8 @@
 }
 
 .mode-toggle.is-selected {
-    background: var(--primary-medium-color);
-    color: var(--secondary-background-color);
+    background: var(--side-nav-select);
+    color: var(--primary-darkest-font-color);
 }
 
 .toggle:focus {

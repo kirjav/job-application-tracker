@@ -31,7 +31,7 @@
 }
 
 .side-nav-content h2 button {
-    color: var(--secondary-grey-color);
+    color: var(--icon-color);
     flex: 1 1 0;
     display: flex;
     justify-content: flex-end;
@@ -41,6 +41,10 @@
 }
 .side-nav-content h2 img {
     height: 50px;
+}
+
+[data-theme="dark"] .side-nav-content h2 img {
+    filter: brightness(0) invert(1);
 }
 
 .side-nav-content nav {
@@ -95,7 +99,7 @@
 }
 
 .nav-icon {
-    color: var(--secondary-dark-grey-color);
+    color: var(--icon-color);
 }
 
 .side-nav-content nav a.tab-active {
@@ -109,7 +113,7 @@
 
 
 .side-nav-content .tab-active .nav-icon {
-    color: var(--primary-darkest-font-color);
+    color: var(--icon-color);
 }
 
 .tab-inactive {

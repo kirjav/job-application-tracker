@@ -5,7 +5,7 @@ import ApplicationCard from "../ApplicationCard/ApplicationCard";
 import ThinLeftArrow from "../../../assets/icons/table/ThinLeftArrow.svg?react";
 import "./StatusColumn.css";
 
-function StatusColumn({ status, applications, expandedView, onHide }) {
+function StatusColumn({ status, applications, expandedView, onHide, onEdit, onDelete }) {
     const { setNodeRef } = useDroppable({ id: status });
     return (
         <div ref={setNodeRef} className="status-column">
@@ -35,7 +35,13 @@ function StatusColumn({ status, applications, expandedView, onHide }) {
                     strategy={verticalListSortingStrategy}
                 >
                     {applications.map((app) => (
-                        <ApplicationCard key={app.id} app={app} expanded={expandedView} />
+                        <ApplicationCard
+                            key={app.id}
+                            app={app}
+                            expanded={expandedView}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                        />
                     ))}
                 </SortableContext>
             </div>

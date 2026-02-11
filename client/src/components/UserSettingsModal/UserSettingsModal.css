@@ -1,10 +1,10 @@
-/* User Settings modal – design: white bg, thin green border, rounded corners, shadow */
+/* User Settings modal – theme-aware */
 .user-settings-overlay {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,10 +14,10 @@
 .user-settings-modal {
   width: min(92vw, 440px);
   max-height: 90vh;
-  background: #ffffff;
-  border: 2px solid var(--primary-darkest-font-color);
+  background: var(--surface-bg);
+  border: 2px solid var(--input-border);
   border-radius: 10px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@
   align-items: center;
   padding: 1rem 1.25rem;
   flex-shrink: 0;
-  background: #ffffff;
+  background: var(--surface-bg);
 }
 
 .user-settings-title {
@@ -58,7 +58,7 @@
 }
 
 .user-settings-close:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--row-hover);
   color: var(--primary-darkest-font-color);
 }
 
@@ -130,10 +130,10 @@
 
 .user-settings-edit-box {
   width: min(100%, 360px);
-  background: #ffffff;
-  border: 2px solid var(--primary-darkest-font-color);
+  background: var(--surface-bg);
+  border: 2px solid var(--input-border);
   border-radius: 10px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
   padding: 1.25rem;
 }
 
@@ -211,7 +211,7 @@
 .user-settings-edit-field input:focus {
   outline: none;
   border-color: var(--primary-darkest-font-color);
-  box-shadow: 0 0 0 2px rgba(40, 76, 60, 0.2);
+  box-shadow: 0 0 0 2px var(--input-border);
 }
 
 .user-settings-error {

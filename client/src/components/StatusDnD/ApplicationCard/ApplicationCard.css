@@ -154,7 +154,7 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  color: var(--secondary-grey-color);
+  color: var(--icon-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -166,10 +166,45 @@
 
 .application-card-options:hover {
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--row-hover);
 }
 
 .application-card-options svg {
   width: 16px;
   height: 16px;
+}
+
+/* Card options dropdown – match table row menu */
+.application-card-dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  padding: 4px;
+  color: var(--primary-darkest-font-color);
+  background: var(--surface-bg);
+}
+
+.application-card-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.application-card-menu-item:hover,
+.application-card-menu-item:focus {
+  background: var(--row-hover);
+  outline: none;
+}
+
+.application-card-menu-item-danger {
+  color: var(--form-required-indicator, #b42318);
 }

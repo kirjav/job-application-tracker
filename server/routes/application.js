@@ -8,6 +8,7 @@ const {
   applicationSchema,
   updateApplicationSchema,
   filterSchema,
+  allApplicationsQuerySchema,
   paramIdSchema,
   updateGroupApplicationsSchema,
 } = require("../validation/applicationSchemas");
@@ -20,7 +21,7 @@ router.post("/", authenticateToken, validate(applicationSchema), createApplicati
 // GET /applications – query validation for filter stuff
 router.get("/", authenticateToken, validate(filterSchema, "query"), getUserApplications);
 
-router.get("/all", authenticateToken, getAllUserApplications);
+router.get("/all", authenticateToken, validate(allApplicationsQuerySchema, "query"), getAllUserApplications);
 
 router.patch(
   "/statusUpdate",

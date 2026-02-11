@@ -58,3 +58,31 @@
     transform: scale(0.98);
 }
 
+.top-nav-theme-toggle {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    padding: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--icon-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.top-nav-theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .top-nav-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.top-nav-theme-icon {
+    width: 22px;
+    height: 22px;
+}
+

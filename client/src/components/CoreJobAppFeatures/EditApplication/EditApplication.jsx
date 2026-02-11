@@ -25,8 +25,13 @@ const EditApplication = ({ applicationId, onSuccess, onClose }) => {
       <ApplicationForm
         existingApp={appData}
         onSuccess={onSuccess}
+        onCancel={onClose}
       />
-      <button onClick={onClose}>Cancel</button>
+      <div className="edit-application-actions">
+        <button type="button" className="edit-application-cancel" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
     </div>
   ) : (
     <p>Loading application...</p>

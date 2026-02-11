@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { rectIntersection } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import StatusColumn from "../StatusColumn/StatusColumn";
+import EditApplication from "../../CoreJobAppFeatures/EditApplication/EditApplication";
 import axios from "../../../utils/api";
+import API from "../../../utils/api";
 import { STATUS_OPTIONS } from "../../../constants/ApplicationStatuses";
 import { ApplicationCardPreview } from "../ApplicationCard/ApplicationCard";
 import ThinRightArrow from "../../../assets/icons/table/ThinRightArrow.svg?react";
+import "../../CoreJobAppFeatures/TableFeature/ApplicationTablePage/ApplicationTablePage.css";
 import "./StatusBoard.css";
 
 function MinimizedColumn({ status, onExpand }) {
@@ -24,10 +27,41 @@ function MinimizedColumn({ status, onExpand }) {
     );
 }
 
-function StatusBoard({ expandedView = true }) {
+function StatusBoard({ expandedView = true, activityFilter = "all" }) {
     const [applications, setApplications] = useState([]);
     const [hiddenStatuses, setHiddenStatuses] = useState(new Set());
     const [activeId, setActiveId] = useState(null);
+    const [editAppId, setEditAppId] = useState(null);
+
+    const fetchApplications = useCallback(async () => {
+        const filterForThisRequest = activityFilter;
+        try {
+            const res = await axios.get("/applications/all", {
+                params: { activity: filterForThisRequest },
+            });
+            if (filterForThisRequest === activityFilter) {
+                setApplications(res.data);
+            }
+        } catch (err) {
+            if (filterForThisRequest === activityFilter) {
+                console.error("Failed to fetch applications:", err);
+            }
+        }
+    }, [activityFilter]);
+
+    const handleDelete = useCallback(
+        async (id) => {
+            if (!window.confirm("Delete this application?")) return;
+            try {
+                await API.delete(`/applications/${id}`);
+                fetchApplications();
+            } catch (err) {
+                console.error("Failed to delete application:", err);
+                alert("Failed to delete application.");
+            }
+        },
+        [fetchApplications]
+    );
 
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: { distance: 8 },
@@ -40,17 +74,8 @@ function StatusBoard({ expandedView = true }) {
     );
 
     useEffect(() => {
-        const fetchApplications = async () => {
-            try {
-                const res = await axios.get("/applications/all");
-                setApplications(res.data);
-            } catch (err) {
-                console.error("Failed to fetch applications:", err);
-            }
-        };
-
         fetchApplications();
-    }, []);
+    }, [fetchApplications]);
 
     const grouped = STATUS_OPTIONS.reduce((acc, status) => {
         acc[status] = applications.filter((app) => app.status === status);
@@ -132,6 +157,8 @@ function StatusBoard({ expandedView = true }) {
                                     onHide={() =>
                                         setHiddenStatuses((prev) => new Set(prev).add(status))
                                     }
+                                    onEdit={setEditAppId}
+                                    onDelete={handleDelete}
                                 />
                             );
                         })}
@@ -153,6 +180,21 @@ function StatusBoard({ expandedView = true }) {
                     ) : null}
                 </DragOverlay>
             </DndContext>
+
+            {editAppId && (
+                <div className="status-board-edit-overlay" onClick={() => setEditAppId(null)}>
+                    <div className="status-board-edit-modal" onClick={(e) => e.stopPropagation()}>
+                        <EditApplication
+                            applicationId={editAppId}
+                            onSuccess={() => {
+                                setEditAppId(null);
+                                fetchApplications();
+                            }}
+                            onClose={() => setEditAppId(null)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import TableRowOptions from "../../../assets/icons/table/TableRowOptions.svg?react";
+import { Dropdown } from "../../Popover/Dropdown";
 import "./ApplicationCard.css";
 
 const STATUS_COLORS = {
@@ -21,7 +22,7 @@ function formatDate(dateString) {
 }
 
 /** Presentational card used in DragOverlay (no drag hooks – avoids jitter) */
-export function ApplicationCardPreview({ app, expanded, isOverlay }) {
+export function ApplicationCardPreview({ app, expanded, isOverlay, onEdit, onDelete }) {
   const color = STATUS_COLORS[app.status] || "var(--decor-line-color)";
   return (
     <div
@@ -40,16 +41,45 @@ export function ApplicationCardPreview({ app, expanded, isOverlay }) {
             )}
           </div>
           {!isOverlay && (
-            <button
-              className="application-card-options"
-              onClick={(e) => {
-                e.stopPropagation();
-                alert(`Options for ${app.company}`);
-              }}
-              aria-label="Options"
+            <Dropdown
+              trigger={
+                <button
+                  type="button"
+                  className="application-card-options"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label="Options"
+                >
+                  <TableRowOptions />
+                </button>
+              }
+              align="right"
+              portal
             >
-              <TableRowOptions />
-            </button>
+              {({ close }) => (
+                <div role="menu" className="application-card-dropdown-menu">
+                  <button
+                    className="application-card-menu-item"
+                    type="button"
+                    onClick={() => {
+                      onEdit?.(app.id);
+                      close();
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="application-card-menu-item application-card-menu-item-danger"
+                    type="button"
+                    onClick={() => {
+                      onDelete?.(app.id);
+                      close();
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </Dropdown>
           )}
         </div>
       </div>
@@ -57,7 +87,7 @@ export function ApplicationCardPreview({ app, expanded, isOverlay }) {
   );
 }
 
-function ApplicationCard({ app, expanded }) {
+function ApplicationCard({ app, expanded, onEdit, onDelete }) {
   const {
     attributes,
     listeners,
@@ -98,16 +128,45 @@ function ApplicationCard({ app, expanded }) {
               </>
             )}
           </div>
-          <button
-            className="application-card-options"
-            onClick={(e) => {
-              e.stopPropagation();
-              alert(`Options for ${app.company}`);
-            }}
-            aria-label="Options"
+          <Dropdown
+            trigger={
+              <button
+                type="button"
+                className="application-card-options"
+                onClick={(e) => e.stopPropagation()}
+                aria-label="Options"
+              >
+                <TableRowOptions />
+              </button>
+            }
+            align="right"
+            portal
           >
-            <TableRowOptions />
-          </button>
+            {({ close }) => (
+              <div role="menu" className="application-card-dropdown-menu">
+                <button
+                  className="application-card-menu-item"
+                  type="button"
+                  onClick={() => {
+                    onEdit?.(app.id);
+                    close();
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  className="application-card-menu-item application-card-menu-item-danger"
+                  type="button"
+                  onClick={() => {
+                    onDelete?.(app.id);
+                    close();
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </Dropdown>
         </div>
       </div>
     </div>

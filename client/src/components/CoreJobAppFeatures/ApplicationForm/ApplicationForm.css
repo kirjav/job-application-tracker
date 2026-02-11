@@ -42,6 +42,7 @@
   border-radius: 8px;
   border: 0;
   background: transparent;
+  color: var(--icon-color);
   cursor: pointer;
   font-size: 26px;
   line-height: 1;
@@ -52,7 +53,7 @@
 }
 
 .application-form-close:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--row-hover);
 }
 
 .application-form-header-spacer {
@@ -117,6 +118,22 @@
   font-weight: 700;
 }
 
+/* Select dropdown arrow – theme-aware (uses currentColor → --text-color / --icon-color) */
+.application-form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+}
+
+.application-form-select::-ms-expand {
+  display: none;
+}
+
 .application-form-input::placeholder,
 .application-form-textarea::placeholder {
   color: var(--secondary-grey-color);
@@ -128,6 +145,18 @@
 .application-form-textarea:focus {
   outline: none;
   border-color: var(--secondary-background-color);
+}
+
+/* Number inputs – hide native spinners so they don’t pop up grey/white in dark mode */
+.application-form-input[type="number"]::-webkit-inner-spin-button,
+.application-form-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.application-form-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Date pill – match .date-pill (TableFilterForm) */
@@ -149,6 +178,12 @@
   outline: none;
   padding: 0;
   font-size: 1rem;
+}
+
+/* Native date picker calendar icon – visible in dark mode */
+[data-theme="dark"] .application-form-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 .application-form-textarea {

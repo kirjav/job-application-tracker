@@ -13,7 +13,7 @@ import { Popover } from "./Popover.jsx";
  *   )}
  * </Dropdown>
  */
-export function Dropdown({ trigger, align = "right", offset = 6, children }) {
+export function Dropdown({ trigger, align = "right", offset = 6, portal = false, children }) {
   const itemRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(-1);
 
@@ -42,8 +42,8 @@ export function Dropdown({ trigger, align = "right", offset = 6, children }) {
   };
 
   return (
-    <Popover align={align} offset={offset}>
-      {({ open, setOpen, triggerProps, panelProps }) => {
+    <Popover align={align} offset={offset} portal={portal}>
+      {({ open, setOpen, triggerProps, panelProps, renderPanel }) => {
         // Make trigger keyboard-open aware (ArrowDown opens + focuses first item)
         const enhancedTriggerProps = {
           ...triggerProps,
@@ -160,21 +160,36 @@ export function Dropdown({ trigger, align = "right", offset = 6, children }) {
         return (
           <div style={{ position: "relative", display: "inline-block" }}>
             {triggerEl}
-            {open && (
-              <div
-                {...panelProps}
-                // menu container keyboard handling
-                onKeyDown={(e) => {
-                  onMenuKeyDown(e);
-                  panelProps.onKeyDown?.(e);
-                }}
-              >
-                {/* Consumers provide items; we enhance them via getItemProps */}
-                {typeof children === "function"
-                  ? children({ close: () => setOpen(false), getItemProps })
-                  : children}
-              </div>
-            )}
+            {open &&
+              (renderPanel
+                ? renderPanel(
+                    <div
+                      role="menu"
+                      tabIndex={-1}
+                      onKeyDown={(e) => {
+                        onMenuKeyDown(e);
+                        panelProps.onKeyDown?.(e);
+                      }}
+                      style={{ outline: "none" }}
+                    >
+                      {typeof children === "function"
+                        ? children({ close: () => setOpen(false), getItemProps })
+                        : children}
+                    </div>
+                  )
+                : (
+                    <div
+                      {...panelProps}
+                      onKeyDown={(e) => {
+                        onMenuKeyDown(e);
+                        panelProps.onKeyDown?.(e);
+                      }}
+                    >
+                      {typeof children === "function"
+                        ? children({ close: () => setOpen(false), getItemProps })
+                        : children}
+                    </div>
+                  ))}
           </div>
         );
       }}

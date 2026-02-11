@@ -1,13 +1,15 @@
 // src/components/Popover/Popover.jsx
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
-/** Headless popover primitive */
+/** Headless popover primitive. Use portal={true} when inside overflow/scroll containers so the panel isn't clipped. */
 export function Popover({
   open: controlledOpen,
   onOpenChange,
-  side = "bottom",      // ⬅️ add: 'bottom' | 'right'
-  align = "right",      // for bottom: 'left' | 'right'
+  side = "bottom",
+  align = "right",
   offset = 6,
+  portal = false,
   children,
 }) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -17,6 +19,7 @@ export function Popover({
   const btnRef = useRef(null);
   const panelRef = useRef(null);
   const id = useId();
+  const [portalStyle, setPortalStyle] = useState({});
 
   useEffect(() => {
     if (!open) return;
@@ -40,11 +43,48 @@ export function Popover({
     };
   }, [open, setOpen]);
 
-  // Position styles
-  const panelPos =
-    side === "right"
-      ? { left: "100%", top: 0, marginLeft: offset }                  // submenu to the right of trigger
-      : { top: "100%", [align]: 0, marginTop: offset };               // default dropdown below trigger
+  // When using portal, position panel with fixed coords from trigger (layoutEffect so no flash)
+  useLayoutEffect(() => {
+    if (!portal || !open || !btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    if (side === "right") {
+      setPortalStyle({
+        position: "fixed",
+        top: rect.top,
+        left: rect.right + offset,
+      });
+    } else {
+      setPortalStyle({
+        position: "fixed",
+        top: rect.bottom + offset,
+        ...(align === "right"
+          ? { right: window.innerWidth - rect.right, left: "auto" }
+          : { left: rect.left, right: "auto" }),
+      });
+    }
+  }, [portal, open, side, align, offset]);
+
+  const basePanelStyle = {
+    background: "var(--surface-bg)",
+    border: "1px solid var(--input-border)",
+    borderRadius: 8,
+    boxShadow: "0 8px 24px rgba(0,0,0,.25)",
+    zIndex: 10000,
+    minWidth: 200,
+    padding: 4,
+    color: "var(--primary-darkest-font-color)",
+  };
+
+  const inlinePanelStyle =
+    !portal
+      ? {
+          ...basePanelStyle,
+          position: "absolute",
+          ...(side === "right"
+            ? { left: "100%", top: 0, marginLeft: offset }
+            : { top: "100%", [align]: 0, marginTop: offset }),
+        }
+      : { ...basePanelStyle, ...portalStyle };
 
   return children({
     open,
@@ -62,18 +102,25 @@ export function Popover({
       ref: panelRef,
       role: "menu",
       tabIndex: -1,
-      style: {
-        position: "absolute",
-        background: "#fff",
-        border: "1px solid #e5e7eb",
-        borderRadius: 8,
-        boxShadow: "0 8px 24px rgba(0,0,0,.12)",
-        zIndex: 2000,
-        minWidth: 200,
-        padding: 4,
-        ...panelPos,
-      },
+      style: inlinePanelStyle,
       onClick: (e) => e.stopPropagation(),
     },
+    /** When portal is true, render menu content with this to avoid clipping. Otherwise null. */
+    renderPanel: portal
+      ? (content) =>
+          createPortal(
+            <div
+              id={id}
+              ref={panelRef}
+              role="menu"
+              tabIndex={-1}
+              style={inlinePanelStyle}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {content}
+            </div>,
+            document.body
+          )
+      : null,
   });
 }

@@ -43,6 +43,10 @@
   /* Tag Color */
   --tag-color: #83A878;
 
+  /* Primary palette (used by table/tags/filters; also in Auth) */
+  --primary-medium-color: #6D9573;
+  --primary-dark-color: #284C3C;
+
   /* Table Unsorted */
   --table-unsorted: #A2A2A2;
   --table-sorted: var(--primary-darkest-font-color);
@@ -74,6 +78,9 @@
   --dashboard-card-shadow: rgba(0, 0, 0, 0.1);
   --dashboard-header-border: var(--primary-darkest-font-color);
 
+  /* Icons (SVGs using currentColor inherit this when parent sets it) */
+  --icon-color: var(--primary-darkest-font-color);
+
   /* Global polish */
   --focus-ring: 2px solid var(--primary-darkest-font-color);
   --focus-ring-offset: 2px;
@@ -83,18 +90,58 @@
 }
 
 [data-theme="dark"] {
-  --bg-color: #1e1e1e;
-  --text-color: #f3f3f3;
-  --primary-color: #60a5fa;
-  --accent-color: #a855f7;
-  --surface-bg: #2a2a2a;
-  --input-bg: #252525;
-  --input-border: #404040;
-  --form-title-color: #9ca3af;
-  --form-divider: rgba(255, 255, 255, 0.15);
-  --date-pill-bg: #1f1f1f;
+  /* Dark purple-hue base (subtle, not strongly purple) */
+  --bg-color: #1c1b22;
+  --text-color: #e8e6f0;
+  --contrast-text-color: #ffffff;
+  --primary-color: #a78bfa;
+  --accent-color: #c4b5fd;
+  --decor-line-color: #3d3a4a;
+  --primary-darkest-font-color: #e2e0ec;
+  --secondary-dark-grey-color: #d0ceda;
+  --secondary-grey-color: #a8a5b8;
+  --secondary-light-color: #2a2838;
+  --tertiary-grey-color: #b0adc0;
+  --side-nav-select: #2d2b38;
+  --side-nav-hover: #36344a;
+  --account-icon-background-color: #3d3a4a;
+  --account-icon-text-color: #e8e6f0;
+  --secondary-background-color: #5b4d7a;
+  --secondary-background-border-color: #6d5d8a;
+  --secondary-background-hover-color: #6d5d8a;
+  --surface-bg: #252330;
+  --input-bg: #2a2838;
+  --input-border: #3d3a4a;
+  --form-title-color: #a8a5b8;
+  --form-divider: rgba(255, 255, 255, 0.12);
+  --date-pill-bg: #2a2838;
   --form-required-indicator: #f87171;
-  --selection-bg: rgba(96, 165, 250, 0.3);
+  --table-border: #3d3a4a;
+  --table-head: #2d2b38;
+  --row-odd: #252330;
+  --row-even: #2a2838;
+  --row-hover: #36344a;
+  --check-box-color: #a8a5b8;
+  --tag-color: #5b4d7a;
+  --primary-medium-color: #6d5d8a;
+  --primary-dark-color: #c4c0d4;
+  --table-unsorted: #6b7280;
+  --dashboard-column-bg: #252330;
+  --dashboard-column-header-bg: #2d2b38;
+  --dashboard-column-border: #3d3a4a;
+  --dashboard-card-bg: #2a2838;
+  --dashboard-card-border: #3d3a4a;
+  --dashboard-card-shadow: rgba(0, 0, 0, 0.4);
+  --selection-bg: rgba(167, 139, 250, 0.25);
+  --icon-color: #e2e0ec;
+  /* Status pills: slightly muted for dark backgrounds */
+  --wishlist-status-color: #5a9bc4;
+  --applied-status-color: #3a9d94;
+  --interviewing-status-color: #c4840a;
+  --offer-status-color: #0d8c47;
+  --rejected-status-color: #c43c3c;
+  --ghosted-status-color: #6b7280;
+  --withdrawn-status-color: #cc6b38;
 }
 
 [data-theme="solarized"] {

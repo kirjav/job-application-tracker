@@ -16,7 +16,7 @@
 
 /* Modal Content */
 .edit-application {
-  background-color: #fff;
+  background-color: var(--surface-bg);
   padding: 2rem;
   border-radius: 12px;
   max-width: 600px;
@@ -29,6 +29,27 @@
 /* Optional: Adjust Cancel button */
 .edit-application button {
   margin-top: 1rem;
+}
+
+.edit-application-actions {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--form-divider, rgba(0, 0, 0, 0.18));
+}
+
+.edit-application-cancel {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--dashboard-column-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--primary-darkest-font-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-application-cancel:hover {
+  background: var(--side-nav-select);
 }
 
 .app-table-page h2 {

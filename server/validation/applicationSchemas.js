@@ -88,6 +88,11 @@ const filterSchema = z.object({
   page: z.coerce.number().min(1).default(1),
 });
 
+// ─── Query for GET /applications/all (dashboard activity filter) ───
+const allApplicationsQuerySchema = z.object({
+  activity: z.enum(["all", "active", "inactive"]).optional().default("all"),
+}).strip();
+
 // ─── Application Update Schema (can allow partial fields) ────
 const updateApplicationSchema = withSalaryRules(
   applicationBase
@@ -121,6 +126,7 @@ const updateGroupApplicationsSchema = z.object({
 module.exports = {
   applicationSchema,
   filterSchema,
+  allApplicationsQuerySchema,
   updateApplicationSchema,
   paramIdSchema,
   updateGroupApplicationsSchema,
