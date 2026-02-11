@@ -3,45 +3,58 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    height: 50px;
-    gap: 25px;
-    padding-right: 10px;
-    padding-top: 10px;
+    min-height: 56px;
+    gap: 1rem;
+    padding: 0.5rem 1.25rem 0.5rem 0;
+    flex-shrink: 0;
+    background: var(--bg-color);
+    position: relative;
+    z-index: 1;
 }
 
 .account-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 100px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    padding: 0;
+    border-radius: 50%;
     background-color: var(--account-icon-background-color);
     display: flex;
     align-items: center;
     justify-content: center;
-
-    font-family: 'Inter';
-    font-size: 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--account-icon-text-color);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.account-icon:hover {
+    transform: scale(1.02);
 }
 
 .top-nav .application-button {
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 5px;
-    
+    gap: 0.5rem;
     background-color: var(--secondary-background-color);
-    font-family: 'Switzer';
-    font-size: 1.2rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--contrast-text-color);
-    border-style: none;
-    border-radius: 16px;
-    padding: 8px 12px 8px 12px;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color var(--transition-normal), transform var(--transition-fast);
 }
 
 .top-nav .application-button:hover {
-    cursor: pointer;
     background-color: var(--secondary-background-hover-color);
+}
+
+.top-nav .application-button:active {
+    transform: scale(0.98);
 }
 

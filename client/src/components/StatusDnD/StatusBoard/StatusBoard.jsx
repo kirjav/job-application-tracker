@@ -1,16 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { DndContext } from "@dnd-kit/core";
-import StatusColumn from "..//StatusColumn/StatusColumn";
+import React, { useState, useEffect, useMemo } from "react";
+import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { rectIntersection } from "@dnd-kit/core";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import StatusColumn from "../StatusColumn/StatusColumn";
 import axios from "../../../utils/api";
 import { STATUS_OPTIONS } from "../../../constants/ApplicationStatuses";
+import { ApplicationCardPreview } from "../ApplicationCard/ApplicationCard";
+import ThinRightArrow from "../../../assets/icons/table/ThinRightArrow.svg?react";
+import "./StatusBoard.css";
 
-import { closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
+function MinimizedColumn({ status, onExpand }) {
+    return (
+        <button
+            type="button"
+            className="status-board-minimized-column"
+            onClick={onExpand}
+            aria-label={`Show ${status} column`}
+            title={`Show ${status} column`}
+        >
+            <span className="status-board-minimized-column-label">{status}</span>
+            <ThinRightArrow className="status-board-minimized-column-icon" />
+        </button>
+    );
+}
 
-function StatusBoard() {
+function StatusBoard({ expandedView = true }) {
     const [applications, setApplications] = useState([]);
-    const [expandedView, setExpandedView] = useState(true);
     const [hiddenStatuses, setHiddenStatuses] = useState(new Set());
+    const [activeId, setActiveId] = useState(null);
+
+    const pointerSensor = useSensor(PointerSensor, {
+        activationConstraint: { distance: 8 },
+    });
+    const sensors = useSensors(pointerSensor);
+
+    const activeApp = useMemo(
+        () => (activeId ? applications.find((a) => a.id === activeId) : null),
+        [activeId, applications]
+    );
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -68,31 +95,63 @@ function StatusBoard() {
 
     return (
         <div className="status-board">
-            <button onClick={() => setExpandedView((prev) => !prev)}>
-                {expandedView ? "Minimize Cards" : "Expand Cards"}
-            </button>
-
             <DndContext
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
+                sensors={sensors}
+                collisionDetection={rectIntersection}
+                onDragStart={({ active }) => setActiveId(active.id)}
+                onDragEnd={(event) => {
+                    handleDragEnd(event);
+                    setActiveId(null);
+                }}
+                onDragCancel={() => setActiveId(null)}
             >
-
-
-                <div className="status-columns" style={{ display: "flex", gap: "1rem" }}>
-                    {Object.entries(grouped).map(([status, apps]) =>
-                        hiddenStatuses.has(status) ? null : (
-                            <StatusColumn
-                                key={status}
-                                status={status}
-                                applications={apps}
-                                expandedView={expandedView}
-                                onHide={() =>
-                                    setHiddenStatuses((prev) => new Set(prev).add(status))
-                                }
-                            />
-                        )
-                    )}
+                <div className="status-columns-wrapper">
+                    <div className="status-columns">
+                        {STATUS_OPTIONS.map((status) => {
+                            if (hiddenStatuses.has(status)) {
+                                return (
+                                    <MinimizedColumn
+                                        key={status}
+                                        status={status}
+                                        onExpand={() =>
+                                            setHiddenStatuses((prev) => {
+                                                const next = new Set(prev);
+                                                next.delete(status);
+                                                return next;
+                                            })
+                                        }
+                                    />
+                                );
+                            }
+                            return (
+                                <StatusColumn
+                                    key={status}
+                                    status={status}
+                                    applications={grouped[status] ?? []}
+                                    expandedView={expandedView}
+                                    onHide={() =>
+                                        setHiddenStatuses((prev) => new Set(prev).add(status))
+                                    }
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
+                <DragOverlay
+                    dropAnimation={{
+                        duration: 200,
+                        easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
+                    }}
+                    modifiers={[snapCenterToCursor]}
+                >
+                    {activeApp ? (
+                        <ApplicationCardPreview
+                            app={activeApp}
+                            expanded={expandedView}
+                            isOverlay
+                        />
+                    ) : null}
+                </DragOverlay>
             </DndContext>
         </div>
     );

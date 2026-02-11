@@ -1,22 +1,279 @@
+/* Overlay – match TableFilterForm .filter-modal-wrapper */
 .application-overlay {
   position: fixed;
-  inset: 0; /* shorthand for top/right/bottom/left: 0 */
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2147483647; /* win all stacking battles */
+  z-index: 2147483647;
 }
 
+/* Card – match .filters-modal (TableFilterForm) */
 .application-overlay .application-form {
-  background-color: var(--bg-color);
-  padding: 2rem;
+  width: min(92vw, 480px);
+  max-height: 90vh;
+  background: var(--surface-bg);
+  border: 2px solid var(--input-border);
   border-radius: 8px;
-  max-width: 480px;
-  width: min(90vw, 480px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
 
+/* Header – match .filters-header (close left, title center, spacer right) */
+.application-form-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  padding: 10px 10px 8px;
+  background: var(--surface-bg);
+  flex-shrink: 0;
+}
+
+.application-form-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 26px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.application-form-close:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.application-form-header-spacer {
+  width: 36px;
+  height: 36px;
+}
+
+/* Title – match .filters-title exactly */
+.application-form-title {
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-family: Gambarino-Regular;
+  color: var(--primary-darkest-font-color);
+}
+
+/* Scrollable body */
+.application-form-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Divider – match .filters-divider */
+.application-form-divider {
+  height: 1px;
+  background: var(--form-divider);
+}
+
+/* Sections – match .filters-section padding */
+.application-form-section {
+  padding: 14px 16px 4px;
+}
+
+.application-form-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  color: var(--tertiary-grey-color);
+  margin-bottom: 8px;
+}
+
+.application-form-label-required::after {
+  content: " *";
+  color: var(--form-required-indicator);
+  font-weight: 700;
+}
+
+/* Inputs / selects – match .select and date-pill flair (font-weight 700, same borders/radius) */
+.application-form-input,
+.application-form-select,
+.application-form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.application-form-input::placeholder,
+.application-form-textarea::placeholder {
+  color: var(--secondary-grey-color);
+  font-weight: 400;
+}
+
+.application-form-input:focus,
+.application-form-select:focus,
+.application-form-textarea:focus {
+  outline: none;
+  border-color: var(--secondary-background-color);
+}
+
+/* Date pill – match .date-pill (TableFilterForm) */
+.application-form-date-pill {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--date-pill-bg);
+  border: 2px solid var(--input-border);
+  border-radius: 10px;
+}
+
+.application-form-date-input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  color: var(--text-color);
+  outline: none;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.application-form-textarea {
+  font-weight: 400;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.application-form-row {
+  display: grid;
+  gap: 12px;
+}
+
+.application-form-two-col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.application-form-three-col {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.application-form-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.application-form-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+/* Custom checkbox: bordered box, green + white check when selected (theme vars) */
+.application-form-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.application-form-checkbox:hover {
+  border-color: var(--secondary-background-color);
+}
+
+.application-form-checkbox:focus-visible {
+  outline: 2px solid var(--secondary-background-color);
+  outline-offset: 2px;
+}
+
+.application-form-checkbox:checked {
+  background: var(--secondary-background-color);
+  border-color: var(--secondary-background-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 14px 14px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Tag area – match .boxed (TableFilterForm) */
+.application-form-tag-wrap {
+  border: 2px solid var(--input-border);
+  background: var(--input-bg);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Footer – match .filters-footer (grid 1fr 1fr, gap 14px, btn padding 12px 14px, font-weight 800) */
+.application-form-actions {
+  margin-top: 10px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  border-top: 1px solid var(--form-divider);
+  background: var(--surface-bg);
+}
+
+.application-form-actions .application-form-btn {
+  flex: 1 1 calc(50% - 7px);
+  min-width: 120px;
+}
+
+.application-form-btn {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.application-form-btn-solid {
+  border-color: var(--secondary-background-color);
+  background: var(--secondary-background-color);
+  color: var(--contrast-text-color);
+}
+
+.application-form-btn-solid:hover {
+  background: var(--secondary-background-hover-color);
+  border-color: var(--secondary-background-hover-color);
+}
+
+.application-form-btn-outline {
+  border-color: var(--secondary-background-color);
+  background: var(--input-bg);
+  color: var(--primary-darkest-font-color);
+}
+
+.application-form-btn-outline:hover {
+  background: var(--side-nav-select);
+}
+
+.application-form-btn:focus-visible {
+  outline: 2px solid var(--secondary-background-color);
+  outline-offset: 2px;
 }

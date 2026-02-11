@@ -47,6 +47,15 @@
   --table-unsorted: #A2A2A2;
   --table-sorted: var(--primary-darkest-font-color);
 
+  /* Form / modal surfaces (theme-ready) */
+  --surface-bg: #f5f7f6;
+  --input-bg: #f7faf8;
+  --input-border: var(--secondary-background-border-color);
+  --form-title-color: #6b7280;
+  --form-divider: rgba(0, 0, 0, 0.18);
+  --date-pill-bg: #eef2f0;
+  --form-required-indicator: #b42318;
+
   /* STATUS DEFAULT COLORS */
   --wishlist-status-color: #97D1FB;
   --applied-status-color: #4EC0B4;
@@ -56,15 +65,36 @@
   --ghosted-status-color: #999999;
   --withdrawn-status-color: #FF9246;
 
+  /* Dashboard / Kanban Board */
+  --dashboard-column-bg: #f0f8f0;
+  --dashboard-column-header-bg: #dcedde;
+  --dashboard-column-border: #d0d0d0;
+  --dashboard-card-bg: #ffffff;
+  --dashboard-card-border: #e0e0e0;
+  --dashboard-card-shadow: rgba(0, 0, 0, 0.1);
+  --dashboard-header-border: var(--primary-darkest-font-color);
+
+  /* Global polish */
+  --focus-ring: 2px solid var(--primary-darkest-font-color);
+  --focus-ring-offset: 2px;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --selection-bg: rgba(131, 168, 120, 0.25);
 }
 
 [data-theme="dark"] {
   --bg-color: #1e1e1e;
   --text-color: #f3f3f3;
   --primary-color: #60a5fa;
-  /* Light blue */
   --accent-color: #a855f7;
-  /* Lighter purple */
+  --surface-bg: #2a2a2a;
+  --input-bg: #252525;
+  --input-border: #404040;
+  --form-title-color: #9ca3af;
+  --form-divider: rgba(255, 255, 255, 0.15);
+  --date-pill-bg: #1f1f1f;
+  --form-required-indicator: #f87171;
+  --selection-bg: rgba(96, 165, 250, 0.3);
 }
 
 [data-theme="solarized"] {
@@ -72,4 +102,12 @@
   --text-color: #657b83;
   --primary-color: #268bd2;
   --accent-color: #2aa198;
+  --surface-bg: #eee8d5;
+  --input-bg: #fdf6e3;
+  --input-border: #93a1a1;
+  --form-title-color: #586e75;
+  --form-divider: rgba(0, 0, 0, 0.2);
+  --date-pill-bg: #eee8d5;
+  --form-required-indicator: #dc322f;
+  --selection-bg: rgba(38, 139, 210, 0.25);
 }

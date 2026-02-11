@@ -15,6 +15,19 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+::selection {
+    background: var(--selection-bg);
+}
+
+button:focus-visible,
+a:focus-visible,
+[tabindex="0"]:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
 }
 
 .sr-only {
@@ -29,10 +42,12 @@ body {
   border: 0;
 }
 
-button:focus-visible {
-    outline-color: var(--primary-darkest-font-color);          
-}
 * {
     box-sizing: border-box;
-    font-family: 'Inter';
+}
+
+*,
+*::before,
+*::after {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }

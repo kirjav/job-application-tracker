@@ -137,75 +137,132 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
   return (
     <div className="application-overlay">
       <form onSubmit={handleSubmit} className="application-form" ref={ref}>
-        <h2>{isEditMode ? "Update" : "Create"} Application</h2>
+        <header className="application-form-header">
+          {onCancel ? (
+            <button
+              type="button"
+              className="application-form-close"
+              onClick={onCancel}
+              aria-label="Close"
+            >
+              ×
+            </button>
+          ) : (
+            <div className="application-form-header-spacer" />
+          )}
+          <h2 className="application-form-title" id="application-form-heading">
+            {isEditMode ? "Update" : "Create"} Application
+          </h2>
+          <div className="application-form-header-spacer" />
+        </header>
+        <div className="application-form-divider" aria-hidden="true" />
 
-        <input name="company" value={formData.company} onChange={handleChange} placeholder="Company" required />
-        <input name="position" value={formData.position} onChange={handleChange} placeholder="Position" required />
+        <div className="application-form-body">
+        <div className="application-form-section">
+          <label className="application-form-label application-form-label-required" htmlFor="app-company">Company</label>
+          <input id="app-company" className="application-form-input" name="company" value={formData.company} onChange={handleChange} placeholder="Company" required />
+        </div>
+        <div className="application-form-section">
+          <label className="application-form-label application-form-label-required" htmlFor="app-position">Position</label>
+          <input id="app-position" className="application-form-input" name="position" value={formData.position} onChange={handleChange} placeholder="Position" required />
+        </div>
 
-        <select name="status" value={formData.status} onChange={handleChange} required>
-          <option value="" disabled>Select status</option>
-          {STATUS_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
-        </select>
+        <div className="application-form-row application-form-two-col">
+          <div className="application-form-section">
+            <label className="application-form-label application-form-label-required" htmlFor="app-status">Status</label>
+            <select id="app-status" className="application-form-select" name="status" value={formData.status} onChange={handleChange} required>
+              <option value="" disabled>Select status</option>
+              {STATUS_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+            </select>
+          </div>
+          <div className="application-form-section">
+            <label className="application-form-label application-form-label-required" htmlFor="app-mode">Work Arrangement</label>
+            <select id="app-mode" className="application-form-select" name="mode" value={formData.mode} onChange={handleChange} required>
+              <option value="" disabled>Select mode</option>
+              {MODE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+            </select>
+          </div>
+        </div>
 
-        <select name="mode" value={formData.mode} onChange={handleChange} required>
-          <option value="" disabled>Select Work Arrangement</option>
-          {MODE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
-        </select>
+        <div className="application-form-section">
+          <label className="application-form-label application-form-label-required" htmlFor="app-dateApplied">Date Applied</label>
+          <div className="application-form-date-pill">
+            <input id="app-dateApplied" className="application-form-date-input" type="date" name="dateApplied" value={formData.dateApplied} onChange={handleChange} required />
+          </div>
+        </div>
 
-        <input type="number" name="salaryExact" value={formData.salaryExact || ""} onChange={handleChange} placeholder="Exact Salary" />
-        <input type="number" name="salaryMin" value={formData.salaryMin || ""} onChange={handleChange} placeholder="Min Salary" />
-        <input type="number" name="salaryMax" value={formData.salaryMax || ""} onChange={handleChange} placeholder="Max Salary" />
-        <input name="source" value={formData.source} onChange={handleChange} placeholder="Source (e.g. LinkedIn)" />
-        <textarea name="notes" value={formData.notes} onChange={handleChange} placeholder="Notes" />
+        <div className="application-form-row application-form-three-col">
+          <div className="application-form-section">
+            <label className="application-form-label" htmlFor="app-salaryExact">Exact Salary</label>
+            <input id="app-salaryExact" className="application-form-input" type="number" name="salaryExact" value={formData.salaryExact || ""} onChange={handleChange} placeholder="—" />
+          </div>
+          <div className="application-form-section">
+            <label className="application-form-label" htmlFor="app-salaryMin">Min Salary</label>
+            <input id="app-salaryMin" className="application-form-input" type="number" name="salaryMin" value={formData.salaryMin || ""} onChange={handleChange} placeholder="—" />
+          </div>
+          <div className="application-form-section">
+            <label className="application-form-label" htmlFor="app-salaryMax">Max Salary</label>
+            <input id="app-salaryMax" className="application-form-input" type="number" name="salaryMax" value={formData.salaryMax || ""} onChange={handleChange} placeholder="—" />
+          </div>
+        </div>
 
-        <label>
-          <input type="checkbox" name="tailoredResume" checked={formData.tailoredResume} onChange={handleCheckboxChange} />
-          Tailored Resume
-        </label>
+        <div className="application-form-section">
+          <label className="application-form-label" htmlFor="app-source">Source</label>
+          <input id="app-source" className="application-form-input" name="source" value={formData.source} onChange={handleChange} placeholder="e.g. LinkedIn" />
+        </div>
 
-        <label>
-          <input type="checkbox" name="tailoredCoverLetter" checked={formData.tailoredCoverLetter} onChange={handleCheckboxChange} />
-          Tailored Cover Letter
-        </label>
+        <div className="application-form-section">
+          <label className="application-form-label" htmlFor="app-notes">Notes</label>
+          <textarea id="app-notes" className="application-form-textarea" name="notes" value={formData.notes} onChange={handleChange} placeholder="Notes" rows={3} />
+        </div>
 
-        <input type="date" name="dateApplied" value={formData.dateApplied} onChange={handleChange} required />
+        <div className="application-form-section application-form-checkboxes">
+          <label className="application-form-checkbox-label">
+            <input type="checkbox" name="tailoredResume" checked={formData.tailoredResume} onChange={handleCheckboxChange} className="application-form-checkbox" />
+            <span>Tailored Resume</span>
+          </label>
+          <label className="application-form-checkbox-label">
+            <input type="checkbox" name="tailoredCoverLetter" checked={formData.tailoredCoverLetter} onChange={handleCheckboxChange} className="application-form-checkbox" />
+            <span>Tailored Cover Letter</span>
+          </label>
+        </div>
 
-        <TagInput selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+        <div className="application-form-section">
+          <label className="application-form-label">Tags</label>
+          <div className="application-form-tag-wrap">
+            <TagInput selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+          </div>
+        </div>
 
-        <div style={{ display: "flex", gap: 8 }}>
+        <div className="application-form-actions">
           <button
             type="submit"
+            className="application-form-btn application-form-btn-solid"
             onClick={() => (submitIntentRef.current = "submit")}
           >
             {isEditMode ? "Update" : "Submit"}
           </button>
-
           {!isEditMode && (
             <button
               type="submit"
+              className="application-form-btn application-form-btn-outline"
               onClick={() => (submitIntentRef.current = "addAnother")}
             >
               Add another
             </button>
           )}
-
           {isEditMode && (
             <button
               type="submit"
+              className="application-form-btn application-form-btn-outline"
               onClick={() => (submitIntentRef.current = "saveNew")}
               title="Save this, then start a new blank entry"
             >
               Save & New
             </button>
           )}
-
-          {onCancel && (
-            <button type="button" onClick={onCancel}>
-              Cancel
-            </button>
-          )}
         </div>
-
+        </div>
       </form>
     </div>
   );

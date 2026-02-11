@@ -99,6 +99,28 @@ async function updatePassword(req, res) {
     }
 }
 
+/** Mask email for display: "j***n@example.com" */
+function maskEmail(email) {
+    if (!email || typeof email !== "string") return "";
+    const [local, domain] = email.split("@");
+    if (!domain) return "***";
+    if (local.length <= 2) return local[0] + "***@" + domain;
+    return local[0] + "***" + local[local.length - 1] + "@" + domain;
+}
+
+async function getMe(req, res) {
+    try {
+        const user = await getAuthenticatedUser(req.user.userId);
+        return res.json({
+            name: user.name ?? "",
+            emailMasked: maskEmail(user.email),
+            inactivityGraceDays: user.inactivityThresholdDays ?? 0,
+        });
+    } catch (err) {
+        return handleError(res, err, "Failed to get profile");
+    }
+}
+
 function pruneUndefined(obj) {
     const out = {};
     for (const [k, v] of Object.entries(obj)) {
@@ -117,6 +139,12 @@ async function updateMe(req, res) {
         }
         await getAuthenticatedUser(req.user.userId);
 
+        // Map API field to Prisma field name
+        if (allowed.inactivityGraceDays !== undefined) {
+            allowed.inactivityThresholdDays = allowed.inactivityGraceDays;
+            delete allowed.inactivityGraceDays;
+        }
+
         const updated = await prisma.user.update({
             where: { id: req.user.userId },
             data: allowed,
@@ -124,12 +152,18 @@ async function updateMe(req, res) {
                 id: true,
                 name: true,
                 dailyApplicationGoal: true,
-                inactivityGraceDays: true,
-                // add new fields here
+                inactivityThresholdDays: true,
             },
         });
 
-        return res.json({ message: "Updated successfully", user: updated });
+        return res.json({
+            message: "Updated successfully",
+            user: {
+                name: updated.name,
+                dailyApplicationGoal: updated.dailyApplicationGoal,
+                inactivityGraceDays: updated.inactivityThresholdDays ?? 0,
+            },
+        });
     } catch (err) {
         return handleError(res, err, "Failed to update profile");
     }
@@ -137,6 +171,7 @@ async function updateMe(req, res) {
 
 module.exports = {
     deleteUser,
+    getMe,
     updateEmail,
     updatePassword,
     updateMe,

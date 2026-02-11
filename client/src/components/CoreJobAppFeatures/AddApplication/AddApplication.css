@@ -1,23 +1,20 @@
 .add-application-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2147483646;
 }
 
 .add-application-modal {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
+  background: transparent;
+  padding: 0;
   max-width: 600px;
   width: 100%;
-}
-
-.add-application-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  max-height: 90vh;
 }

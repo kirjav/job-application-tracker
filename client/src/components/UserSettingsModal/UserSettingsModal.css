@@ -1,0 +1,227 @@
+/* User Settings modal – design: white bg, thin green border, rounded corners, shadow */
+.user-settings-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+}
+
+.user-settings-modal {
+  width: min(92vw, 440px);
+  max-height: 90vh;
+  background: #ffffff;
+  border: 2px solid var(--primary-darkest-font-color);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.user-settings-title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 400;
+  font-family: 'Gambarino', serif;
+  color: var(--primary-darkest-font-color);
+}
+
+.user-settings-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--tertiary-grey-color);
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.user-settings-close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--primary-darkest-font-color);
+}
+
+.user-settings-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.user-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--form-divider);
+}
+
+.user-settings-row:first-child {
+  border-top: none;
+}
+
+.user-settings-row-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-settings-row-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-darkest-font-color);
+  margin-bottom: 0.25rem;
+}
+
+.user-settings-row-value {
+  font-size: 0.9375rem;
+  color: var(--secondary-dark-grey-color);
+}
+
+.user-settings-edit-btn {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--secondary-background-color);
+  color: var(--contrast-text-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.user-settings-edit-btn:hover {
+  background: var(--secondary-background-hover-color);
+}
+
+/* Edit sub-modal (same overlay pattern) */
+.user-settings-edit-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  padding: 1rem;
+}
+
+.user-settings-edit-box {
+  width: min(100%, 360px);
+  background: #ffffff;
+  border: 2px solid var(--primary-darkest-font-color);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  padding: 1.25rem;
+}
+
+.user-settings-edit-title {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-darkest-font-color);
+}
+
+.user-settings-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.user-settings-edit-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.user-settings-edit-cancel {
+  border: 1px solid var(--dashboard-column-border);
+  background: var(--input-bg);
+  color: var(--primary-darkest-font-color);
+}
+
+.user-settings-edit-cancel:hover {
+  background: var(--side-nav-select);
+}
+
+.user-settings-edit-save {
+  border: 0;
+  background: var(--secondary-background-color);
+  color: var(--contrast-text-color);
+}
+
+.user-settings-edit-save:hover {
+  background: var(--secondary-background-hover-color);
+}
+
+.user-settings-edit-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.user-settings-edit-field {
+  margin-bottom: 0.75rem;
+}
+
+.user-settings-edit-field label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--secondary-dark-grey-color);
+  margin-bottom: 0.25rem;
+}
+
+.user-settings-edit-field input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  font-size: 0.9375rem;
+  color: var(--primary-darkest-font-color);
+  box-sizing: border-box;
+}
+
+.user-settings-edit-field input:focus {
+  outline: none;
+  border-color: var(--primary-darkest-font-color);
+  box-shadow: 0 0 0 2px rgba(40, 76, 60, 0.2);
+}
+
+.user-settings-error {
+  font-size: 0.8125rem;
+  color: var(--form-required-indicator);
+  margin-top: 0.25rem;
+}
+
+.user-settings-loading {
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  color: var(--tertiary-grey-color);
+}
