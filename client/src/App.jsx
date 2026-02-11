@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import ApplicationOverview from "./pages/ApplicationOverview";
+import ApplicationsView from "./pages/ApplicationsView";
 import Auth from "./pages/Auth/Auth";
 import AuthRoute from "./routes/AuthRoute";
 import GuestRoute from "./routes/GuestRoute";
@@ -34,7 +34,7 @@ function App() {
             }
           >
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/applications" element={<ApplicationOverview />} />
+            <Route path="/applications" element={<ApplicationsView />} />
             {/* <Route path="/apply" element={<ApplicationForm />} /> */}
           </Route>
 

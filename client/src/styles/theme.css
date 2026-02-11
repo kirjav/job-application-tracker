@@ -144,6 +144,31 @@
   --withdrawn-status-color: #cc6b38;
 }
 
+/* Dark theme: scrollbar to match background */
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--input-bg);
+  border-radius: 5px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--decor-line-color);
+  border-radius: 5px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-grey-color);
+}
+
+[data-theme="dark"] {
+  scrollbar-color: var(--decor-line-color) var(--input-bg);
+  scrollbar-width: thin;
+}
+
 [data-theme="solarized"] {
   --bg-color: #fdf6e3;
   --text-color: #657b83;

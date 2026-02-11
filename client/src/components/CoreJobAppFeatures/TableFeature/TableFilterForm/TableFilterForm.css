@@ -140,6 +140,10 @@
   font-size: 1rem;
 }
 
+.toolbar .main-button svg {
+  color: var(--icon-color);
+}
+
 .toolbar .main-button:hover {
   background-color: var(--secondary-light-color);
 }
@@ -148,11 +152,15 @@
   background-color: var(--secondary-light-color);
 }
 
+.main-button .filter-icon,
+.main-button .action-icon {
+  color: var(--icon-color);
+}
+
 .main-button .filter-icon {
   height: 24px;
   width: 24px;
 }
-
 
 .main-button .action-icon {
   margin: 3px;
@@ -300,13 +308,19 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 0;
   background: transparent;
   font-weight: 700;
-  color: var(--primary-darkest-font-color);
+  color: var(--text-color);
   outline: none;
+}
+
+[data-theme="dark"] .date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 .date-sep {
   opacity: .55;
   font-weight: 700;
+  color: var(--text-color);
 }
 
 /* Two-column row (salary) */
