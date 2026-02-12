@@ -335,13 +335,13 @@ export default function TableFilterForm({
                     onChange={(e) => update({ salaryMin: e.target.value })}
                   >
                     <option value="">No Min</option>
-                    <option value="50000">50,000</option>
-                    <option value="75000">75,000</option>
-                    <option value="100000">100,000</option>
-                    <option value="125000">125,000</option>
-                    <option value="150000">150,000</option>
-                    <option value="175000">175,000</option>
-                    <option value="200000">200,000</option>
+                    <option value="50000">$50,000</option>
+                    <option value="75000">$75,000</option>
+                    <option value="100000">$100,000</option>
+                    <option value="125000">$125,000</option>
+                    <option value="150000">$150,000</option>
+                    <option value="175000">$175,000</option>
+                    <option value="200000">$200,000</option>
                   </select>
                 </div>
 
@@ -354,14 +354,14 @@ export default function TableFilterForm({
                     onChange={(e) => update({ salaryMax: e.target.value })}
                   >
                     <option value="">No Max</option>
-                    <option value="75000">75,000</option>
-                    <option value="100000">100,000</option>
-                    <option value="125000">125,000</option>
-                    <option value="150000">150,000</option>
-                    <option value="175000">175,000</option>
-                    <option value="200000">200,000</option>
-                    <option value="250000">250,000</option>
-                    <option value="300000">300,000</option>
+                    <option value="75000">$75,000</option>
+                    <option value="100000">$100,000</option>
+                    <option value="125000">$125,000</option>
+                    <option value="150000">$150,000</option>
+                    <option value="175000">$175,000</option>
+                    <option value="200000">$200,000</option>
+                    <option value="250000">$250,000</option>
+                    <option value="300000">$300,000</option>
                   </select>
                 </div>
               </div>

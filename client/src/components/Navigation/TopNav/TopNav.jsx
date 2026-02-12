@@ -39,8 +39,8 @@ const TopNav = ({ onAddApplicationClick }) => {
   return (
     <>
       <div className="top-nav">
-        <button onClick={onAddApplicationClick} className="application-button">
-          <AddApplicationIcon /> Add Application
+        <button onClick={onAddApplicationClick} className="application-button" title="Add Application">
+          <AddApplicationIcon /> <span className="application-button-label">Add Application</span>
         </button>
         <button
           type="button"

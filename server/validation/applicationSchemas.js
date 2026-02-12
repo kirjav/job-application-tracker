@@ -84,7 +84,7 @@ const filterSchema = z.object({
   // sorting & paging
   sortBy: SortBy.default("dateApplied"),
   sortDir: SortDir.default("desc"),
-  itemsPerPage: z.coerce.number().min(5).max(100).default(10),
+  itemsPerPage: z.coerce.number().min(0).max(100).default(10),
   page: z.coerce.number().min(1).default(1),
 });
 

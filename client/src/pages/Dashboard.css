@@ -7,6 +7,14 @@
   background: var(--bg-color);
 }
 
+.dashboard-inner {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -98,6 +106,8 @@
 @media (min-width: 1024px) {
   .dashboard-header {
     padding: 1.5rem 2rem 0.75rem;
+    /* 7 columns × (252px max-width + 8px margin) + 2 × 2rem board padding */
+    max-width: calc(7 * (252px + 8px) + 4rem);
   }
 }
 
@@ -106,7 +116,7 @@
   font-size: 1.5rem;
   font-weight: 400;
   color: var(--primary-darkest-font-color);
-  font-family: 'Gambarino', serif;
+  font-family: "Gambarino", serif;
 }
 
 @media (min-width: 640px) {
@@ -145,3 +155,4 @@
   width: 24px;
   height: 24px;
 }
+

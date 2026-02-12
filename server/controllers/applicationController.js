@@ -1,6 +1,23 @@
 const prisma = require("../utils/prisma");
 const { handleError } = require("../utils/handleError");
 
+/**
+ * Compute effectiveSalary for sorting: exact if set, else average of min/max when both set.
+ */
+function computeEffectiveSalary(salaryExact, salaryMin, salaryMax) {
+  if (salaryExact != null && typeof salaryExact === "number" && !Number.isNaN(salaryExact)) {
+    return salaryExact;
+  }
+  const min = salaryMin != null && typeof salaryMin === "number" && !Number.isNaN(salaryMin) ? salaryMin : null;
+  const max = salaryMax != null && typeof salaryMax === "number" && !Number.isNaN(salaryMax) ? salaryMax : null;
+  if (min != null && max != null) {
+    return Math.round((min + max) / 2);
+  }
+  if (min != null) return min;
+  if (max != null) return max;
+  return null;
+}
+
 async function createApplication(req, res) {
   const {
     company, position, status, mode, source, notes,
@@ -18,6 +35,8 @@ async function createApplication(req, res) {
     });
     const validatedTagIds = userTags.map(t => t.id);
 
+    const effectiveSalary = computeEffectiveSalary(salaryExact, salaryMin, salaryMax);
+
     const newApp = await prisma.application.create({
       data: {
         company,
@@ -33,6 +52,7 @@ async function createApplication(req, res) {
         salaryExact,
         salaryMin,
         salaryMax,
+        effectiveSalary,
         userId: req.user.userId,
         // implicit M:N: connect tags directly by id
         ...(validatedTagIds.length
@@ -262,6 +282,8 @@ async function updateApplication(req, res) {
       };
     }
 
+    const effectiveSalary = computeEffectiveSalary(salaryExact, salaryMin, salaryMax);
+
     const updatedApp = await prisma.application.update({
       where: { id: Number(id) },
       data: {
@@ -279,6 +301,7 @@ async function updateApplication(req, res) {
         salaryExact,
         salaryMin,
         salaryMax,
+        effectiveSalary,
       },
       include: { tags: true },
     });
@@ -314,6 +337,13 @@ async function updateApplicationPartial(req, res) {
       };
 
       delete updates.tagIds;
+    }
+
+    if ("salaryExact" in updates || "salaryMin" in updates || "salaryMax" in updates) {
+      const salaryExact = updates.salaryExact !== undefined ? updates.salaryExact : app.salaryExact;
+      const salaryMin = updates.salaryMin !== undefined ? updates.salaryMin : app.salaryMin;
+      const salaryMax = updates.salaryMax !== undefined ? updates.salaryMax : app.salaryMax;
+      updates.effectiveSalary = computeEffectiveSalary(salaryExact, salaryMin, salaryMax);
     }
 
     const updated = await prisma.application.update({

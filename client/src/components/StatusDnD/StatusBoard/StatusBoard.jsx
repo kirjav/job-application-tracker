@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { rectIntersection } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import confetti from "canvas-confetti";
 import StatusColumn from "../StatusColumn/StatusColumn";
 import EditApplication from "../../CoreJobAppFeatures/EditApplication/EditApplication";
 import axios from "../../../utils/api";
@@ -11,6 +12,19 @@ import { ApplicationCardPreview } from "../ApplicationCard/ApplicationCard";
 import ThinRightArrow from "../../../assets/icons/table/ThinRightArrow.svg?react";
 import "../../CoreJobAppFeatures/TableFeature/ApplicationTablePage/ApplicationTablePage.css";
 import "./StatusBoard.css";
+
+function fireOfferCelebration() {
+  const count = 120;
+  const defaults = { origin: { y: 0.6 }, zIndex: 9999 };
+  function fire(particleRatio, opts) {
+    confetti({ ...defaults, ...opts, particleCount: Math.floor(count * particleRatio) });
+  }
+  fire(0.25, { spread: 26, startVelocity: 55 });
+  fire(0.2, { spread: 60 });
+  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+  fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+  fire(0.1, { spread: 120, startVelocity: 45 });
+}
 
 function MinimizedColumn({ status, onExpand }) {
     return (
@@ -110,6 +124,9 @@ function StatusBoard({ expandedView = true, activityFilter = "all" }) {
         // Step 4: Persist to server
         axios
             .patch(`/applications/${activeId}`, { status: overColumn })
+            .then(() => {
+                if (overColumn === "Offer") fireOfferCelebration();
+            })
             .catch((err) => {
                 console.error("Failed to update application status:", err?.response?.data || err);
                 setApplications(applications); // revert if failed

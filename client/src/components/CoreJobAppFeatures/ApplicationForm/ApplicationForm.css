@@ -160,6 +160,42 @@
 }
 
 /* Date pill – match .date-pill (TableFilterForm) */
+/* Salary inputs with $ prefix */
+.application-form-salary-wrap {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--input-border);
+  border-radius: 10px;
+  background: var(--input-bg);
+  overflow: hidden;
+}
+
+.application-form-salary-prefix {
+  padding-left: 12px;
+  padding-right: 4px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--secondary-grey-color);
+  flex-shrink: 0;
+}
+
+.application-form-salary-wrap .application-form-input {
+  border: none;
+  border-radius: 0;
+  padding-left: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.application-form-salary-wrap .application-form-input:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.application-form-salary-wrap:focus-within {
+  border-color: var(--secondary-background-color);
+}
+
 .application-form-date-pill {
   display: flex;
   align-items: center;

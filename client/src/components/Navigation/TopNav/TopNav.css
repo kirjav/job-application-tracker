@@ -58,6 +58,17 @@
     transform: scale(0.98);
 }
 
+@media (max-width: 640px) {
+    .top-nav .application-button {
+        padding: 0.5rem;
+        border-radius: 8px;
+    }
+
+    .top-nav .application-button .application-button-label {
+        display: none;
+    }
+}
+
 .top-nav-theme-toggle {
     width: 40px;
     height: 40px;

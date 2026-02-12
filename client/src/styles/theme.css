@@ -89,6 +89,36 @@
   --selection-bg: rgba(131, 168, 120, 0.25);
 }
 
+/* Explicit light theme (e.g. Auth page always light) */
+[data-theme="light"] {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --contrast-text-color: white;
+  --decor-line-color: #DDDDDD;
+  --primary-darkest-font-color: #284C3C;
+  --secondary-dark-grey-color: #3C3C3C;
+  --secondary-grey-color: #626262;
+  --secondary-light-color: #E3F0DA;
+  --side-nav-select: #E3F0DA;
+  --side-nav-hover: #f1f5eb;
+  --tertiary-grey-color: #4D4D4D;
+  --account-icon-background-color: #284C3C;
+  --account-icon-text-color: #ffffff;
+  --secondary-background-color: #83A878;
+  --secondary-background-border-color: #BDDBB3;
+  --secondary-background-hover-color: #74925D;
+  --surface-bg: #f5f7f6;
+  --input-bg: #f7faf8;
+  --input-border: #BDDBB3;
+  --form-title-color: #6b7280;
+  --form-divider: rgba(0, 0, 0, 0.18);
+  --date-pill-bg: #eef2f0;
+  --form-required-indicator: #b42318;
+  --primary-medium-color: #6D9573;
+  --primary-dark-color: #284C3C;
+  --icon-color: #284C3C;
+}
+
 [data-theme="dark"] {
   /* Dark purple-hue base (subtle, not strongly purple) */
   --bg-color: #1c1b22;
@@ -167,6 +197,27 @@
 [data-theme="dark"] {
   scrollbar-color: var(--decor-line-color) var(--input-bg);
   scrollbar-width: thin;
+}
+
+/* Dark theme: inputs and textareas keep dark background and visible caret */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  caret-color: var(--text-color);
+}
+
+/* Dark theme: prevent browser autofill from forcing white background on inputs */
+[data-theme="dark"] input:-webkit-autofill,
+[data-theme="dark"] input:-webkit-autofill:hover,
+[data-theme="dark"] input:-webkit-autofill:focus,
+[data-theme="dark"] input:-webkit-autofill:active,
+[data-theme="dark"] textarea:-webkit-autofill,
+[data-theme="dark"] textarea:-webkit-autofill:hover,
+[data-theme="dark"] textarea:-webkit-autofill:focus,
+[data-theme="dark"] textarea:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 100px var(--input-bg) inset !important;
+  box-shadow: 0 0 0 100px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--text-color) !important;
+  caret-color: var(--text-color);
 }
 
 [data-theme="solarized"] {
