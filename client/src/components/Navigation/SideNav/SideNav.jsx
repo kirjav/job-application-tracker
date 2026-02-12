@@ -40,6 +40,14 @@ const SideNav = () => {
                 <nav aria-label="Main navigation">
                     <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><DashboardNavIcon className="nav-icon" aria-hidden="true" focusable="false" /><span className="nav-label">Dashboard</span></NavLink>
                     <NavLink to="/applications" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><MyApplicationsNavIcon className="nav-icon" aria-hidden="true" focusable="false" /><span className="nav-label">My Applications</span></NavLink>
+                    <NavLink to="/stats" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}>
+                        <svg className="nav-icon" width="24" height="24" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="18" y="3" width="4" height="18" rx="1" />
+                            <rect x="10" y="8" width="4" height="13" rx="1" />
+                            <rect x="2" y="13" width="4" height="8" rx="1" />
+                        </svg>
+                        <span className="nav-label">Stats</span>
+                    </NavLink>
                 </nav>
         </aside >
     )

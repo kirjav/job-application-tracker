@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { createApplication, getUserApplications, updateApplication, updateApplicationPartial, updateApplicationsStatus, deleteApplication, getSingleApplication, getAllUserApplications } = require("../controllers/applicationController");
+const { getStats } = require("../controllers/statsController");
 const validate = require("../middleware/schemaValidation");
 const authenticateToken = require("../middleware/authMiddleware");
 
@@ -29,6 +30,9 @@ router.patch(
   validate(updateGroupApplicationsSchema, "body"),
   updateApplicationsStatus
 );
+
+// GET /applications/stats – aggregated stats for the stats page
+router.get("/stats", authenticateToken, getStats);
 
 router.get("/:id", authenticateToken, getSingleApplication);
 

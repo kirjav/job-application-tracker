@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ApplicationsView from "./pages/ApplicationsView";
+import Stats from "./pages/Stats";
 import Auth from "./pages/Auth/Auth";
 import AuthRoute from "./routes/AuthRoute";
 import GuestRoute from "./routes/GuestRoute";
@@ -35,6 +36,7 @@ function App() {
           >
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/applications" element={<ApplicationsView />} />
+            <Route path="/stats" element={<Stats />} />
             {/* <Route path="/apply" element={<ApplicationForm />} /> */}
           </Route>
 
