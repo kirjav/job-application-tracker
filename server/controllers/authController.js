@@ -170,7 +170,9 @@ async function forgotPassword(req, res) {
     });
 
     // TODO: Send email with reset link
-    console.log(`[DEBUG] Send user this reset link: https://yourapp.com/reset-password?token=${resetToken}`);
+    if (process.env.NODE_ENV !== "production") {
+      console.log(`[DEBUG] Send user this reset link: https://yourapp.com/reset-password?token=${resetToken}`);
+    }
 
     return res.json({ message: "If the email exists, a reset link has been sent." });
   } catch (err) {

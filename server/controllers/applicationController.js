@@ -64,8 +64,7 @@ async function createApplication(req, res) {
 
     res.status(201).json(newApp);
   } catch (err) {
-    console.error("Create application error:", err.code, err.message, err.meta);
-    return res.status(500).json({ error: err.message, code: err.code, meta: err.meta });
+    return handleError(res, err, "Failed to create application");
   }
 }
 
@@ -197,6 +196,7 @@ async function getUserApplications(req, res) {
 
 // Short-lived cache for user's inactivity threshold to avoid repeated user lookups when toggling activity filter.
 const USER_THRESHOLD_CACHE_TTL_MS = 60_000; // 1 minute
+const USER_THRESHOLD_CACHE_MAX = 500; // cap to prevent unbounded growth
 const userThresholdCache = new Map(); // userId -> { value: number, ts: number }
 
 function getInactivityThresholdDays(userId) {
@@ -208,6 +208,9 @@ function getInactivityThresholdDays(userId) {
 }
 
 function setInactivityThresholdCache(userId, value) {
+  if (userThresholdCache.size >= USER_THRESHOLD_CACHE_MAX) {
+    userThresholdCache.clear();
+  }
   userThresholdCache.set(userId, { value, ts: Date.now() });
 }
 

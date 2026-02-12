@@ -15,10 +15,18 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+// Higher-limit rate limiter for PATCH (drag-and-drop status updates fire frequently)
+const patchLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Custom limiter for /applications route
 const applicationsLimiter = (req, res, next) => {
-  if (req.method === "PATCH") return next(); // skip limiter for PATCH
-  return generalLimiter(req, res, next);     // apply limiter otherwise
+  if (req.method === "PATCH") return patchLimiter(req, res, next);
+  return generalLimiter(req, res, next);
 };
 
 module.exports = {

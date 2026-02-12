@@ -1,9 +1,64 @@
 // src/components/ApplicationTablePage/ApplicationTablePage.jsx
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import qs from "qs";
 import API from "../../../../utils/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+// ── CSV export helpers ───────────────────────────────────────
+function escapeCsv(val) {
+  if (val == null) return "";
+  const s = String(val);
+  if (s.includes(",") || s.includes('"') || s.includes("\n")) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
+
+function formatMoney(val) {
+  if (val == null || val === "") return "";
+  return Number(val).toLocaleString("en-US");
+}
+
+function applicationsToCsv(apps) {
+  const headers = [
+    "Company", "Position", "Status", "Work Arrangement",
+    "Date Applied", "Exact Salary", "Min Salary", "Max Salary",
+    "Source", "Notes", "Tailored Resume", "Tailored Cover Letter", "Tags",
+  ];
+  const lines = [headers.map(escapeCsv).join(",")];
+  for (const a of apps) {
+    const row = [
+      a.company,
+      a.position,
+      a.status,
+      a.mode,
+      a.dateApplied ? a.dateApplied.split("T")[0] : "",
+      formatMoney(a.salaryExact),
+      formatMoney(a.salaryMin),
+      formatMoney(a.salaryMax),
+      a.source,
+      a.notes,
+      a.tailoredResume ? "Yes" : "No",
+      a.tailoredCoverLetter ? "Yes" : "No",
+      (a.tags || []).map((t) => t.name).join("; "),
+    ];
+    lines.push(row.map(escapeCsv).join(","));
+  }
+  return lines.join("\n");
+}
+
+function downloadCsv(csvString, filename) {
+  const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
 
 import "./ApplicationTablePage.css";
 
@@ -199,6 +254,65 @@ export default function ApplicationTablePage() {
     await bulkDeleteMutation.mutateAsync(ids);
   };
 
+  // ── Export handler ─────────────────────────────────────────
+  const handleExport = useCallback(async () => {
+    const today = new Date().toISOString().split("T")[0];
+    let appsToExport;
+
+    if (selectedIds.size > 0) {
+      // Export only selected rows (from the already-fetched window data)
+      const allItems = windowData?.items ?? [];
+      appsToExport = allItems.filter((a) => selectedIds.has(a.id));
+    } else {
+      // Export all applications, then client-side filter to match current filters
+      try {
+        const res = await API.get("/applications/all");
+        let all = res.data ?? [];
+
+        // Apply client-side filters to match what the table shows
+        const f = filters;
+        if (f.statuses?.length) all = all.filter((a) => f.statuses.includes(a.status));
+        if (f.modes?.length) all = all.filter((a) => f.modes.includes(a.mode));
+        if (f.dateFrom) all = all.filter((a) => a.dateApplied && a.dateApplied.split("T")[0] >= f.dateFrom);
+        if (f.dateTo) all = all.filter((a) => a.dateApplied && a.dateApplied.split("T")[0] <= f.dateTo);
+        if (f.salaryMin) all = all.filter((a) => (a.effectiveSalary ?? 0) >= Number(f.salaryMin));
+        if (f.salaryMax) all = all.filter((a) => (a.effectiveSalary ?? Infinity) <= Number(f.salaryMax));
+        if (f.tagNames?.length) {
+          all = all.filter((a) => {
+            const appTags = (a.tags || []).map((t) => t.name);
+            return f.tagNames.some((tn) => appTags.includes(tn));
+          });
+        }
+        if (f.q) {
+          const q = f.q.toLowerCase();
+          all = all.filter((a) =>
+            (a.company || "").toLowerCase().includes(q) ||
+            (a.position || "").toLowerCase().includes(q) ||
+            (a.source || "").toLowerCase().includes(q) ||
+            (a.notes || "").toLowerCase().includes(q)
+          );
+        }
+
+        appsToExport = all;
+      } catch (err) {
+        console.error("Export fetch failed:", err);
+        alert("Failed to fetch applications for export.");
+        return;
+      }
+    }
+
+    if (!appsToExport.length) {
+      alert("No applications to export.");
+      return;
+    }
+
+    const csv = applicationsToCsv(appsToExport);
+    const filename = selectedIds.size > 0
+      ? `applications_selected_${today}.csv`
+      : `applications_${today}.csv`;
+    downloadCsv(csv, filename);
+  }, [selectedIds, windowData, filters, sortBy, sortDir]);
+
   return (
     <div className="app-table-page">
       <div className="table-topbar">
@@ -211,6 +325,7 @@ export default function ApplicationTablePage() {
         selectedCount={selectedIds.size}
         onBulkUpdateStatus={updateSelectedApplicationStatus}
         onBulkDelete={bulkDeleteSelected}
+        onExport={handleExport}
       />
 
       <ActiveFilters filters={filters} onChange={setFilters} />

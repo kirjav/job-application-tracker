@@ -9,6 +9,14 @@ const { generalLimiter, authLimiter, applicationsLimiter } = require("./middlewa
 // Load env FIRST
 dotenv.config();
 
+// ── Fail fast if critical env vars are missing ───────────────
+const REQUIRED_ENV = ["JWT_SECRET", "REFRESH_SECRET", "DATABASE_URL"];
+for (const key of REQUIRED_ENV) {
+  if (!process.env[key]) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+}
+
 const isProd = process.env.NODE_ENV === "production";
 // Parse allowed origins from env
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(s => s.trim()) || [];
@@ -51,13 +59,11 @@ app.use("/auth", authLimiter, authRoutes);
 const applicationRoutes = require("./routes/application");
 app.use("/applications", applicationsLimiter, applicationRoutes);
 
-app.use(generalLimiter);
-
 const tagRoutes = require("./routes/tag");
-app.use("/tags", tagRoutes);
+app.use("/tags", generalLimiter, tagRoutes);
 
 const userRoutes = require("./routes/user");
-app.use("/user", userRoutes);
+app.use("/user", generalLimiter, userRoutes);
 
 app.use((err, req, res, next) => {
   // Treat CORS errors & other thrown errors uniformly

@@ -91,10 +91,13 @@ function StatusBoard({ expandedView = true, activityFilter = "all" }) {
         fetchApplications();
     }, [fetchApplications]);
 
-    const grouped = STATUS_OPTIONS.reduce((acc, status) => {
-        acc[status] = applications.filter((app) => app.status === status);
-        return acc;
-    }, {});
+    const grouped = useMemo(
+        () => STATUS_OPTIONS.reduce((acc, status) => {
+            acc[status] = applications.filter((app) => app.status === status);
+            return acc;
+        }, {}),
+        [applications]
+    );
 
     function handleDragEnd(event) {
         const { active, over } = event;

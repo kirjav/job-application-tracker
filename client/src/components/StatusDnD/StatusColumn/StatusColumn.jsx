@@ -62,4 +62,4 @@ function StatusColumn({ status, applications, expandedView, onHide, onEdit, onDe
     );
 }
 
-export default StatusColumn;
+export default React.memo(StatusColumn);
