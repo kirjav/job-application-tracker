@@ -159,6 +159,61 @@
   appearance: textfield;
 }
 
+/* Salary mode toggle */
+.application-form-salary-toggle {
+  display: inline-flex;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.salary-toggle-btn {
+  padding: 6px 16px;
+  border: none;
+  background: var(--input-bg);
+  color: var(--secondary-dark-grey-color);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.salary-toggle-btn:first-child {
+  border-right: 1px solid var(--input-border);
+}
+
+.salary-toggle-btn.salary-toggle-active {
+  background: var(--secondary-background-color);
+  color: var(--contrast-text-color);
+}
+
+.salary-toggle-btn:not(.salary-toggle-active):hover {
+  background: var(--row-hover);
+}
+
+.application-form-salary-fields {
+  width: 100%;
+}
+
+.application-form-salary-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.application-form-salary-range .application-form-salary-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.application-form-salary-sep {
+  font-weight: 700;
+  color: var(--secondary-grey-color);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
 /* Date pill – match .date-pill (TableFilterForm) */
 /* Salary inputs with $ prefix */
 .application-form-salary-wrap {

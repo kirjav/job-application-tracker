@@ -208,6 +208,18 @@
   box-sizing: border-box;
 }
 
+/* Hide native number-input spinners */
+.user-settings-edit-field input[type="number"]::-webkit-inner-spin-button,
+.user-settings-edit-field input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.user-settings-edit-field input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 .user-settings-edit-field input:focus {
   outline: none;
   border-color: var(--primary-darkest-font-color);

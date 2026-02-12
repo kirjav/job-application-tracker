@@ -12,11 +12,12 @@
 
 .tag-chip {
   background-color: var(--row-even);
-  padding: 4px 8px;
+  padding: 2px 8px;
   border-radius: 4px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   font-size: 14px;
+  line-height: 1.4;
   color: var(--text-color);
 }
 
@@ -27,6 +28,11 @@
   margin-left: 4px;
   cursor: pointer;
   color: var(--icon-color);
+  padding: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tag-input-wrapper input {

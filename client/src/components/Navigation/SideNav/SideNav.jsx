@@ -49,6 +49,15 @@ const SideNav = () => {
                         <span className="nav-label">Stats</span>
                     </NavLink>
                 </nav>
+                <div className="side-nav-footer">
+                    <a href="https://example.com/feedback" target="_blank" rel="noopener noreferrer" className="side-nav-feedback-link" title="Send Feedback">
+                        <svg className="nav-icon" width="24" height="24" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <span className="nav-label">Send Feedback</span>
+                    </a>
+                    {!collapsed && <span className="side-nav-copyright">&copy; 2026 Pursuit</span>}
+                </div>
         </aside >
     )
 };

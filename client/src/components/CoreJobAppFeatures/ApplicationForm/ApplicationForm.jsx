@@ -9,11 +9,32 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import "./ApplicationForm.css";
 
+/** Format a numeric value with commas (e.g. 125000 → "125,000"). */
+const formatSalary = (val) => {
+  if (val === "" || val == null) return "";
+  const num = String(val).replace(/[^0-9]/g, "");
+  if (!num) return "";
+  return Number(num).toLocaleString("en-US");
+};
+
+/** Strip everything that isn't a digit and return the raw string (or ""). */
+const parseSalaryInput = (str) => {
+  const digits = str.replace(/[^0-9]/g, "");
+  return digits === "" ? "" : digits;
+};
+
 const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
   const qc = useQueryClient();
   const isEditMode = !!existingApp;
 
   const [selectedTags, setSelectedTags] = useState(() => existingApp?.tags || []);
+
+  // Salary mode: "exact" shows a single field, "range" shows min/max
+  const [salaryMode, setSalaryMode] = useState(() => {
+    if (existingApp?.salaryMin || existingApp?.salaryMax) return "range";
+    return "exact";
+  });
+
   const [formData, setFormData] = useState({
     company: existingApp?.company || "",
     position: existingApp?.position || "",
@@ -41,6 +62,7 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
 
   const resetForm = () => {
     setSelectedTags([]);
+    setSalaryMode("exact");
     setFormData({
       company: "",
       position: "",
@@ -83,6 +105,20 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setFormData((prev) => ({ ...prev, [name]: checked }));
+  };
+
+  const handleSalaryChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: parseSalaryInput(value) }));
+  };
+
+  const handleSalaryModeChange = (mode) => {
+    setSalaryMode(mode);
+    if (mode === "exact") {
+      setFormData((prev) => ({ ...prev, salaryMin: "", salaryMax: "" }));
+    } else {
+      setFormData((prev) => ({ ...prev, salaryExact: "" }));
+    }
   };
 
   const submitIntentRef = useRef("submit"); // "submit" | "addAnother" | "saveNew"
@@ -191,28 +227,49 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
           </div>
         </div>
 
-        <div className="application-form-row application-form-three-col">
-          <div className="application-form-section">
-            <label className="application-form-label" htmlFor="app-salaryExact">Exact Salary</label>
-            <div className="application-form-salary-wrap">
-              <span className="application-form-salary-prefix" aria-hidden="true">$</span>
-              <input id="app-salaryExact" className="application-form-input" type="number" name="salaryExact" value={formData.salaryExact || ""} onChange={handleChange} placeholder="—" />
-            </div>
+        <div className="application-form-section">
+          <label className="application-form-label">Salary</label>
+          <div className="application-form-salary-toggle" role="radiogroup" aria-label="Salary type">
+            <button
+              type="button"
+              className={`salary-toggle-btn ${salaryMode === "exact" ? "salary-toggle-active" : ""}`}
+              onClick={() => handleSalaryModeChange("exact")}
+              role="radio"
+              aria-checked={salaryMode === "exact"}
+            >
+              Exact
+            </button>
+            <button
+              type="button"
+              className={`salary-toggle-btn ${salaryMode === "range" ? "salary-toggle-active" : ""}`}
+              onClick={() => handleSalaryModeChange("range")}
+              role="radio"
+              aria-checked={salaryMode === "range"}
+            >
+              Range
+            </button>
           </div>
-          <div className="application-form-section">
-            <label className="application-form-label" htmlFor="app-salaryMin">Min Salary</label>
-            <div className="application-form-salary-wrap">
-              <span className="application-form-salary-prefix" aria-hidden="true">$</span>
-              <input id="app-salaryMin" className="application-form-input" type="number" name="salaryMin" value={formData.salaryMin || ""} onChange={handleChange} placeholder="—" />
+
+          {salaryMode === "exact" ? (
+            <div className="application-form-salary-fields">
+              <div className="application-form-salary-wrap">
+                <span className="application-form-salary-prefix" aria-hidden="true">$</span>
+                <input id="app-salaryExact" className="application-form-input" type="text" inputMode="numeric" name="salaryExact" value={formatSalary(formData.salaryExact)} onChange={handleSalaryChange} placeholder="e.g. 75,000" />
+              </div>
             </div>
-          </div>
-          <div className="application-form-section">
-            <label className="application-form-label" htmlFor="app-salaryMax">Max Salary</label>
-            <div className="application-form-salary-wrap">
-              <span className="application-form-salary-prefix" aria-hidden="true">$</span>
-              <input id="app-salaryMax" className="application-form-input" type="number" name="salaryMax" value={formData.salaryMax || ""} onChange={handleChange} placeholder="—" />
+          ) : (
+            <div className="application-form-salary-fields application-form-salary-range">
+              <div className="application-form-salary-wrap">
+                <span className="application-form-salary-prefix" aria-hidden="true">$</span>
+                <input id="app-salaryMin" className="application-form-input" type="text" inputMode="numeric" name="salaryMin" value={formatSalary(formData.salaryMin)} onChange={handleSalaryChange} placeholder="Min" />
+              </div>
+              <span className="application-form-salary-sep" aria-hidden="true">–</span>
+              <div className="application-form-salary-wrap">
+                <span className="application-form-salary-prefix" aria-hidden="true">$</span>
+                <input id="app-salaryMax" className="application-form-input" type="text" inputMode="numeric" name="salaryMax" value={formatSalary(formData.salaryMax)} onChange={handleSalaryChange} placeholder="Max" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="application-form-section">

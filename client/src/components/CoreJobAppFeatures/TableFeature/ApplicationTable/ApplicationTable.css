@@ -287,6 +287,12 @@ th[aria-sort="descending"] .th-sort {
 .pagination-controls .pagination-direction {
     background: none;
     border: none;
+    color: var(--text-color);
+}
+
+.pagination-controls .pagination-direction:disabled {
+    color: var(--decor-line-color);
+    cursor: not-allowed;
 }
 
 /* keep your existing 2px borders for all cells */
