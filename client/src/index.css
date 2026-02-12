@@ -25,6 +25,9 @@ body {
 
 button:focus-visible,
 a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
 [tabindex="0"]:focus-visible {
     outline: var(--focus-ring);
     outline-offset: var(--focus-ring-offset);

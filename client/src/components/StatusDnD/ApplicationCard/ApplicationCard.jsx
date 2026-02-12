@@ -60,6 +60,7 @@ export function ApplicationCardPreview({ app, expanded, isOverlay, onEdit, onDel
                   <button
                     className="application-card-menu-item"
                     type="button"
+                    role="menuitem"
                     onClick={() => {
                       onEdit?.(app.id);
                       close();
@@ -70,6 +71,7 @@ export function ApplicationCardPreview({ app, expanded, isOverlay, onEdit, onDel
                   <button
                     className="application-card-menu-item application-card-menu-item-danger"
                     type="button"
+                    role="menuitem"
                     onClick={() => {
                       onDelete?.(app.id);
                       close();
@@ -147,6 +149,7 @@ function ApplicationCard({ app, expanded, onEdit, onDelete }) {
                 <button
                   className="application-card-menu-item"
                   type="button"
+                  role="menuitem"
                   onClick={() => {
                     onEdit?.(app.id);
                     close();
@@ -157,6 +160,7 @@ function ApplicationCard({ app, expanded, onEdit, onDelete }) {
                 <button
                   className="application-card-menu-item application-card-menu-item-danger"
                   type="button"
+                  role="menuitem"
                   onClick={() => {
                     onDelete?.(app.id);
                     close();

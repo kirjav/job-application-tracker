@@ -114,6 +114,7 @@ const Auth = () => {
           <p className="component-toggle">
             {isLogin ? "Don't have an account yet?" : "Already have an account?"}{" "}
             <button
+              type="button"
               onClick={toggleForm}>
               {isLogin ? "Sign up for free" : "Login"}
             </button>

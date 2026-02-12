@@ -93,7 +93,7 @@ const TagInput = ({ selectedTags = [], setSelectedTags = () => { } }) => {
       {selectedTags.map((tag) => (
         <div key={tag.id} className="tag-chip">
           {tag.name}
-          <button type="button" onClick={() => handleRemoveTag(tag.id)}>
+          <button type="button" onClick={() => handleRemoveTag(tag.id)} aria-label={`Remove ${tag.name}`}>
             ×
           </button>
         </div>
@@ -104,11 +104,14 @@ const TagInput = ({ selectedTags = [], setSelectedTags = () => { } }) => {
         onChange={(e) => setInput(e.target.value.replace(/\s/g, ""))} // prevent spaces
         onKeyDown={handleInputKeyDown}
         placeholder="Add tag"
+        aria-label="Add tag"
+        aria-autocomplete="list"
+        aria-controls={suggestions.length > 0 ? "tag-input-suggestions" : undefined}
       />
       {suggestions.length > 0 && (
-        <ul className="tag-suggestions">
+        <ul className="tag-suggestions" id="tag-input-suggestions" role="listbox" aria-label="Tag suggestions">
           {suggestions.map((tag) => (
-            <li key={tag.id} onClick={() => handleAddTag(tag.name)}>
+            <li key={tag.id} role="option" onClick={() => handleAddTag(tag.name)} tabIndex={-1}>
               {tag.name}
             </li>
           ))}

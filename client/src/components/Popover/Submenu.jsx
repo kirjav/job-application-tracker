@@ -74,7 +74,7 @@ export function Submenu({
               }}
             >
               <span style={{ flex: 1 }}>{label}</span>
-              <span aria-hidden>›</span>
+              <span aria-hidden="true">›</span>
             </button>
 
             {open && (

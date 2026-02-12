@@ -109,7 +109,7 @@ export default function ApplicationTable({
               </th>
 
               <th aria-sort="none" className="tag-col"><span>Tags</span></th>
-              <th className="row-actions-col"><TableRowOptions /></th>
+              <th className="row-actions-col"><span className="sr-only">Row actions</span><TableRowOptions aria-hidden="true" focusable="false" /></th>
             </tr>
           </thead>
 
@@ -171,7 +171,7 @@ export default function ApplicationTable({
 
       {/* Pagination UI (controlled) */}
       <div className="pagination-controls">
-        <div className="pager" aria-label="Pagination">
+        <div className="pager" role="navigation" aria-label="Pagination">
           <button
             className="pagination-direction"
             onClick={() => onPageChange(Math.max(1, page - 1))}

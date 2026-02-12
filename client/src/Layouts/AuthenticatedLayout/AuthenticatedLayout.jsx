@@ -21,11 +21,14 @@ const AuthenticatedLayout = () => {
 
   return (
     <div className="auth-layout">
+      <a href="#main-content" className="sr-only skip-link">Skip to main content</a>
       <div className="side-nav"><SideNav /></div>
       <div className="main-page">
         <div className="top-nav"><TopNav onAddApplicationClick={() => setShowAddApplicationPopUp(true)} /></div>
         {/* Page content */}
-        <Outlet />
+        <main id="main-content">
+          <Outlet />
+        </main>
 
         {/* showAddApplication Pop Up} */}
         {showAddApplication && (

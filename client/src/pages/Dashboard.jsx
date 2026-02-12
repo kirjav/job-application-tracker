@@ -46,9 +46,9 @@ const Dashboard = () => {
                 title={expandedView ? "Switch to compact cards" : "Switch to expanded cards"}
               >
                 {expandedView ? (
-                  <NavCollapseIcon className="dashboard-view-toggle-icon" aria-hidden />
+                  <NavCollapseIcon className="dashboard-view-toggle-icon" aria-hidden="true" />
                 ) : (
-                  <NavExpandIcon className="dashboard-view-toggle-icon" aria-hidden />
+                  <NavExpandIcon className="dashboard-view-toggle-icon" aria-hidden="true" />
                 )}
               </button>
               <button className="dashboard-settings" aria-label="Settings">

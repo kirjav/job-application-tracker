@@ -85,6 +85,8 @@ const RegisterForm = () => {
           value={formData.name}
           onChange={handleChange}
           placeholder="Name"
+          aria-label="Name"
+          autoComplete="name"
           required
         />
         <input
@@ -93,6 +95,8 @@ const RegisterForm = () => {
           value={formData.email}
           onChange={handleChange}
           placeholder="Email"
+          aria-label="Email"
+          autoComplete="email"
           required
         />
         {/* Password */}
@@ -104,6 +108,8 @@ const RegisterForm = () => {
             onChange={handleChange}
             onBlur={() => setPasswordTouched(true)}
             placeholder="Password"
+            aria-label="Password"
+            autoComplete="new-password"
             required
             aria-invalid={passwordTouched && !isPasswordValid}
             aria-describedby="pwd-checklist"
@@ -136,6 +142,8 @@ const RegisterForm = () => {
             onChange={handleChange}
             onBlur={() => setConfirmTouched(true)}
             placeholder="Confirm Password"
+            aria-label="Confirm Password"
+            autoComplete="new-password"
             aria-invalid={showMismatch}
             required
           />
@@ -171,7 +179,7 @@ const RegisterForm = () => {
         </button>
       </div>
 
-      {message && <p>{message}</p>}
+      {message && <p role="alert">{message}</p>}
     </form>
   );
 };

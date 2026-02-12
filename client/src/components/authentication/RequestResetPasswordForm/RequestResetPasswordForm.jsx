@@ -29,6 +29,8 @@ const RequestResetPasswordForm = ({ onBack }) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Your email"
+        aria-label="Email address"
+        autoComplete="email"
         required
       /></div>
       <button type="submit">Send Reset Link</button>
@@ -39,7 +41,7 @@ const RequestResetPasswordForm = ({ onBack }) => {
       >
         Back to Login
       </button>
-      {message && <p>{message}</p>}
+      {message && <p role="alert">{message}</p>}
     </form>
   );
 };

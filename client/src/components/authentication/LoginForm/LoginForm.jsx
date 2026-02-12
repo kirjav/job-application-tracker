@@ -68,6 +68,8 @@ const LoginForm = () => {
           value={formData.email}
           onChange={handleChange}
           placeholder="Email"
+          aria-label="Email"
+          autoComplete="email"
           required
         />
         <div className="password-wrapper">
@@ -77,16 +79,20 @@ const LoginForm = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Password"
+            aria-label="Password"
+            autoComplete="current-password"
             required
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             className="toggle-password"
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
             <img
               src={showPassword ? "/icons/auth/eyeHIDE.svg" : "/icons/auth/eyeSHOW.svg"}
-              alt={showPassword ? "Hide password" : "Show password"}
+              alt=""
+              aria-hidden="true"
             />
           </button>
         </div></div>
@@ -98,7 +104,7 @@ const LoginForm = () => {
           Forgot your password?
         </button></div>
       <button type="submit">Log In</button>
-      {message && <p>{message}</p>}
+      {message && <p role="alert">{message}</p>}
     </form>
   );
 };

@@ -199,7 +199,14 @@ function StatusBoard({ expandedView = true, activityFilter = "all" }) {
             </DndContext>
 
             {editAppId && (
-                <div className="status-board-edit-overlay" onClick={() => setEditAppId(null)}>
+                <div
+                    className="status-board-edit-overlay"
+                    onClick={() => setEditAppId(null)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Edit Application"
+                    onKeyDown={(e) => { if (e.key === "Escape") setEditAppId(null); }}
+                >
                     <div className="status-board-edit-modal" onClick={(e) => e.stopPropagation()}>
                         <EditApplication
                             applicationId={editAppId}

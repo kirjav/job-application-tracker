@@ -37,9 +37,9 @@ const SideNav = () => {
                     {collapsed ? <NavExpandIcon/> : <NavCollapseIcon/>}
                 </button></h2>
                 <div className="intermission"><div className="decor-line"></div>{!collapsed && (<p>OVERVIEW</p>)}</div>
-                <nav>
-                    <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><DashboardNavIcon className="nav-icon"/><span className="nav-label">Dashboard</span></NavLink>
-                    <NavLink to="/applications" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><MyApplicationsNavIcon className="nav-icon"/><span className="nav-label">My Applications</span></NavLink>
+                <nav aria-label="Main navigation">
+                    <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><DashboardNavIcon className="nav-icon" aria-hidden="true" focusable="false" /><span className="nav-label">Dashboard</span></NavLink>
+                    <NavLink to="/applications" className={({ isActive }) => (isActive ? "tab-active" : "tab-inactive")}><MyApplicationsNavIcon className="nav-icon" aria-hidden="true" focusable="false" /><span className="nav-label">My Applications</span></NavLink>
                 </nav>
         </aside >
     )

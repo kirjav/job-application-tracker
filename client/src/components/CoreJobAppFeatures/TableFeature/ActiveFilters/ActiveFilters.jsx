@@ -111,7 +111,7 @@ export default function ActiveFilters({ filters, onChange }) {
           title="Remove filter"
         >
           {p.label}
-          <span className="pill-x" aria-hidden><TagClose/></span>
+          <span className="pill-x" aria-hidden="true"><TagClose/></span>
         </button>
       ))}
       <button type="button" className="pill pill-clear" onClick={clearAll} title="Clear all">

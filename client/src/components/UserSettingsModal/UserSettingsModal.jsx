@@ -139,7 +139,7 @@ export default function UserSettingsModal({ onClose }) {
   if (!profile && !loading && !error) return null;
 
   return (
-    <div className="user-settings-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="user-settings-overlay" onClick={(e) => e.target === e.currentTarget && onClose()} onKeyDown={(e) => { if (e.key === "Escape" && !editMode) onClose(); }}>
       <div className="user-settings-modal" role="dialog" aria-labelledby="user-settings-title" aria-modal="true">
         <div className="user-settings-header">
           <h2 id="user-settings-title" className="user-settings-title">User Settings</h2>
@@ -197,7 +197,14 @@ export default function UserSettingsModal({ onClose }) {
 
         {/* Edit sub-modal */}
         {editMode && (
-          <div className="user-settings-edit-overlay" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="user-settings-edit-overlay"
+            onClick={(e) => { e.stopPropagation(); closeEdit(); }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Edit ${editMode}`}
+            onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); closeEdit(); } }}
+          >
             <div className="user-settings-edit-box" onClick={(e) => e.stopPropagation()}>
               {editMode === EDIT_MODES.NAME && (
                 <>

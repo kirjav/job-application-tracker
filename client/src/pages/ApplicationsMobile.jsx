@@ -69,7 +69,7 @@ export default function ApplicationsMobile() {
                   onClick={() => setEditId(app.id)}
                   aria-label={`Edit ${app.company} – ${app.position}`}
                 >
-                  <span className="applications-mobile-card-color-bar" style={{ backgroundColor: statusColor }} aria-hidden />
+                  <span className="applications-mobile-card-color-bar" style={{ backgroundColor: statusColor }} aria-hidden="true" />
                   <span className="applications-mobile-card-inner">
                     <span className="applications-mobile-card-company">{app.company}</span>
                     <span className="applications-mobile-card-position">{app.position}</span>

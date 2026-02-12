@@ -135,7 +135,7 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
   }, [onCancel]);
 
   return (
-    <div className="application-overlay">
+    <div className="application-overlay" role="dialog" aria-modal="true" aria-labelledby="application-form-heading">
       <form onSubmit={handleSubmit} className="application-form" ref={ref}>
         <header className="application-form-header">
           {onCancel ? (
@@ -195,21 +195,21 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
           <div className="application-form-section">
             <label className="application-form-label" htmlFor="app-salaryExact">Exact Salary</label>
             <div className="application-form-salary-wrap">
-              <span className="application-form-salary-prefix" aria-hidden>$</span>
+              <span className="application-form-salary-prefix" aria-hidden="true">$</span>
               <input id="app-salaryExact" className="application-form-input" type="number" name="salaryExact" value={formData.salaryExact || ""} onChange={handleChange} placeholder="—" />
             </div>
           </div>
           <div className="application-form-section">
             <label className="application-form-label" htmlFor="app-salaryMin">Min Salary</label>
             <div className="application-form-salary-wrap">
-              <span className="application-form-salary-prefix" aria-hidden>$</span>
+              <span className="application-form-salary-prefix" aria-hidden="true">$</span>
               <input id="app-salaryMin" className="application-form-input" type="number" name="salaryMin" value={formData.salaryMin || ""} onChange={handleChange} placeholder="—" />
             </div>
           </div>
           <div className="application-form-section">
             <label className="application-form-label" htmlFor="app-salaryMax">Max Salary</label>
             <div className="application-form-salary-wrap">
-              <span className="application-form-salary-prefix" aria-hidden>$</span>
+              <span className="application-form-salary-prefix" aria-hidden="true">$</span>
               <input id="app-salaryMax" className="application-form-input" type="number" name="salaryMax" value={formData.salaryMax || ""} onChange={handleChange} placeholder="—" />
             </div>
           </div>
