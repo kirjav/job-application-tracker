@@ -211,6 +211,11 @@ function setInactivityThresholdCache(userId, value) {
   userThresholdCache.set(userId, { value, ts: Date.now() });
 }
 
+/** Call when user updates their settings so stale cache doesn't override the new value. */
+function invalidateThresholdCache(userId) {
+  userThresholdCache.delete(userId);
+}
+
 async function getAllUserApplications(req, res) {
   const userId = req.user.userId;
   const activity = req.validated?.query?.activity ?? "all";
@@ -218,25 +223,30 @@ async function getAllUserApplications(req, res) {
   try {
     const where = { userId };
 
-    if (activity !== "all") {
-      let thresholdDays = getInactivityThresholdDays(userId);
-      if (thresholdDays === null) {
-        const user = await prisma.user.findUnique({
-          where: { id: userId },
-          select: { inactivityThresholdDays: true },
-        });
-        thresholdDays = user?.inactivityThresholdDays ?? 30;
-        setInactivityThresholdCache(userId, thresholdDays);
-      }
-      const cutoff = new Date();
+    // Always resolve the threshold so we can tag each app with isInactive
+    let thresholdDays = getInactivityThresholdDays(userId);
+    if (thresholdDays === null) {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { inactivityThresholdDays: true },
+      });
+      thresholdDays = user?.inactivityThresholdDays ?? 30;
+      setInactivityThresholdCache(userId, thresholdDays);
+    }
+
+    const cutoff = new Date();
+    if (thresholdDays === 0) {
+      // 0 days means "must have been updated right now" → use current timestamp
+      // so effectively every app is inactive
+    } else {
       cutoff.setDate(cutoff.getDate() - thresholdDays);
       cutoff.setHours(0, 0, 0, 0);
+    }
 
-      if (activity === "active") {
-        where.dateUpdated = { gte: cutoff };
-      } else {
-        where.dateUpdated = { lt: cutoff };
-      }
+    if (activity === "active") {
+      where.dateUpdated = { gte: cutoff };
+    } else if (activity === "inactive") {
+      where.dateUpdated = { lt: cutoff };
     }
 
     const allApps = await prisma.application.findMany({
@@ -246,7 +256,14 @@ async function getAllUserApplications(req, res) {
       },
     });
 
-    res.json(allApps);
+    // Annotate each application with isInactive
+    const cutoffMs = cutoff.getTime();
+    const annotated = allApps.map((app) => ({
+      ...app,
+      isInactive: app.dateUpdated ? new Date(app.dateUpdated).getTime() < cutoffMs : false,
+    }));
+
+    res.json(annotated);
   } catch (err) {
     return handleError(res, err, "Failed to fetch all applications");
   }
@@ -467,4 +484,5 @@ module.exports = {
   updateApplicationsStatus,
   deleteApplication,
   getSingleApplication,
+  invalidateThresholdCache,
 };

@@ -24,9 +24,10 @@ function formatDate(dateString) {
 /** Presentational card used in DragOverlay (no drag hooks – avoids jitter) */
 export function ApplicationCardPreview({ app, expanded, isOverlay, onEdit, onDelete }) {
   const color = STATUS_COLORS[app.status] || "var(--decor-line-color)";
+  const inactiveClass = app.isInactive ? "application-card-inactive" : "";
   return (
     <div
-      className={`application-card ${expanded ? "expanded" : "minimized"} ${isOverlay ? "application-card-drag-overlay" : ""}`}
+      className={`application-card ${expanded ? "expanded" : "minimized"} ${isOverlay ? "application-card-drag-overlay" : ""} ${inactiveClass}`}
     >
       <div className="application-card-color-bar" style={{ backgroundColor: color }} />
       <div className="application-card-content">
@@ -107,11 +108,13 @@ function ApplicationCard({ app, expanded, onEdit, onDelete }) {
         opacity: 1,
       };
 
+  const inactiveClass = app.isInactive ? "application-card-inactive" : "";
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`application-card ${expanded ? "expanded" : "minimized"}`}
+      className={`application-card ${expanded ? "expanded" : "minimized"} ${inactiveClass}`}
       {...attributes}
       {...listeners}
     >

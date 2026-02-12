@@ -208,3 +208,38 @@
 .application-card-menu-item-danger {
   color: var(--form-required-indicator, #b42318);
 }
+
+/* ── Inactive card treatment ─────────────────────────── */
+.application-card-inactive {
+  opacity: 0.62;
+}
+
+.application-card-inactive::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(128, 128, 128, 0.08) 5px,
+    rgba(128, 128, 128, 0.08) 6px
+  );
+  z-index: 1;
+}
+
+[data-theme="dark"] .application-card-inactive::after {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(200, 200, 200, 0.06) 5px,
+    rgba(200, 200, 200, 0.06) 6px
+  );
+}
+
+.application-card-inactive:hover {
+  opacity: 0.8;
+}

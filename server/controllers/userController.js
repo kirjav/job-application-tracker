@@ -6,6 +6,7 @@ const { getAuthenticatedUser } = require("../utils/authHelpers");
 const { handleError } = require("../utils/handleError");
 
 const prisma = require("../utils/prisma");
+const { invalidateThresholdCache } = require("./applicationController");
 
 const jwt = require("jsonwebtoken");
 
@@ -143,6 +144,8 @@ async function updateMe(req, res) {
         if (allowed.inactivityGraceDays !== undefined) {
             allowed.inactivityThresholdDays = allowed.inactivityGraceDays;
             delete allowed.inactivityGraceDays;
+            // bust the in-memory cache so the new value takes effect immediately
+            invalidateThresholdCache(req.user.userId);
         }
 
         const updated = await prisma.user.update({

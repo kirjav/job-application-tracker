@@ -109,7 +109,7 @@ export default function ApplicationTable({
               </th>
 
               <th aria-sort="none" className="tag-col"><span>Tags</span></th>
-              <th className="row-actions-col"><span className="sr-only">Row actions</span><TableRowOptions aria-hidden="true" focusable="false" /></th>
+              <th className="row-actions-col"><span className="sr-only">Row actions</span></th>
             </tr>
           </thead>
 

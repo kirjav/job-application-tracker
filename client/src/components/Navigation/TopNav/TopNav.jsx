@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LogoutButton from "../../authentication/LogoutButton/LogoutButton";
 import UserSettingsModal from "../../UserSettingsModal/UserSettingsModal";
+import API from "../../../utils/api";
 import "./TopNav.css";
 
 import AddApplicationIcon from "../../../assets/icons/addApplicationIcon.svg?react";
@@ -20,7 +21,20 @@ function getInitialTheme() {
 const TopNav = ({ onAddApplicationClick }) => {
   const [showUserSettings, setShowUserSettings] = useState(false);
   const [theme, setTheme] = useState(getInitialTheme);
+  const [userInitial, setUserInitial] = useState("");
   const isDark = theme === "dark";
+
+  useEffect(() => {
+    let cancelled = false;
+    API.get("/user/me")
+      .then(({ data }) => {
+        if (!cancelled && data?.name) {
+          setUserInitial(data.name.trim().charAt(0).toUpperCase());
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [showUserSettings]); // re-fetch after settings modal closes (name may have changed)
 
   useEffect(() => {
     const root = document.documentElement;
@@ -63,7 +77,7 @@ const TopNav = ({ onAddApplicationClick }) => {
           aria-label="User settings"
           title="User settings"
         >
-          A
+          {userInitial || "?"}
         </button>
       </div>
       {showUserSettings && (
