@@ -5,6 +5,19 @@
   display: flex;
   flex-direction: column;
   background: var(--bg-color);
+  padding: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .dashboard-page {
+    padding: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-page {
+    padding: 1rem;
+  }
 }
 
 .dashboard-inner {
@@ -13,6 +26,11 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+  background: var(--dashboard-column-bg);
+  border: 1px solid var(--dashboard-column-border);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px var(--dashboard-card-shadow);
+  overflow: hidden;
 }
 
 .dashboard-header {

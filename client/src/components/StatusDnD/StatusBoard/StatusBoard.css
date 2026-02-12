@@ -4,7 +4,7 @@
   flex-direction: column;
   overflow: hidden;
   padding: 0.5rem 1.25rem 1rem;
-  background: var(--bg-color);
+  background: transparent;
 }
 
 @media (min-width: 640px) {
@@ -89,7 +89,7 @@
 }
 
 .status-columns-wrapper::-webkit-scrollbar-track {
-  background: var(--decor-line-color);
+  background: var(--dashboard-column-header-bg);
   border-radius: 5px;
 }
 
