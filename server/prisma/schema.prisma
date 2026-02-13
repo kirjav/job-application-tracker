@@ -41,6 +41,8 @@ model Application {
   salaryMax        Int?
   effectiveSalary  Decimal? @db.Decimal(12,2)
   dateUpdated      DateTime @updatedAt
+  interviewRoundsDone  Int? @default(0)
+  interviewRoundsTotal Int? @default(1)
   lastProgressAt   DateTime?
   resumeUrl        String?
   tags             Tag[]

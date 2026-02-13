@@ -24,14 +24,12 @@
 
 .stats-container {
   width: 100%;
-  flex: 1;
   display: flex;
   flex-direction: column;
   background: var(--dashboard-column-bg);
   border: 1px solid var(--dashboard-column-border);
   border-radius: 14px;
   box-shadow: 0 2px 12px var(--dashboard-card-shadow);
-  overflow: hidden;
 }
 
 .stats-header {
@@ -289,15 +287,38 @@
   }
 }
 
-.stats-goal-bar-fill {
+/* Clip reveals left pct% of the full-width gradient so bar color changes with progress */
+.stats-goal-bar-fill-clip {
   height: 100%;
-  background: var(--secondary-background-color);
+  overflow: hidden;
   border-radius: 4px;
   transition: width 0.5s ease;
 }
 
+.stats-goal-bar-fill {
+  height: 100%;
+  /* Full gradient across the track; clip reveals left portion so 0% = grey, 100% = hot */
+  width: calc(100% * 100 / var(--pct, 1));
+  background: linear-gradient(
+    to right,
+    #94a3b8 0%,
+    #64748b 50%,
+    #f97316 72%,
+    #ea580c 85%,
+    #ec4899 100%
+  );
+  border-radius: 4px;
+}
+
 .stats-goal-bar-fill.is-met {
-  background: var(--offer-status-color);
+  background: linear-gradient(
+    to right,
+    #94a3b8 0%,
+    #64748b 50%,
+    #f97316 72%,
+    #ea580c 85%,
+    #ec4899 100%
+  );
 }
 
 .stats-goal-bar-pct {

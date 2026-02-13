@@ -26,8 +26,8 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
-/* Optional: Adjust Cancel button */
-.edit-application button {
+/* Cancel button in edit-application wrapper */
+.edit-application > .edit-application-actions button {
   margin-top: 1rem;
 }
 

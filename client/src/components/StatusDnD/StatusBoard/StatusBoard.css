@@ -110,6 +110,82 @@
   min-width: min-content;
 }
 
+/* ── Negative columns drawer toggle ───────────────────────── */
+.negative-drawer-toggle {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 46px;
+  min-width: 46px;
+  margin: 0.5rem 2px;
+  padding: 0.75rem 0.4rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  font-family: inherit;
+  color: var(--secondary-dark-grey-color);
+  background: var(--input-bg);
+  border: 2px dashed var(--decor-line-color);
+  border-radius: 10px;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.negative-drawer-toggle:hover {
+  background: var(--row-hover);
+  border-color: var(--secondary-grey-color);
+  box-shadow: 0 2px 8px var(--dashboard-card-shadow);
+}
+
+.negative-drawer-toggle.negative-drawer-expanded {
+  width: 32px;
+  min-width: 32px;
+  padding: 0.5rem 0.25rem;
+  border-style: solid;
+  border-color: var(--decor-line-color);
+  gap: 0;
+}
+
+.negative-drawer-chevron {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.negative-drawer-toggle:hover .negative-drawer-chevron {
+  opacity: 1;
+}
+
+.negative-drawer-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.negative-drawer-toggle:hover .negative-drawer-icon {
+  opacity: 0.85;
+}
+
+@media (min-width: 640px) {
+  .negative-drawer-toggle {
+    width: 50px;
+    min-width: 50px;
+    margin: 0.75rem 3px;
+  }
+
+  .negative-drawer-toggle.negative-drawer-expanded {
+    width: 36px;
+    min-width: 36px;
+  }
+
+  .negative-drawer-label {
+    font-size: 0.75rem;
+  }
+}
+
 /* Edit application overlay – same behaviour as table edit modal */
 .status-board-edit-overlay {
   position: fixed;

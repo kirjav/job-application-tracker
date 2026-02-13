@@ -15,7 +15,7 @@ const STATUS_COLORS = {
     Withdrawn: "var(--withdrawn-status-color)",
 };
 
-function StatusColumn({ status, applications, expandedView, onHide, onEdit, onDelete }) {
+function StatusColumn({ status, applications, expandedView, onHide, onEdit, onDelete, onIncrementRound }) {
     const { setNodeRef } = useDroppable({ id: status });
     const statusColor = STATUS_COLORS[status] || "var(--decor-line-color)";
     return (
@@ -54,6 +54,7 @@ function StatusColumn({ status, applications, expandedView, onHide, onEdit, onDe
                             expanded={expandedView}
                             onEdit={onEdit}
                             onDelete={onDelete}
+                            onIncrementRound={onIncrementRound}
                         />
                     ))}
                 </SortableContext>

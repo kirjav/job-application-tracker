@@ -22,7 +22,8 @@ async function createApplication(req, res) {
   const {
     company, position, status, mode, source, notes,
     tailoredCoverLetter, tailoredResume,
-    dateApplied, salaryExact, salaryMin, salaryMax, resumeUrl, tagIds
+    dateApplied, salaryExact, salaryMin, salaryMax, resumeUrl, tagIds,
+    interviewRoundsDone, interviewRoundsTotal
   } = req.validated.body;
 
   try {
@@ -53,6 +54,8 @@ async function createApplication(req, res) {
         salaryMin,
         salaryMax,
         effectiveSalary,
+        interviewRoundsDone: interviewRoundsDone ?? 0,
+        interviewRoundsTotal: interviewRoundsTotal ?? 1,
         userId: req.user.userId,
         // implicit M:N: connect tags directly by id
         ...(validatedTagIds.length
@@ -277,7 +280,8 @@ async function updateApplication(req, res) {
   const {
     company, position, status, mode, source, notes,
     tailoredCoverLetter, tailoredResume,
-    dateApplied, salaryExact, salaryMin, salaryMax, resumeUrl, tagIds
+    dateApplied, salaryExact, salaryMin, salaryMax, resumeUrl, tagIds,
+    interviewRoundsDone, interviewRoundsTotal
   } = req.validated.body;
 
   try {
@@ -322,6 +326,8 @@ async function updateApplication(req, res) {
         salaryMin,
         salaryMax,
         effectiveSalary,
+        interviewRoundsDone,
+        interviewRoundsTotal,
       },
       include: { tags: true },
     });

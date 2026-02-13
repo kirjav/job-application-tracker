@@ -50,6 +50,8 @@ const applicationBase = z.object({
   tagIds: z.array(z.number().int()).optional(),
   tailoredResume: z.boolean().optional().default(false),
   tailoredCoverLetter: z.boolean().optional().default(false),
+  interviewRoundsDone: z.coerce.number().int().min(0).max(50).optional().nullable(),
+  interviewRoundsTotal: z.coerce.number().int().min(1).max(50).optional().nullable(),
 }).strict();
 
 // ─── Application Creation Schema ─────────────────────────────

@@ -162,15 +162,13 @@
 /* Salary mode toggle */
 .application-form-salary-toggle {
   display: inline-flex;
-  border: 2px solid var(--input-border);
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+  margin-top: -2px;
 }
 
 .salary-toggle-btn {
-  padding: 6px 16px;
-  border: none;
+  padding: 8px 18px;
+  border: 2px solid var(--input-border);
   background: var(--input-bg);
   color: var(--secondary-dark-grey-color);
   font-size: 0.8125rem;
@@ -181,11 +179,18 @@
 
 .salary-toggle-btn:first-child {
   border-right: 1px solid var(--input-border);
+  border-radius: 10px 0 0 10px;
+}
+
+.salary-toggle-btn:last-child {
+  border-left: 1px solid var(--input-border);
+  border-radius: 0 10px 10px 0;
 }
 
 .salary-toggle-btn.salary-toggle-active {
   background: var(--secondary-background-color);
   color: var(--contrast-text-color);
+  border-color: var(--secondary-background-color);
 }
 
 .salary-toggle-btn:not(.salary-toggle-active):hover {
@@ -345,12 +350,13 @@
   background-repeat: no-repeat;
 }
 
-/* Tag area – match .boxed (TableFilterForm) */
-.application-form-tag-wrap {
+/* Tag area – the inner .tag-input-wrapper handles its own border */
+.application-form-tag-wrap .tag-input-wrapper {
   border: 2px solid var(--input-border);
   background: var(--input-bg);
   border-radius: 10px;
   padding: 10px;
+  min-height: 44px;
 }
 
 /* Footer – match .filters-footer (grid 1fr 1fr, gap 14px, btn padding 12px 14px, font-weight 800) */

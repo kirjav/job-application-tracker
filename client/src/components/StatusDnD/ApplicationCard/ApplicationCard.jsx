@@ -1,9 +1,99 @@
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import confetti from "canvas-confetti";
 import TableRowOptions from "../../../assets/icons/table/TableRowOptions.svg?react";
 import { Dropdown } from "../../Popover/Dropdown";
 import "./ApplicationCard.css";
+
+function fireRoundCelebration(element) {
+  if (!element) return;
+  const rect = element.getBoundingClientRect();
+  const x = (rect.left + rect.width / 2) / window.innerWidth;
+  const y = (rect.top + rect.height / 2) / window.innerHeight;
+  confetti({
+    particleCount: 30,
+    spread: 50,
+    startVelocity: 20,
+    origin: { x, y },
+    zIndex: 9999,
+    scalar: 0.7,
+    ticks: 60,
+  });
+}
+
+function fireAllRoundsComplete(element) {
+  if (!element) return;
+  const rect = element.getBoundingClientRect();
+  const x = (rect.left + rect.width / 2) / window.innerWidth;
+  const y = (rect.top + rect.height / 2) / window.innerHeight;
+  confetti({
+    particleCount: 80,
+    spread: 100,
+    startVelocity: 35,
+    origin: { x, y },
+    zIndex: 9999,
+  });
+}
+
+function InterviewProgress({ app, onIncrement, interactive }) {
+  const done = app.interviewRoundsDone ?? 0;
+  const total = app.interviewRoundsTotal;
+  const hasTotal = total != null && total > 0;
+  const allDone = hasTotal && done >= total;
+
+  if (done === 0 && !hasTotal) return null;
+
+  const btnRef = React.useRef(null);
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (allDone) return;
+    onIncrement?.(app.id, done, total);
+    // Fire celebration from button position
+    if (hasTotal && done + 1 >= total) {
+      fireAllRoundsComplete(btnRef.current);
+    } else {
+      fireRoundCelebration(btnRef.current);
+    }
+  };
+
+  return (
+    <div className="interview-progress">
+      {hasTotal ? (
+        <div className="interview-progress-bar-wrap">
+          <div className="interview-progress-bar">
+            <div
+              className={`interview-progress-fill ${allDone ? "interview-progress-complete" : ""}`}
+              style={{ width: `${Math.min((done / total) * 100, 100)}%` }}
+            />
+          </div>
+          <span className="interview-progress-label">
+            {done}/{total} rounds
+          </span>
+        </div>
+      ) : (
+        <span className="interview-progress-label">
+          {done} round{done !== 1 ? "s" : ""} done
+        </span>
+      )}
+      {interactive && !allDone && (
+        <button
+          ref={btnRef}
+          type="button"
+          className="interview-progress-increment"
+          onClick={handleClick}
+          aria-label={`Mark interview round ${done + 1} complete`}
+          title="Complete a round"
+        >
+          +
+        </button>
+      )}
+      {allDone && <span className="interview-progress-check" aria-label="All rounds complete" title="All rounds complete">&#10003;</span>}
+    </div>
+  );
+}
 
 const STATUS_COLORS = {
   Wishlist: "var(--wishlist-status-color)",
@@ -38,6 +128,9 @@ export function ApplicationCardPreview({ app, expanded, isOverlay, onEdit, onDel
               <>
                 <div className="application-card-position">{app.position}</div>
                 <div className="application-card-date">Applied: {formatDate(app.dateApplied)}</div>
+                {app.status === "Interviewing" && (
+                  <InterviewProgress app={app} interactive={false} />
+                )}
               </>
             )}
           </div>
@@ -90,7 +183,7 @@ export function ApplicationCardPreview({ app, expanded, isOverlay, onEdit, onDel
   );
 }
 
-function ApplicationCard({ app, expanded, onEdit, onDelete }) {
+function ApplicationCard({ app, expanded, onEdit, onDelete, onIncrementRound }) {
   const {
     attributes,
     listeners,
@@ -130,6 +223,9 @@ function ApplicationCard({ app, expanded, onEdit, onDelete }) {
               <>
                 <div className="application-card-position">{app.position}</div>
                 <div className="application-card-date">Applied: {formatDate(app.dateApplied)}</div>
+                {app.status === "Interviewing" && (
+                  <InterviewProgress app={app} onIncrement={onIncrementRound} interactive />
+                )}
               </>
             )}
           </div>

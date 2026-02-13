@@ -30,10 +30,12 @@ const AuthenticatedLayout = () => {
           <Outlet />
         </main>
 
-        {/* showAddApplication Pop Up} */}
-        {showAddApplication && (
-          <AddApplication onClose={() => setShowAddApplicationPopUp(false)} />
-        )}</div>
+      </div>
+
+      {/* Add Application modal – rendered outside .main-page so it doesn't affect flex layout */}
+      {showAddApplication && (
+        <AddApplication onClose={() => setShowAddApplicationPopUp(false)} />
+      )}
 
       {/* Session timeout modal */}
       {showWarning && (

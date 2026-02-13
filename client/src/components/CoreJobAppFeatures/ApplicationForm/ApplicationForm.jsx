@@ -50,6 +50,8 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
     salaryExact: existingApp?.salaryExact || "",
     salaryMin: existingApp?.salaryMin || "",
     salaryMax: existingApp?.salaryMax || "",
+    interviewRoundsDone: existingApp?.interviewRoundsDone ?? 0,
+    interviewRoundsTotal: existingApp?.interviewRoundsTotal ?? 1,
     tagIds: existingApp?.tags?.map((tag) => tag.id) || [],
   });
 
@@ -76,6 +78,8 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
       salaryExact: "",
       salaryMin: "",
       salaryMax: "",
+      interviewRoundsDone: 0,
+      interviewRoundsTotal: 1,
       tagIds: [],
     });
   };
@@ -218,6 +222,39 @@ const ApplicationForm = ({ existingApp, onSuccess, onCancel }) => {
               {MODE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
             </select>
           </div>
+        </div>
+
+        <div className="application-form-row application-form-two-col">
+          <div className="application-form-section">
+            <label className="application-form-label" htmlFor="app-interviewRoundsTotal">Interview Rounds</label>
+            <input
+              id="app-interviewRoundsTotal"
+              className="application-form-input"
+              type="number"
+              name="interviewRoundsTotal"
+              min="1"
+              max="50"
+              value={formData.interviewRoundsTotal}
+              onChange={handleChange}
+              placeholder="e.g. 4"
+            />
+          </div>
+          {(isEditMode || formData.status === "Interviewing") && (
+            <div className="application-form-section">
+              <label className="application-form-label" htmlFor="app-interviewRoundsDone">Rounds Completed</label>
+              <input
+                id="app-interviewRoundsDone"
+                className="application-form-input"
+                type="number"
+                name="interviewRoundsDone"
+                min="0"
+                max="50"
+                value={formData.interviewRoundsDone}
+                onChange={handleChange}
+                placeholder="0"
+              />
+            </div>
+          )}
         </div>
 
         <div className="application-form-section">

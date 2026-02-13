@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import API from "../utils/api";
 import "./Stats.css";
 
@@ -50,9 +50,11 @@ function WeeklyGoalWidget({ goal, submitted }) {
       <div className="stats-goal-bar-wrap">
         <div className="stats-goal-bar-track">
           <div
-            className={`stats-goal-bar-fill ${met ? "is-met" : ""}`}
-            style={{ width: `${pct}%` }}
-          />
+            className="stats-goal-bar-fill-clip"
+            style={{ width: `${pct}%`, ["--pct"]: Math.max(pct, 0.5) }}
+          >
+            <div className={`stats-goal-bar-fill ${met ? "is-met" : ""}`} />
+          </div>
         </div>
         <span className="stats-goal-bar-pct">{Math.round(pct)}%</span>
       </div>
@@ -136,21 +138,13 @@ function WeeklyTrendWidget({ trend }) {
 
 // ── Stats Page ───────────────────────────────────────────────
 export default function Stats() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-    API.get("/applications/stats")
-      .then(({ data }) => {
-        if (!cancelled) setData(data);
-      })
-      .catch((err) => console.error("Failed to load stats:", err))
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => { cancelled = true; };
-  }, []);
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ["applications", "stats"],
+    queryFn: async () => {
+      const res = await API.get("/applications/stats");
+      return res.data;
+    },
+  });
 
   return (
     <div className="stats-page">
