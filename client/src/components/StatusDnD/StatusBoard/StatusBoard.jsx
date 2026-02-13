@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { rectIntersection } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
@@ -98,25 +98,46 @@ function StatusBoard({ expandedView = true, activityFilter = "all" }) {
         [qc]
     );
 
+    const INCREMENT_DEBOUNCE_MS = 600;
+    const incrementTimeoutsRef = useRef(new Map());
+
+    useEffect(() => {
+        const timeouts = incrementTimeoutsRef.current;
+        return () => {
+            timeouts.forEach((t) => clearTimeout(t));
+            timeouts.clear();
+        };
+    }, []);
+
     const handleIncrementRound = useCallback(
         (appId, currentDone, total) => {
             const newDone = currentDone + 1;
-            // Don't exceed total if set
             if (total != null && newDone > total) return;
 
-            // Optimistic update
-            const previous = qc.getQueryData(queryKey);
+            // Optimistic update immediately
             qc.setQueryData(queryKey, (old) =>
                 (old || []).map((app) =>
                     app.id === appId ? { ...app, interviewRoundsDone: newDone } : app
                 )
             );
 
-            API.patch(`/applications/${appId}`, { interviewRoundsDone: newDone })
-                .catch((err) => {
-                    console.error("Failed to increment interview round:", err);
-                    qc.setQueryData(queryKey, previous);
-                });
+            // Debounce the API call: one PATCH per app after user stops clicking
+            const timeouts = incrementTimeoutsRef.current;
+            if (timeouts.has(appId)) clearTimeout(timeouts.get(appId));
+
+            const timeoutId = setTimeout(() => {
+                timeouts.delete(appId);
+                const data = qc.getQueryData(queryKey);
+                const app = data?.find((a) => a.id === appId);
+                const value = app?.interviewRoundsDone ?? newDone;
+                API.patch(`/applications/${appId}`, { interviewRoundsDone: value })
+                    .catch((err) => {
+                        console.error("Failed to increment interview round:", err);
+                        qc.invalidateQueries({ queryKey });
+                    });
+            }, INCREMENT_DEBOUNCE_MS);
+
+            timeouts.set(appId, timeoutId);
         },
         [qc, queryKey]
     );
